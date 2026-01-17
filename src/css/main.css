@@ -242,14 +242,12 @@ body {
     position: relative;
     width: 100%;
     max-width: 1000px;
+    height: 700px;
     margin: 0 auto;
-    min-height: 700px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: auto 1fr auto;
-    gap: 2rem;
+    display: flex;
     align-items: center;
-    justify-items: center;
+    justify-content: center;
+    padding: 0;
 }
 
 /* SVG Connections Layer */
@@ -276,10 +274,26 @@ body {
     to { stroke-dashoffset: -12; }
 }
 
+/* Central Hub Link Wrapper */
+.central-hub-link {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.central-hub-link:hover .central-hub {
+    box-shadow: 0 0 70px rgba(37, 99, 235, 0.8), inset 0 0 40px rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
 /* Central Hub */
 .central-hub {
-    grid-column: 2;
-    grid-row: 2;
+    position: relative;
     width: 220px;
     height: 220px;
     background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
@@ -289,9 +303,8 @@ body {
     align-items: center;
     justify-content: center;
     box-shadow: 0 0 50px rgba(37, 99, 235, 0.5), inset 0 0 30px rgba(255, 255, 255, 0.1);
-    z-index: 10;
     animation: hubPulse 3s ease-in-out infinite;
-    position: relative;
+    transition: all 0.3s ease;
 }
 
 .central-hub::before {
@@ -338,6 +351,9 @@ body {
 
 /* Spoke Nodes */
 .spoke-node {
+    position: absolute;
+    top: 50%;
+    left: 50%;
     width: 180px;
     min-height: 140px;
     background: linear-gradient(145deg, var(--surface), var(--surface-light));
@@ -351,11 +367,80 @@ body {
     text-align: center;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
-    position: relative;
     z-index: 5;
     overflow: hidden;
+    animation: spokeAppear 0.6s ease-out backwards;
 }
 
+/* Staggered animation delays for each spoke */
+.spoke-node.property-info { animation-delay: 0.1s; }
+.spoke-node.primary-school { animation-delay: 0.2s; }
+.spoke-node.secondary-school { animation-delay: 0.3s; }
+.spoke-node.train-station { animation-delay: 0.4s; }
+.spoke-node.flinders-train { animation-delay: 0.5s; }
+
+@keyframes spokeAppear {
+    from {
+        opacity: 0;
+        scale: 0.5;
+    }
+    to {
+        opacity: 1;
+        scale: 1;
+    }
+}
+
+/* Connection line from spoke to hub */
+.spoke-node::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    background: linear-gradient(180deg, var(--primary-color), transparent);
+    opacity: 0.3;
+    z-index: -1;
+}
+
+/* Specific line lengths and rotations for each spoke */
+.spoke-node.primary-school::after {
+    height: 150px;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.spoke-node.secondary-school::after {
+    height: 150px;
+    bottom: 70%;
+    right: 70%;
+    transform-origin: bottom right;
+    transform: rotate(-60deg);
+}
+
+.spoke-node.train-station::after {
+    height: 150px;
+    top: 70%;
+    right: 70%;
+    transform-origin: top right;
+    transform: rotate(-150deg);
+}
+
+.spoke-node.flinders-train::after {
+    height: 150px;
+    top: 70%;
+    left: 70%;
+    transform-origin: top left;
+    transform: rotate(150deg);
+}
+
+.spoke-node.property-info::after {
+    height: 150px;
+    bottom: 70%;
+    left: 70%;
+    transform-origin: bottom left;
+    transform: rotate(60deg);
+}
+
+/* Hover effect - shimmer */
 .spoke-node::before {
     content: '';
     position: absolute;
@@ -365,16 +450,22 @@ body {
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
     transition: left 0.5s ease;
+    z-index: 1;
 }
 
 .spoke-node:hover::before {
     left: 100%;
 }
 
+.spoke-node:hover::after {
+    opacity: 0.6;
+    background: linear-gradient(180deg, var(--primary-light), transparent);
+}
+
 .spoke-node:hover {
-    transform: translateY(-5px) scale(1.02);
     border-color: var(--primary-color);
     box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3), 0 0 0 1px var(--primary-color);
+    scale: 1.05;
 }
 
 .spoke-node .node-icon {
@@ -414,13 +505,48 @@ body {
 .spoke-node.flinders-direct { border-left: 4px solid #ec4899; }
 .spoke-node.property-info { border-left: 4px solid #3b82f6; }
 
-/* Grid positioning for nodes */
-.spoke-node.property-info { grid-column: 1; grid-row: 1; }
-.spoke-node.primary-school { grid-column: 2; grid-row: 1; }
-.spoke-node.secondary-school { grid-column: 3; grid-row: 1; }
-.spoke-node.train-station { grid-column: 3; grid-row: 2; }
-.spoke-node.flinders-train { grid-column: 3; grid-row: 3; }
-.spoke-node.flinders-direct { grid-column: 2; grid-row: 3; }
+/* Circular positioning for nodes - PERFECT PENTAGON layout */
+/* 5 nodes evenly distributed in a circle at 72° intervals, radius 260px */
+
+/* Primary School - 0° (top) */
+.spoke-node.primary-school {
+    transform: translate(-50%, -50%) !important;
+    margin-left: 0px !important;
+    margin-top: -260px !important;
+}
+
+/* Secondary School - 72° (upper-right) */
+.spoke-node.secondary-school {
+    transform: translate(-50%, -50%) !important;
+    margin-left: 247px !important;
+    margin-top: -80px !important;
+}
+
+/* Train Station - 144° (lower-right) */
+.spoke-node.train-station {
+    transform: translate(-50%, -50%) !important;
+    margin-left: 153px !important;
+    margin-top: 210px !important;
+}
+
+/* Flinders via Train - 216° (lower-left) */
+.spoke-node.flinders-train {
+    transform: translate(-50%, -50%) !important;
+    margin-left: -153px !important;
+    margin-top: 210px !important;
+}
+
+/* Property Info - 288° (upper-left) */
+.spoke-node.property-info {
+    transform: translate(-50%, -50%) !important;
+    margin-left: -247px !important;
+    margin-top: -80px !important;
+}
+
+/* Flinders Direct (if exists) - 6 o'clock (bottom) */
+.spoke-node.flinders-direct {
+    transform: translate(-50%, -50%) translate(0, 260px);
+}
 
 /* Lookup link in nodes */
 .lookup-link {
@@ -434,7 +560,6 @@ body {
     color: var(--secondary-color);
     text-decoration: underline;
 }
-.spoke-node.property-info { top: 15%; left: 5%; }
 
 /* Entry Tabs */
 .entry-tabs {
@@ -814,16 +939,89 @@ body.is-localhost .nav-link.localhost-only {
     }
 
     .hub-spoke-container {
-        min-height: 800px;
+        height: 550px;
+        padding: 0;
     }
 
     .central-hub {
-        width: 150px;
-        height: 150px;
+        width: 140px;
+        height: 140px;
+    }
+
+    .hub-icon {
+        font-size: 2.2rem;
+    }
+
+    .hub-address {
+        font-size: 0.65rem;
+        max-width: 120px;
     }
 
     .spoke-node {
-        width: 130px;
-        height: 130px;
+        width: 110px;
+        min-height: 100px;
+        padding: 0.65rem;
+    }
+
+    .spoke-node .node-icon {
+        font-size: 1.6rem;
+    }
+
+    .spoke-node .node-title {
+        font-size: 0.55rem;
+    }
+
+    .spoke-node .node-value {
+        font-size: 0.7rem;
+    }
+
+    .spoke-node .node-detail {
+        font-size: 0.6rem;
+    }
+
+    /* Mobile pentagon layout - radius 180px, same margin-based approach */
+    .spoke-node.primary-school {
+        transform: translate(-50%, -50%) !important;
+        margin-left: 0px !important;
+        margin-top: -180px !important;
+    }
+
+    .spoke-node.secondary-school {
+        transform: translate(-50%, -50%) !important;
+        margin-left: 171px !important;
+        margin-top: -55px !important;
+    }
+
+    .spoke-node.train-station {
+        transform: translate(-50%, -50%) !important;
+        margin-left: 106px !important;
+        margin-top: 146px !important;
+    }
+
+    .spoke-node.flinders-train {
+        transform: translate(-50%, -50%) !important;
+        margin-left: -106px !important;
+        margin-top: 146px !important;
+    }
+
+    .spoke-node.property-info {
+        transform: translate(-50%, -50%) !important;
+        margin-left: -171px !important;
+        margin-top: -55px !important;
+    }
+
+    .spoke-node.flinders-direct {
+        transform: translate(-50%, -50%) !important;
+        margin-left: 0 !important;
+        margin-top: 180px !important;
+    }
+
+    /* Shorter connection lines for mobile */
+    .spoke-node.primary-school::after,
+    .spoke-node.secondary-school::after,
+    .spoke-node.train-station::after,
+    .spoke-node.flinders-train::after,
+    .spoke-node.property-info::after {
+        height: 110px;
     }
 }

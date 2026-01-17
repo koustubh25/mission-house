@@ -131,6 +131,60 @@ const MapsService = {
     },
 
     /**
+     * Find nearest bus stop
+     * @param {Object} location - Location with lat, lng
+     * @returns {Promise<Object>} Bus stop details with walking route
+     */
+    async findNearestBusStop(location) {
+        if (!this.placesService) {
+            throw new Error('Maps service not initialized');
+        }
+
+        return new Promise((resolve, reject) => {
+            const request = {
+                location: new google.maps.LatLng(location.lat, location.lng),
+                radius: 1000, // 1km radius for bus stops
+                type: 'bus_station'
+            };
+
+            this.placesService.nearbySearch(request, async (results, status) => {
+                if (status === 'OK' && results.length > 0) {
+                    const busStop = results[0];
+                    const stopLocation = {
+                        lat: busStop.geometry.location.lat(),
+                        lng: busStop.geometry.location.lng()
+                    };
+
+                    try {
+                        // Get walking directions to the bus stop
+                        const walkingRoute = await this.getDirections(
+                            location,
+                            stopLocation,
+                            'WALKING'
+                        );
+
+                        resolve({
+                            name: busStop.name,
+                            location: stopLocation,
+                            walkingDistance: walkingRoute.distance,
+                            walkingDuration: walkingRoute.duration,
+                            placeId: busStop.place_id
+                        });
+                    } catch (e) {
+                        resolve({
+                            name: busStop.name,
+                            location: stopLocation,
+                            placeId: busStop.place_id
+                        });
+                    }
+                } else {
+                    reject(new Error(`No bus stops found nearby: ${status}`));
+                }
+            });
+        });
+    },
+
+    /**
      * Find nearest train station to a location
      * @param {Object} location - Location {lat, lng}
      * @returns {Promise<Object>} Nearest station info
@@ -150,35 +204,70 @@ const MapsService = {
             this.placesService.nearbySearch(request, async (results, status) => {
                 if (status === 'OK' && results.length > 0) {
                     const station = results[0];
+                    const stationLocation = {
+                        lat: station.geometry.location.lat(),
+                        lng: station.geometry.location.lng()
+                    };
 
-                    // Get walking directions to the station
+                    // Get all transport modes to the station
+                    const routes = {};
+                    const modes = [
+                        { key: 'walking', mode: 'WALKING' },
+                        { key: 'driving', mode: 'DRIVING' },
+                        { key: 'transit', mode: 'TRANSIT' }  // This includes buses
+                    ];
+
                     try {
-                        const walkingRoute = await this.getDirections(
-                            location,
-                            {
-                                lat: station.geometry.location.lat(),
-                                lng: station.geometry.location.lng()
-                            },
-                            'WALKING'
-                        );
+                        for (const { key, mode } of modes) {
+                            try {
+                                routes[key] = await this.getDirections(
+                                    location,
+                                    stationLocation,
+                                    mode
+                                );
+                            } catch (e) {
+                                console.warn(`Failed to get ${mode} route to station:`, e);
+                                routes[key] = null;
+                            }
+                        }
+
+                        // Also find nearest bus stop for detailed bus route breakdown
+                        let busStopInfo = null;
+                        try {
+                            const nearestBusStop = await this.findNearestBusStop(location);
+
+                            // Get transit route from bus stop to train station
+                            const busToStation = await this.getDirections(
+                                nearestBusStop.location,
+                                stationLocation,
+                                'TRANSIT'
+                            );
+
+                            busStopInfo = {
+                                stop: nearestBusStop,
+                                walkToBusStop: nearestBusStop.walkingDuration,
+                                busToStation: busToStation.duration
+                            };
+                        } catch (e) {
+                            console.warn('Failed to get bus stop details:', e);
+                        }
 
                         resolve({
                             name: station.name,
-                            location: {
-                                lat: station.geometry.location.lat(),
-                                lng: station.geometry.location.lng()
-                            },
-                            walkingDistance: walkingRoute.distance,
-                            walkingDuration: walkingRoute.duration,
+                            location: stationLocation,
+                            // Keep backward compatibility
+                            walkingDistance: routes.walking?.distance,
+                            walkingDuration: routes.walking?.duration,
+                            // New: all routes
+                            routes: routes,
+                            // Bus stop breakdown
+                            busStopDetails: busStopInfo,
                             placeId: station.place_id
                         });
                     } catch (e) {
                         resolve({
                             name: station.name,
-                            location: {
-                                lat: station.geometry.location.lat(),
-                                lng: station.geometry.location.lng()
-                            },
+                            location: stationLocation,
                             placeId: station.place_id
                         });
                     }
@@ -236,11 +325,8 @@ const MapsService = {
             // Geocode the property
             const propertyLocation = await this.geocodeAddress(propertyAddress);
 
-            // Find nearest train station
+            // Find nearest train station with all transport modes
             const nearestStation = await this.findNearestTrainStation(propertyLocation);
-
-            // Get travel to Flinders from property (direct)
-            const directToFlinders = await this.getTravelToFlinders(propertyAddress);
 
             // Get travel to Flinders from nearest station
             const stationToFlinders = await this.getTravelToFlinders(nearestStation.location);
@@ -251,7 +337,6 @@ const MapsService = {
                     location: propertyLocation
                 },
                 nearestStation: nearestStation,
-                directToFlinders: directToFlinders,
                 viaStation: {
                     walkToStation: nearestStation.walkingDuration,
                     stationToFlinders: stationToFlinders.routes.transit,

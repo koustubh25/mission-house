@@ -2,9 +2,6 @@
  * Configuration for Mission House app
  */
 const Config = {
-    // Google Maps API Key - Replace with your actual key
-    GOOGLE_MAPS_API_KEY: 'your api key',
-
     // Melbourne-specific settings
     MELBOURNE: {
         center: { lat: -37.8136, lng: 144.9631 },

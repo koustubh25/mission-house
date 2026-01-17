@@ -23,6 +23,7 @@ const App = {
         // Setup page-specific functionality
         this.setupDataViewPage();
         this.setupDataEntryPage();
+        this.setupSettingsPage();
 
         // Initialize Google Maps
         try {
@@ -53,42 +54,89 @@ const App = {
     },
 
     /**
-     * Save to database (displays JSON for manual save)
+     * Save to database (saves to houses.json via backend)
      * @param {Object} property - Property to add
      */
-    saveToDatabase(property) {
-        // Check for duplicates by address
-        const existingIndex = this.database.findIndex(
-            p => p.address.toLowerCase() === property.address.toLowerCase()
-        );
-
-        if (existingIndex >= 0) {
-            this.database[existingIndex] = property;
-        } else {
-            this.database.push(property);
-        }
-
-        // Display updated JSON for manual save
-        const json = JSON.stringify({ properties: this.database }, null, 2);
-
+    async saveToDatabase(property) {
         const resultEl = document.getElementById('scrape-result');
-        if (resultEl) {
-            resultEl.innerHTML = `
-                <div class="success-message">
-                    <h3>Property Added!</h3>
-                    <p>Copy the JSON below and save it to <code>src/data/houses.json</code>:</p>
-                    <textarea class="json-output" readonly>${json}</textarea>
-                    <button class="copy-btn" onclick="navigator.clipboard.writeText(this.previousElementSibling.value).then(() => Utils.showToast('Copied!', 'success'))">
-                        Copy to Clipboard
-                    </button>
-                </div>
-            `;
-            resultEl.classList.remove('hidden');
-            resultEl.classList.add('success');
-        }
 
-        this.updateDatabaseList();
-        Utils.showToast('Property added to database!', 'success');
+        try {
+            // Try to save via backend API
+            const response = await fetch('/api/save-property', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ property })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Property saved via backend:', data);
+
+                // Update local database
+                const existingIndex = this.database.findIndex(
+                    p => p.address.toLowerCase() === property.address.toLowerCase()
+                );
+
+                if (existingIndex >= 0) {
+                    this.database[existingIndex] = property;
+                } else {
+                    this.database.push(property);
+                }
+
+                // Show success message
+                if (resultEl) {
+                    resultEl.innerHTML = `
+                        <div class="success-message">
+                            <h3>✓ Property Saved!</h3>
+                            <p><strong>${property.address}</strong> has been saved to the database.</p>
+                            <p>Total properties: ${data.totalProperties}</p>
+                        </div>
+                    `;
+                    resultEl.classList.remove('hidden', 'error');
+                    resultEl.classList.add('success');
+                }
+
+                this.updateDatabaseList();
+                Utils.showToast('Property saved successfully!', 'success');
+                return;
+            }
+
+            throw new Error('Server returned ' + response.status);
+        } catch (error) {
+            console.warn('Backend save failed, showing JSON for manual save:', error.message);
+
+            // Fallback: Update local database and show JSON for manual save
+            const existingIndex = this.database.findIndex(
+                p => p.address.toLowerCase() === property.address.toLowerCase()
+            );
+
+            if (existingIndex >= 0) {
+                this.database[existingIndex] = property;
+            } else {
+                this.database.push(property);
+            }
+
+            const json = JSON.stringify({ properties: this.database }, null, 2);
+
+            if (resultEl) {
+                resultEl.innerHTML = `
+                    <div class="success-message">
+                        <h3>Property Parsed!</h3>
+                        <p><strong>Server not running.</strong> Copy the JSON below and save it to <code>src/data/houses.json</code>:</p>
+                        <textarea class="json-output" readonly>${json}</textarea>
+                        <button class="copy-btn" onclick="navigator.clipboard.writeText(this.previousElementSibling.value).then(() => Utils.showToast('Copied!', 'success'))">
+                            Copy to Clipboard
+                        </button>
+                        <p class="form-hint">To auto-save, start the server with: <code>node server.js</code></p>
+                    </div>
+                `;
+                resultEl.classList.remove('hidden', 'error');
+                resultEl.classList.add('success');
+            }
+
+            this.updateDatabaseList();
+            Utils.showToast('Property added (manual save required)', 'success');
+        }
     },
 
     /**
@@ -131,7 +179,12 @@ const App = {
         const addressInput = document.getElementById('address-input');
         const suggestionsEl = document.getElementById('address-suggestions');
 
-        if (!addressInput) return;
+        if (!addressInput || !suggestionsEl) {
+            console.warn('Data View page elements not found');
+            return;
+        }
+
+        console.log('Setting up Data View page, database has', this.database.length, 'properties');
 
         // Setup autocomplete from database
         const showSuggestions = Utils.debounce((query) => {
@@ -140,17 +193,19 @@ const App = {
                 return;
             }
 
+            console.log('Searching for:', query, 'in', this.database.length, 'properties');
             const matches = this.database.filter(p =>
-                p.address.toLowerCase().includes(query.toLowerCase())
+                p.address && p.address.toLowerCase().includes(query.toLowerCase())
             );
+            console.log('Found', matches.length, 'matches');
 
             if (matches.length > 0) {
                 suggestionsEl.innerHTML = matches.map(p => `
                     <div class="suggestion-item" data-address="${p.address}">
                         <div class="address">${p.address}</div>
                         <div class="details">
-                            ${p.rooms.bedrooms} bed | ${p.rooms.bathrooms} bath |
-                            ${Utils.formatPriceRange(p.price.min, p.price.max)}
+                            ${p.rooms?.bedrooms || 0} bed | ${p.rooms?.bathrooms || 0} bath |
+                            ${Utils.formatPriceRange(p.price?.min, p.price?.max)}
                         </div>
                     </div>
                 `).join('');
@@ -159,12 +214,12 @@ const App = {
                 suggestionsEl.innerHTML = `
                     <div class="suggestion-item no-results">
                         <div class="address">No matching properties</div>
-                        <div class="details">Try entering a Google Maps address</div>
+                        <div class="details">Try entering any Melbourne address</div>
                     </div>
                 `;
                 suggestionsEl.classList.add('show');
             }
-        }, 200);
+        }, 300);
 
         addressInput.addEventListener('input', (e) => {
             showSuggestions(e.target.value);
@@ -173,6 +228,10 @@ const App = {
         addressInput.addEventListener('focus', () => {
             if (addressInput.value) {
                 showSuggestions(addressInput.value);
+            } else if (this.database.length > 0) {
+                // Show all properties when focusing on empty input
+                showSuggestions(' ');
+                addressInput.value = '';
             }
         });
 
@@ -181,6 +240,7 @@ const App = {
             const item = e.target.closest('.suggestion-item');
             if (item && !item.classList.contains('no-results')) {
                 const address = item.dataset.address;
+                console.log('Selected address:', address);
                 addressInput.value = address;
                 suggestionsEl.classList.remove('show');
                 this.loadPropertyView(address);
@@ -190,8 +250,12 @@ const App = {
         // Handle enter key
         addressInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
+                e.preventDefault();
                 suggestionsEl.classList.remove('show');
-                this.loadPropertyView(addressInput.value);
+                const address = addressInput.value.trim();
+                if (address) {
+                    this.loadPropertyView(address);
+                }
             }
         });
 
@@ -203,8 +267,10 @@ const App = {
         });
 
         // Setup Google Maps autocomplete if available
-        if (typeof google !== 'undefined' && google.maps) {
+        if (typeof google !== 'undefined' && google.maps && google.maps.places) {
+            console.log('Setting up Google Maps autocomplete');
             MapsService.setupAutocomplete(addressInput, (place) => {
+                console.log('Google Maps place selected:', place);
                 this.loadPropertyView(place.address);
             });
         }
@@ -218,12 +284,19 @@ const App = {
         const displayEl = document.getElementById('property-display');
         const noSelectionEl = document.getElementById('no-selection');
 
-        if (!address) return;
+        if (!address) {
+            console.warn('loadPropertyView called with empty address');
+            return;
+        }
+
+        console.log('Loading property view for:', address);
 
         // Find in database
         const property = this.database.find(
-            p => p.address.toLowerCase() === address.toLowerCase()
+            p => p.address && p.address.toLowerCase() === address.toLowerCase()
         );
+
+        console.log('Property found in database:', !!property);
 
         this.currentProperty = property || { address };
 
@@ -233,24 +306,30 @@ const App = {
         displayEl.innerHTML = '<div class="loading">Loading property data...</div>';
 
         try {
-            // Fetch all data in parallel
-            const [commuteData, schoolData] = await Promise.all([
-                // Get commute analysis if Maps is available
-                MapsService.isLoaded
-                    ? MapsService.getCommuteAnalysis(address).catch(e => {
-                        console.warn('Commute analysis failed:', e);
-                        return null;
-                    })
-                    : Promise.resolve(null),
-                // Get school catchment data
-                SchoolService.getAllSchools(address).catch(e => {
-                    console.warn('School lookup failed:', e);
-                    return { primary: null, secondary: null };
+            // Check if Google Maps is available
+            const mapsAvailable = MapsService.isLoaded;
+            if (!mapsAvailable) {
+                console.warn('Google Maps not loaded. Check API key in Settings.');
+            }
+
+            // Get commute analysis if Maps is available
+            const commuteData = mapsAvailable
+                ? await MapsService.getCommuteAnalysis(address).catch(e => {
+                    console.warn('Commute analysis failed:', e);
+                    return null;
                 })
-            ]);
+                : null;
+
+            console.log('Data loaded. Commute:', !!commuteData, 'Schools:', !!property?.schools);
 
             // Render the hub and spoke visualization
-            this.renderHubSpoke(displayEl, property, commuteData, schoolData);
+            // School data comes from property.schools (pre-loaded from backend)
+            this.renderHubSpoke(displayEl, property, commuteData);
+
+            // Calculate walking times to schools asynchronously
+            if (property?.schools && mapsAvailable) {
+                this.calculateSchoolWalkingTimes(property, displayEl);
+            }
 
         } catch (e) {
             console.error('Error loading property view:', e);
@@ -258,6 +337,7 @@ const App = {
                 <div class="error-message">
                     <h3>Error Loading Data</h3>
                     <p class="error-detail">${e.message}</p>
+                    ${!MapsService.isLoaded ? '<p>Note: Google Maps API is not loaded. Configure your API key in Settings.</p>' : ''}
                 </div>
             `;
         }
@@ -268,21 +348,23 @@ const App = {
      * @param {HTMLElement} container - Container element
      * @param {Object} property - Property data
      * @param {Object} commuteData - Commute analysis data
-     * @param {Object} schoolData - School catchment data
      */
-    renderHubSpoke(container, property, commuteData, schoolData = {}) {
+    renderHubSpoke(container, property, commuteData) {
         const hasPropertyData = property && property.address;
-        const primarySchool = schoolData?.primary;
-        const secondarySchool = schoolData?.secondary;
+        const primarySchool = property?.schools?.primary;
+        const secondarySchool = property?.schools?.secondary;
 
         // Helper to render school node content
         const renderSchoolNode = (school, type, icon, label) => {
-            if (school?.success && school?.school) {
+            if (school?.lookupSuccess && school?.name) {
+                const mapsAvailable = MapsService.isLoaded;
                 return `
                     <div class="node-icon">${icon}</div>
                     <div class="node-title">${label}</div>
-                    <div class="node-value">${school.school.name}</div>
-                    <div class="node-detail">${school.school.distance || ''}</div>
+                    <div class="node-value">${school.name}</div>
+                    <div class="node-detail" data-school-type="${type}" data-school-address="${school.address || ''}" ${mapsAvailable ? 'data-loading="true"' : ''}>
+                        ${mapsAvailable ? 'Calculating walking time...' : (school.address || 'Address not available')}
+                    </div>
                 `;
             } else {
                 const lookupUrl = SchoolService.generateFindMySchoolLink(property?.address || '', type);
@@ -300,10 +382,19 @@ const App = {
         container.innerHTML = `
             <div class="hub-spoke-container">
                 <!-- Central Hub - Property -->
+                ${property?.url ? `
+                <a href="${property.url}" target="_blank" rel="noopener noreferrer" class="central-hub-link">
+                    <div class="central-hub">
+                        <div class="hub-icon">🏠</div>
+                        <div class="hub-address">${property.address || 'Unknown Address'}</div>
+                    </div>
+                </a>
+                ` : `
                 <div class="central-hub">
                     <div class="hub-icon">🏠</div>
                     <div class="hub-address">${property?.address || 'Unknown Address'}</div>
                 </div>
+                `}
 
                 <!-- Property Info Node -->
                 ${hasPropertyData && property.rooms ? `
@@ -339,8 +430,17 @@ const App = {
                     <div class="node-title">Nearest Station</div>
                     <div class="node-value">${commuteData?.nearestStation?.name || 'Maps API required'}</div>
                     <div class="node-detail">
-                        ${commuteData?.nearestStation?.walkingDuration ?
-                            `${commuteData.nearestStation.walkingDuration.text} walk` : 'Configure API key'}
+                        ${commuteData?.nearestStation?.routes ? `
+                            ${commuteData.nearestStation.routes.walking ?
+                                `🚶 ${commuteData.nearestStation.routes.walking.duration.text}` : ''}
+                            ${commuteData.nearestStation.routes.walking && commuteData.nearestStation.routes.driving ? ' | ' : ''}
+                            ${commuteData.nearestStation.routes.driving ?
+                                `🚗 ${commuteData.nearestStation.routes.driving.duration.text}` : ''}
+                            ${commuteData.nearestStation.busStopDetails ? '<br>' : ''}
+                            ${commuteData.nearestStation.busStopDetails ?
+                                `🚶 ${commuteData.nearestStation.busStopDetails.walkToBusStop.text} to bus → 🚌 ${commuteData.nearestStation.busStopDetails.busToStation.text}` :
+                                (commuteData.nearestStation.routes.transit ? `<br>🚌 ${commuteData.nearestStation.routes.transit.duration.text}` : '')}
+                        ` : 'Configure API key'}
                     </div>
                 </div>
 
@@ -354,19 +454,6 @@ const App = {
                     </div>
                     <div class="node-detail">Peak hours (8:30 AM)</div>
                 </div>
-
-                <!-- Flinders Direct -->
-                <div class="spoke-node flinders-direct">
-                    <div class="node-icon">🚗</div>
-                    <div class="node-title">To Flinders (direct)</div>
-                    <div class="node-value">
-                        ${commuteData?.directToFlinders?.routes?.transit?.duration?.text || 'N/A'}
-                    </div>
-                    <div class="node-detail">
-                        ${commuteData?.directToFlinders?.routes?.driving?.duration ?
-                            `Drive: ${commuteData.directToFlinders.routes.driving.duration.text}` : 'Transit & driving times'}
-                    </div>
-                </div>
             </div>
         `;
 
@@ -378,10 +465,87 @@ const App = {
                     // Open findmyschool for school nodes
                     window.open(SchoolService.generateFindMySchoolLink(property?.address || '', schoolType), '_blank');
                 } else {
-                    this.showNodeDetails(node.classList[1], property, commuteData, schoolData);
+                    this.showNodeDetails(node.classList[1], property, commuteData);
                 }
             });
         });
+    },
+
+    /**
+     * Calculate and display walking times to schools
+     * @param {Object} property - Property data with schools
+     * @param {HTMLElement} container - Container element
+     */
+    async calculateSchoolWalkingTimes(property, container) {
+        console.log('Calculating walking times to schools...');
+        const schools = ['primary', 'secondary'];
+
+        for (const schoolType of schools) {
+            const school = property.schools[schoolType];
+            console.log(`${schoolType} school:`, school);
+
+            if (!school?.lookupSuccess || !school?.address) {
+                console.warn(`Skipping ${schoolType} school - no address available`);
+                continue;
+            }
+
+            try {
+                console.log(`Getting directions from "${property.address}" to "${school.address}"`);
+
+                // Get walking directions from property to school
+                const result = await MapsService.getDirections(
+                    property.address,
+                    school.address,
+                    'WALKING'
+                );
+
+                console.log(`Directions result for ${schoolType}:`, result);
+
+                if (result?.duration && result?.distance) {
+                    const walkingTime = result.duration.text;
+                    const distance = result.distance.text;
+
+                    console.log(`${schoolType} school walking time: ${walkingTime}, distance: ${distance}`);
+
+                    // Update the UI
+                    const detailEl = container.querySelector(
+                        `.spoke-node[data-school-type="${schoolType}"] .node-detail[data-loading="true"]`
+                    );
+
+                    if (detailEl) {
+                        detailEl.innerHTML = `🚶 ${walkingTime} | ${distance}`;
+                        detailEl.removeAttribute('data-loading');
+                        console.log(`Updated UI for ${schoolType} school`);
+                    } else {
+                        console.warn(`Could not find detail element for ${schoolType} school`);
+                    }
+                } else {
+                    console.warn(`No routes found for ${schoolType} school - result structure:`, result);
+
+                    // Show school address instead
+                    const detailEl = container.querySelector(
+                        `.spoke-node[data-school-type="${schoolType}"] .node-detail[data-loading="true"]`
+                    );
+                    if (detailEl) {
+                        detailEl.innerHTML = school.address;
+                        detailEl.removeAttribute('data-loading');
+                    }
+                }
+            } catch (error) {
+                console.error(`Failed to calculate walking time to ${schoolType} school:`, error);
+
+                // Show school address as fallback
+                const detailEl = container.querySelector(
+                    `.spoke-node[data-school-type="${schoolType}"] .node-detail[data-loading="true"]`
+                );
+                if (detailEl) {
+                    detailEl.innerHTML = school.address;
+                    detailEl.removeAttribute('data-loading');
+                }
+            }
+        }
+
+        console.log('Finished calculating walking times');
     },
 
     /**
@@ -389,7 +553,6 @@ const App = {
      * @param {string} nodeType - Type of node clicked
      * @param {Object} property - Property data
      * @param {Object} commuteData - Commute data
-     * @param {Object} schoolData - School data
      */
     showNodeDetails(nodeType, property, commuteData) {
         // Could show a modal or expanded view with more details
@@ -402,113 +565,8 @@ const App = {
     setupDataEntryPage() {
         if (!Config.isLocalhost()) return;
 
-        // Setup tab switching
-        this.setupEntryTabs();
-
-        // Setup URL form
-        this.setupUrlEntryForm();
-
         // Setup HTML paste form
         this.setupHtmlEntryForm();
-    },
-
-    /**
-     * Setup entry tab switching
-     */
-    setupEntryTabs() {
-        const tabs = document.querySelectorAll('.tab-btn');
-        const contents = document.querySelectorAll('.tab-content');
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const targetTab = tab.dataset.tab;
-
-                // Update tab buttons
-                tabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-
-                // Update content visibility
-                contents.forEach(c => {
-                    c.classList.toggle('active', c.dataset.tab === targetTab);
-                });
-
-                // Clear any previous results
-                const resultEl = document.getElementById('scrape-result');
-                if (resultEl) {
-                    resultEl.classList.add('hidden');
-                    resultEl.classList.remove('success', 'error');
-                }
-            });
-        });
-    },
-
-    /**
-     * Setup URL entry form
-     */
-    setupUrlEntryForm() {
-        const form = document.getElementById('entry-form');
-        const urlInput = document.getElementById('url-input');
-
-        if (!form) return;
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const submitBtn = form.querySelector('.submit-btn');
-            const btnText = submitBtn?.querySelector('.btn-text');
-            const btnLoader = submitBtn?.querySelector('.btn-loader');
-
-            const url = urlInput.value.trim();
-
-            if (!Utils.isValidRealestateUrl(url)) {
-                Utils.showToast('Please enter a valid realestate.com.au URL', 'error');
-                return;
-            }
-
-            // Show loading state
-            submitBtn.disabled = true;
-            btnText.textContent = 'Scraping...';
-            btnLoader?.classList.remove('hidden');
-
-            try {
-                const property = await Scraper.scrapeFromUrl(url);
-                this.saveToDatabase(property);
-                urlInput.value = '';
-            } catch (error) {
-                console.error('Scraping failed:', error);
-
-                const resultEl = document.getElementById('scrape-result');
-                const isServerError = error.message === 'LOCAL_SERVER_NOT_RUNNING';
-
-                if (isServerError) {
-                    resultEl.innerHTML = `
-                        <div class="error-message">
-                            <h3>Server Not Running</h3>
-                            <p>The local backend server is required for URL scraping.</p>
-                            <p><strong>Start it with:</strong></p>
-                            <pre class="code-block">node server.js</pre>
-                            <p>Then refresh this page and try again.</p>
-                            <p><em>Or use the "Paste HTML" tab as an alternative.</em></p>
-                        </div>
-                    `;
-                } else {
-                    resultEl.innerHTML = `
-                        <div class="error-message">
-                            <h3>Scraping Failed</h3>
-                            <p>${error.message}</p>
-                            <p>Try the "Paste HTML" tab as an alternative.</p>
-                        </div>
-                    `;
-                }
-                resultEl.classList.remove('hidden', 'success');
-                resultEl.classList.add('error');
-
-                Utils.showToast(isServerError ? 'Start server with: node server.js' : 'Scraping failed', 'error');
-            } finally {
-                submitBtn.disabled = false;
-                btnText.textContent = 'Scrape & Add';
-                btnLoader?.classList.add('hidden');
-            }
-        });
     },
 
     /**
@@ -517,6 +575,7 @@ const App = {
     setupHtmlEntryForm() {
         const form = document.getElementById('html-form');
         const htmlInput = document.getElementById('html-input');
+        const urlInput = document.getElementById('url-input');
 
         if (!form) return;
 
@@ -545,6 +604,12 @@ const App = {
 
             try {
                 const property = Scraper.parsePropertyHtml(html);
+
+                // Add the URL if provided
+                if (urlInput && urlInput.value.trim()) {
+                    property.url = urlInput.value.trim();
+                }
+
                 const validation = Scraper.validateProperty(property);
 
                 if (!validation.isValid) {
@@ -553,6 +618,7 @@ const App = {
 
                 this.saveToDatabase(property);
                 htmlInput.value = '';
+                if (urlInput) urlInput.value = '';
                 Utils.showToast('Property added successfully!', 'success');
             } catch (error) {
                 console.error('Parsing failed:', error);
@@ -596,6 +662,82 @@ const App = {
                 <div class="item-price">${Utils.formatPriceRange(p.price?.min, p.price?.max)}</div>
             </div>
         `).join('');
+    },
+
+    /**
+     * Setup Settings page functionality
+     */
+    setupSettingsPage() {
+        const apiKeyInput = document.getElementById('api-key-input');
+        const saveBtn = document.getElementById('save-api-key-btn');
+        const statusEl = document.getElementById('api-key-status');
+
+        if (!apiKeyInput || !saveBtn) return;
+
+        // Load existing API key
+        const existingKey = localStorage.getItem('googleMapsApiKey');
+        if (existingKey) {
+            // Show masked version
+            apiKeyInput.value = existingKey.substring(0, 8) + '...' + existingKey.substring(existingKey.length - 4);
+            apiKeyInput.dataset.fullKey = existingKey;
+        }
+
+        // Handle focus to show full key
+        apiKeyInput.addEventListener('focus', () => {
+            if (apiKeyInput.dataset.fullKey) {
+                apiKeyInput.value = apiKeyInput.dataset.fullKey;
+            }
+        });
+
+        // Handle blur to mask key
+        apiKeyInput.addEventListener('blur', () => {
+            const key = apiKeyInput.value.trim();
+            if (key && key.length > 12) {
+                apiKeyInput.dataset.fullKey = key;
+                apiKeyInput.value = key.substring(0, 8) + '...' + key.substring(key.length - 4);
+            }
+        });
+
+        // Handle save
+        saveBtn.addEventListener('click', () => {
+            let apiKey = apiKeyInput.value.trim();
+
+            // Get full key if it's masked
+            if (apiKeyInput.dataset.fullKey) {
+                apiKey = apiKeyInput.dataset.fullKey;
+            }
+
+            if (!apiKey || apiKey.length < 20) {
+                statusEl.innerHTML = '<p class="error-message">Please enter a valid API key</p>';
+                statusEl.classList.remove('hidden');
+                return;
+            }
+
+            // Save to localStorage
+            localStorage.setItem('googleMapsApiKey', apiKey);
+            apiKeyInput.dataset.fullKey = apiKey;
+
+            // Show success message with reload button
+            statusEl.innerHTML = `
+                <div class="success-message">
+                    <p>✓ API key saved!</p>
+                    <button id="reload-page-btn" class="submit-btn" style="margin-top: 10px;">
+                        Reload Page to Activate
+                    </button>
+                </div>
+            `;
+            statusEl.classList.remove('hidden');
+
+            // Add reload handler
+            document.getElementById('reload-page-btn').addEventListener('click', () => {
+                window.location.reload();
+            });
+
+            Utils.showToast('API key saved! Click the button to reload.', 'success');
+
+            // Mask the input
+            apiKeyInput.value = apiKey.substring(0, 8) + '...' + apiKey.substring(apiKey.length - 4);
+        });
     }
 };
 

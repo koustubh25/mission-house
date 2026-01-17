@@ -58,3 +58,102 @@ You can test the whole app if you like but avoid writing any automated tests as 
     [native code]
 }" id="school-search-field" aria-label="Start typing the name of the school and then use the arrow buttons to move through the list of suggested schools." name="q" class="autosuggest__input"> <div class="autosuggest__results-container"><!----></div></div><!----></form></div><div data-v-e0a2b284="" id="Results"><div data-v-4fceb8b1="" data-v-e0a2b284="" id="SchoolInfo"><h4 data-v-4fceb8b1="">For 2026 enrolments, your address is in the primary school zone for:</h4><div data-v-4fceb8b1="" class="container"><h2 data-v-4fceb8b1="" id="SchoolInfo-header">Marlborough Primary School</h2><table data-v-4fceb8b1=""><!----><tr data-v-4fceb8b1=""><th data-v-4fceb8b1="">Campus years</th><td data-v-4fceb8b1="">Prep to 6<div data-v-4fceb8b1=""><a data-v-4fceb8b1="" href="#" style="display: none;">More info</a></div></td></tr><!----><!----><!----><tr data-v-4fceb8b1=""><th data-v-4fceb8b1="">Address</th><td data-v-4fceb8b1=""><div data-v-4fceb8b1="" class="address">Hardy Crescent</div><div data-v-4fceb8b1="" class="address">Heathmont 3135</div></td></tr><tr data-v-4fceb8b1=""><th data-v-4fceb8b1="">School phone</th><td data-v-4fceb8b1="">03 9870 3468</td></tr><tr data-v-4fceb8b1=""><th data-v-4fceb8b1="">Website</th><td data-v-4fceb8b1=""><a data-v-4fceb8b1="" href="http://www.marlboroughps.vic.edu.au" target="_blank" aria-label="Marlborough Primary School. Press enter to visit the school website. Campus years: Prep to 6. Address: Hardy Crescent Heathmont 3135. Phone: 03 9870 3468 . Region: North East . " class="only-screen">Visit school site</a><span data-v-4fceb8b1="" class="only-print">http://www.marlboroughps.vic.edu.au</span></td></tr><!----><tr data-v-4fceb8b1=""><th data-v-4fceb8b1="">Region</th><td data-v-4fceb8b1="">North East</td></tr><!----><!----></table><div data-v-4fceb8b1="" class="maplink only-mobile">View on map</div></div></div><div data-v-6717e4fe="" data-v-e0a2b284="" id="ExportButton" class="only-screen"><button data-v-6717e4fe="">Export</button></div><div data-v-e0a2b284="" style="margin-bottom: 30px;"></div><!----><div data-v-7385e310="" data-v-e0a2b284="" id="NearestSchools"><h4 data-v-7385e310="">The closest primary schools to this address are:</h4><!----><p data-v-7385e310="" class="fine-print">(indicative distances measured by a straight line between the address and the school)</p><div data-v-7385e310="" class="container"><div data-v-7385e310="" class="school-summary-header"><div data-v-7385e310="" class="school-name">Marlborough Primary School</div><div data-v-7385e310="" class="distance">0.82 km</div></div><div data-v-7385e310="" class="key-detail">Years: Prep to 6</div><div data-v-7385e310="" class="goto"><a data-v-7385e310="" href="#">See more</a></div></div><div data-v-7385e310="" class="container"><div data-v-7385e310="" class="school-summary-header"><div data-v-7385e310="" class="school-name">Great Ryrie Primary School</div><div data-v-7385e310="" class="distance">0.84 km</div></div><div data-v-7385e310="" class="key-detail">Years: Prep to 6</div><div data-v-7385e310="" class="goto"><a data-v-7385e310="" href="#">See more</a></div></div><div data-v-7385e310="" class="container"><div data-v-7385e310="" class="school-summary-header"><div data-v-7385e310="" class="school-name">Heathmont East Primary School</div><div data-v-7385e310="" class="distance">1.6 km</div></div><div data-v-7385e310="" class="key-detail">Years: Prep to 6</div><div data-v-7385e310="" class="goto"><a data-v-7385e310="" href="#">See more</a></div></div><div data-v-7385e310="" class="container"><div data-v-7385e310="" class="school-summary-header"><div data-v-7385e310="" class="school-name">Eastwood Primary School</div><div data-v-7385e310="" class="distance">1.95 km</div></div><div data-v-7385e310="" class="key-detail">Years: Prep to 6</div><div data-v-7385e310="" class="goto"><a data-v-7385e310="" href="#">See more</a></div></div><div data-v-7385e310="" class="container"><div data-v-7385e310="" class="school-summary-header"><div data-v-7385e310="" class="school-name">Bayswater Primary School</div><div data-v-7385e310="" class="distance">2.2 km</div></div><div data-v-7385e310="" class="key-detail">Years: Prep to 6</div><div data-v-7385e310="" class="goto"><a data-v-7385e310="" href="#">See more</a></div></div></div><div data-v-582462c4="" data-v-e0a2b284="" id="Disclaimer" style=""><p data-v-582462c4="" class="small-text">Findmyschool.vic.gov.au uses third party services to match an address to a school zone. In rare cases, an address may be imprecisely located and as a result matched to an incorrect school zone. If your property is near a school zone boundary, zoom in to verify that it has been correctly matched by referring to the location of the property outlined on the basemap. If you are unable to locate your property then please contact <a data-v-582462c4="" href="mailto:vsba@education.vic.gov.au">vsba@education.vic.gov.au</a>.</p><div data-v-582462c4="" class="small-text">See <a data-v-582462c4="" href="#"><i data-v-582462c4="">Terms of Use</i></a>.</div><!----><!----></div></div></div>
 ```
+
+---
+
+## Automated School Catchment Lookup (Implemented Jan 2026)
+
+### Overview
+The application now automatically scrapes school catchment information from findmyschool.vic.gov.au during property entry, eliminating the need for manual lookups.
+
+### Backend Implementation (server.js)
+
+**Core Functions:**
+1. **`scrapeSchoolCatchmentWithRetry(address)`** - Main entry point with 3 retry attempts and exponential backoff
+2. **`scrapeSchoolCatchment(address, retryCount)`** - Puppeteer-based scraper that:
+   - Launches visible browser with stealth plugin
+   - Selects year 2026
+   - Looks up both primary and secondary schools sequentially
+   - Extracts school name and address from `#SchoolInfo` div
+
+3. **`lookupSchoolByType(page, address, schoolType)`** - Handles individual school type lookup:
+   - Clicks year selector (`#stage-2026`)
+   - Clicks school type (`#yeargroup-primary` or `#yeargroup-secondary`)
+   - Types address with human-like delays
+   - Clicks autocomplete suggestion
+   - Waits for results in `#SchoolInfo`
+   - Extracts data from `h2#SchoolInfo-header` and address table rows
+
+**Integration:**
+- Integrated into `/api/save-property` endpoint
+- Runs BEFORE saving property to houses.json
+- If school lookup fails, entire property save fails (no partial data)
+
+**Anti-bot Measures:**
+- Puppeteer stealth plugin
+- Non-headless browser (visible)
+- Human-like typing with 50-150ms random delays per character
+- Realistic user agent and headers
+
+**Data Stored:**
+```json
+{
+  "schools": {
+    "primary": {
+      "name": "Mount Waverley Primary School",
+      "address": "41-53 Galvin St, Mount Waverley 3149",
+      "distance": null,
+      "lookupSuccess": true,
+      "scrapedAt": "2026-01-17T10:01:22.176Z"
+    },
+    "secondary": { /* same structure */ }
+  }
+}
+```
+
+### Frontend Implementation (src/js/app.js)
+
+**Changes:**
+1. **`loadPropertyView()`** - Removed live school lookup, uses pre-scraped data from `property.schools`
+2. **`renderHubSpoke()`** - Displays school names and addresses from stored data
+3. **`calculateSchoolWalkingTimes()`** - NEW function that:
+   - Calls `MapsService.getDirections()` for each school
+   - Uses user's Google Maps API key
+   - Updates UI asynchronously with walking time and distance
+   - Fallback to showing school address if calculation fails
+
+### UI Enhancements - Perfect Pentagon Layout
+
+**Problem Solved:** Original L-shaped grid layout was not visually balanced
+
+**Solution:** Implemented perfect pentagon (5-point star) bicycle hub-and-spoke design using margin-based positioning
+
+**Desktop Layout (260px radius):**
+- Primary School: Top (0°) - `margin: 0px, -260px`
+- Secondary School: Upper-right (72°) - `margin: 247px, -80px`
+- Train Station: Lower-right (144°) - `margin: 153px, 210px`
+- Flinders Train: Lower-left (216°) - `margin: -153px, 210px`
+- Property Info: Upper-left (288°) - `margin: -247px, -80px`
+
+**Mobile Layout (180px radius):**
+- Scaled down proportionally for screens < 768px
+- Same pentagon geometry maintained
+- Smaller nodes (110px vs 180px)
+- Reduced font sizes for readability
+
+**Key Technical Decision:**
+- Used `margin-left` and `margin-top` instead of nested `transform: translate()`
+- Reason: Node heights vary based on content, causing inconsistent -50% offsets
+- Using margins ensures perfect symmetry regardless of content size
+
+**Responsive Design:**
+- Container: Fixed height (700px desktop, 550px mobile) for precise centering
+- Central hub: Perfectly centered with `transform: translate(-50%, -50%)` and `margin: 0`
+- Connection lines: Subtle radial lines from each node to hub (CSS `::after` pseudo-elements)
+- Staggered entrance animations (0.1s-0.5s delays)
+
+### Files Modified
+- `server.js` - Added school scraping functions (~250 lines)
+- `src/js/app.js` - Updated to use pre-scraped school data, added walking time calculations
+- `src/css/main.css` - Redesigned hub-spoke layout with perfect pentagon geometry
+- `src/data/houses.json` - Schema enhanced with `schools` field

@@ -19,6 +19,7 @@
             <div class="nav-links">
                 <a href="#" class="nav-link active" data-page="view">Data View</a>
                 <a href="#" class="nav-link localhost-only" data-page="entry">Data Entry</a>
+                <a href="#" class="nav-link" data-page="settings">⚙️ Settings</a>
             </div>
         </nav>
 
@@ -55,40 +56,28 @@
             <section id="page-entry" class="page localhost-only">
                 <div class="entry-container">
                     <h1 class="page-title">Add Property</h1>
-                    <p class="page-subtitle">Add properties from realestate.com.au</p>
+                    <p class="page-subtitle">Add properties from realestate.com.au by pasting the page HTML</p>
 
-                    <!-- Tab Navigation -->
-                    <div class="entry-tabs">
-                        <button class="tab-btn active" data-tab="url">Via URL</button>
-                        <button class="tab-btn" data-tab="html">Paste HTML</button>
-                    </div>
-
-                    <!-- URL Entry Form -->
-                    <form id="entry-form" class="entry-form tab-content active" data-tab="url">
+                    <!-- HTML Paste Form -->
+                    <form id="html-form" class="entry-form">
                         <div class="input-group">
                             <label for="url-input">Property URL</label>
+                            <p class="form-hint">
+                                Copy the URL from your browser's address bar when viewing the property on realestate.com.au
+                            </p>
                             <input type="url"
                                    id="url-input"
                                    class="url-input"
                                    placeholder="https://www.realestate.com.au/property-..."
-                                   required>
+                                   pattern="https?://.*realestate\.com\.au/.*">
                         </div>
-                        <button type="submit" class="submit-btn">
-                            <span class="btn-text">Scrape & Add</span>
-                            <span class="btn-loader hidden"></span>
-                        </button>
-                        <p class="form-hint">Note: If this fails, use "Paste HTML" tab instead</p>
-                    </form>
-
-                    <!-- HTML Paste Form -->
-                    <form id="html-form" class="entry-form tab-content" data-tab="html">
                         <div class="input-group">
                             <label for="html-input">Page HTML</label>
                             <p class="form-hint">
-                                1. Open the property on realestate.com.au<br>
-                                2. Right-click and select "View Page Source"<br>
-                                3. Select All (Ctrl+A) and Copy (Ctrl+C)<br>
-                                4. Paste below
+                                1. Open the property on realestate.com.au in your browser<br>
+                                2. Right-click on the page and select "View Page Source"<br>
+                                3. Select All (Ctrl+A or Cmd+A) and Copy (Ctrl+C or Cmd+C)<br>
+                                4. Paste the HTML below and click "Parse & Add"
                             </p>
                             <textarea id="html-input"
                                       class="html-input"
@@ -114,6 +103,56 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Settings Page -->
+            <section id="page-settings" class="page">
+                <div class="settings-container">
+                    <h1 class="page-title">Settings</h1>
+                    <p class="page-subtitle">Configure your Google Maps API key</p>
+
+                    <div class="settings-section">
+                        <h2>Google Maps API Key</h2>
+                        <p class="form-hint">
+                            Required for commute calculations and location features.<br>
+                            Your API key is stored locally in your browser and never shared.
+                        </p>
+
+                        <div class="input-group">
+                            <label for="api-key-input">API Key</label>
+                            <input type="text"
+                                   id="api-key-input"
+                                   class="api-key-input"
+                                   placeholder="AIza..."
+                                   autocomplete="off">
+                        </div>
+
+                        <button id="save-api-key-btn" class="submit-btn">
+                            Save API Key
+                        </button>
+
+                        <div id="api-key-status" class="api-key-status hidden"></div>
+
+                        <div class="help-section">
+                            <h3>How to get an API key:</h3>
+                            <ol>
+                                <li>Go to <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a></li>
+                                <li>Create a new project or select an existing one</li>
+                                <li>Enable these APIs:
+                                    <ul>
+                                        <li>Maps JavaScript API</li>
+                                        <li>Places API</li>
+                                        <li>Directions API</li>
+                                        <li>Geocoding API</li>
+                                    </ul>
+                                </li>
+                                <li>Go to "Credentials" and create an API key</li>
+                                <li>Paste it above and click "Save API Key"</li>
+                            </ol>
+                            <p><strong>Note:</strong> For production use, restrict your API key to your domain (koustubh25.github.io)</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
 
         <footer class="footer">
@@ -121,22 +160,42 @@
         </footer>
     </div>
 
-    <!-- Google Maps API - Replace YOUR_API_KEY with actual key in config.js -->
+    <!-- Google Maps API - Loaded dynamically after checking for API key -->
     <script>
-        // Load Google Maps API dynamically with the key from config
+        // Load Google Maps API dynamically with the key from localStorage
         function loadGoogleMapsAPI() {
+            // Get API key from localStorage
+            const apiKey = localStorage.getItem('googleMapsApiKey');
+
+            if (!apiKey || apiKey.length < 20) {
+                console.warn('Google Maps API key not configured. Go to Settings to add your API key.');
+                return;
+            }
+
+            // Check if already loaded
+            if (window.google && window.google.maps) {
+                console.log('Google Maps API already loaded');
+                return;
+            }
+
+            console.log('Loading Google Maps API...');
             const script = document.createElement('script');
-            // Note: User must set their API key in src/js/config.js
-            const apiKey = typeof Config !== 'undefined' ? Config.GOOGLE_MAPS_API_KEY : 'YOUR_GOOGLE_MAPS_API_KEY';
             script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places,geometry&callback=initGoogleMaps`;
             script.async = true;
             script.defer = true;
+            script.onerror = () => {
+                console.error('Failed to load Google Maps API. Check your API key and network connection.');
+            };
             document.head.appendChild(script);
         }
+
         function initGoogleMaps() {
             // Google Maps loaded, MapsService will initialize in App.init()
-            console.log('Google Maps API loaded');
+            console.log('Google Maps API loaded successfully');
         }
+
+        // Make loadGoogleMapsAPI available globally so Settings page can call it
+        window.loadGoogleMapsAPI = loadGoogleMapsAPI;
     </script>
     <script src="src/js/config.js"></script>
     <script>loadGoogleMapsAPI();</script>

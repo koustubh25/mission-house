@@ -1,6 +1,6 @@
 /**
- * Web scraper for realestate.com.au
- * Note: Due to CORS restrictions, this scraper works via a proxy or manual HTML input
+ * HTML parser for realestate.com.au property pages
+ * Users paste the page HTML directly to extract property data
  */
 const Scraper = {
     /**
@@ -15,6 +15,7 @@ const Scraper = {
         const property = {
             id: Utils.generateId(),
             address: '',
+            url: '',
             rooms: {
                 bedrooms: 0,
                 bathrooms: 0,
@@ -33,6 +34,12 @@ const Scraper = {
             propertyType: '',
             scrapedAt: new Date().toISOString()
         };
+
+        // Parse URL from canonical link
+        const canonicalLink = doc.querySelector('link[rel="canonical"]');
+        if (canonicalLink) {
+            property.url = canonicalLink.getAttribute('href') || '';
+        }
 
         // Parse address
         const addressEl = doc.querySelector('.property-info-address, h1[class*="address"]');
@@ -109,35 +116,50 @@ const Scraper = {
             }
         }
 
-        // Parse price
-        const priceEl = doc.querySelector('.property-price, [class*="price"]');
-        if (priceEl) {
-            const priceText = priceEl.textContent.trim();
+        // Parse price - look for "Indicative price:" pattern
+        const allText = doc.body.textContent || '';
+        const indicativePriceMatch = allText.match(/Indicative price:\s*\$?([\d,]+(?:\.\d{2})?)\s*-\s*\$?([\d,]+(?:\.\d{2})?)/i);
+
+        if (indicativePriceMatch) {
+            const priceText = indicativePriceMatch[0];
             property.price.displayText = priceText;
-
-            // Check if auction
-            if (priceText.toLowerCase().includes('auction')) {
-                property.auctionDate = 'TBA'; // Could parse actual date if available
-            }
-        }
-
-        // Look for indicative price
-        const indicativeEl = doc.querySelector('[class*="indicative"], strong[class*="price"]');
-        if (indicativeEl) {
-            const priceText = indicativeEl.textContent;
             const parsed = Utils.parsePrice(priceText);
             property.price.min = parsed.min;
             property.price.max = parsed.max;
-            if (!property.price.displayText) {
+        } else {
+            // Fallback: Look for any price element
+            const priceEl = doc.querySelector('[class*="price"]');
+            if (priceEl) {
+                const priceText = priceEl.textContent.trim();
                 property.price.displayText = priceText;
+                const parsed = Utils.parsePrice(priceText);
+                property.price.min = parsed.min;
+                property.price.max = parsed.max;
             }
         }
 
-        // If no indicative price found, try to parse from display text
-        if (!property.price.min && property.price.displayText) {
-            const parsed = Utils.parsePrice(property.price.displayText);
-            property.price.min = parsed.min;
-            property.price.max = parsed.max;
+        // Parse auction date - look for "Auction" pattern
+        const auctionMatch = allText.match(/Auction\s+(\w+)\s+(\d+)\s+(\w+)(?:\s+at\s+(\d+:\d+\s*(?:am|pm)))?/i);
+        if (auctionMatch) {
+            const [, dayOfWeek, day, month, time] = auctionMatch;
+            property.auctionDate = `${dayOfWeek} ${day} ${month}${time ? ' at ' + time : ''}`;
+
+            // Try to convert to ISO date if possible
+            try {
+                const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                const monthIndex = monthNames.findIndex(m => month.toLowerCase().startsWith(m.toLowerCase()));
+                if (monthIndex >= 0) {
+                    const year = new Date().getFullYear();
+                    const isoDate = new Date(year, monthIndex, parseInt(day));
+                    // If the date is in the past, assume next year
+                    if (isoDate < new Date()) {
+                        isoDate.setFullYear(year + 1);
+                    }
+                    property.auctionDate = isoDate.toISOString().split('T')[0]; // YYYY-MM-DD format
+                }
+            } catch (e) {
+                // Keep the human-readable format if parsing fails
+            }
         }
 
         return property;
@@ -163,64 +185,6 @@ const Scraper = {
             isValid: errors.length === 0,
             errors
         };
-    },
-
-    /**
-     * Fetch property page via local backend API
-     * @param {string} url - Realestate.com.au URL
-     * @returns {Promise<string>} HTML content
-     */
-    async fetchPropertyPage(url) {
-        // Try local backend first (runs on port 3000)
-        try {
-            const response = await fetch('/api/scrape', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ url })
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                if (data.html) {
-                    return data.html;
-                }
-            }
-
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.error || `Server returned ${response.status}`);
-        } catch (e) {
-            // If it's a network error (backend not running), give a helpful message
-            if (e.message.includes('Failed to fetch') || e.message.includes('NetworkError')) {
-                throw new Error('LOCAL_SERVER_NOT_RUNNING');
-            }
-            throw e;
-        }
-    },
-
-    /**
-     * Scrape property from URL (localhost only)
-     * @param {string} url - Realestate.com.au URL
-     * @returns {Promise<Object>} Scraped property data
-     */
-    async scrapeFromUrl(url) {
-        if (!Config.isLocalhost()) {
-            throw new Error('Scraping is only available on localhost');
-        }
-
-        if (!Utils.isValidRealestateUrl(url)) {
-            throw new Error('Invalid realestate.com.au URL');
-        }
-
-        const html = await this.fetchPropertyPage(url);
-        const property = this.parsePropertyHtml(html);
-        property.sourceUrl = url;
-
-        const validation = this.validateProperty(property);
-        if (!validation.isValid) {
-            console.warn('Property validation warnings:', validation.errors);
-        }
-
-        return property;
     },
 
     /**

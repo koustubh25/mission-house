@@ -1,11 +1,9 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "description": "Mission House - Melbourne Property Database",
-  "version": "1.0.0",
   "properties": [
     {
-      "id": "sample-mt-waverley",
+      "id": "mki8jjy165m2pnnehvu",
       "address": "2A Donald Street, Mount Waverley, Vic 3149",
+      "url": "https://www.realestate.com.au/property-townhouse-vic-mount+waverley-149968316",
       "rooms": {
         "bedrooms": 4,
         "bathrooms": 3,
@@ -14,16 +12,31 @@
       "price": {
         "min": 1250000,
         "max": 1350000,
-        "displayText": "AUCTION - Indicative price: $1,250,000 - $1,350,000"
+        "displayText": "Indicative price: $1,250,000 - $1,350,000"
       },
-      "auctionDate": "2026-02-15",
+      "auctionDate": "2026-02-06",
       "floorPlan": {
         "landSize": 237,
         "unit": "m²"
       },
       "propertyType": "Townhouse",
-      "sourceUrl": "https://www.realestate.com.au/property-townhouse-vic-mount+waverley-149968316",
-      "scrapedAt": "2026-01-17T10:00:00.000Z"
+      "scrapedAt": "2026-01-17T11:39:57.241Z",
+      "schools": {
+        "primary": {
+          "name": "Mount Waverley Primary School",
+          "address": "37-45 Park Lane, Mount Waverley 3149",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-01-17T11:40:26.075Z"
+        },
+        "secondary": {
+          "name": "Ashwood High School",
+          "address": "50 Vannam Drive, Ashwood 3147",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-01-17T11:40:26.075Z"
+        }
+      }
     }
   ]
 }
