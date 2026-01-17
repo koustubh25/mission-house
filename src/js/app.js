@@ -23,6 +23,7 @@ const App = {
         // Setup page-specific functionality
         this.setupDataViewPage();
         this.setupDataEntryPage();
+        this.setupComparePage();
         this.setupSettingsPage();
 
         // Initialize Google Maps
@@ -643,6 +644,16 @@ const App = {
         });
     },
 
+
+    /**
+     * Setup Compare page functionality
+     */
+    setupComparePage() {
+        // Initialize CompareService when page is first shown
+        if (typeof CompareService !== 'undefined') {
+            CompareService.init();
+        }
+    },
 
     /**
      * Update the database list display

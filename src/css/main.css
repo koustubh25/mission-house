@@ -1025,3 +1025,279 @@ body.is-localhost .nav-link.localhost-only {
         height: 110px;
     }
 }
+
+/* ==========================================
+   Data Comparison Page Styles
+   ========================================== */
+
+.compare-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Property Selector Section */
+.property-selector-section {
+    background: var(--surface);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-md);
+}
+
+.property-selector-section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+}
+
+.property-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.property-checkbox {
+    background: var(--background);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    transition: var(--transition);
+    cursor: pointer;
+    position: relative;
+}
+
+.property-checkbox:hover {
+    border-color: var(--primary-light);
+    background: var(--surface-light);
+}
+
+.property-checkbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.property-checkbox input[type="checkbox"]:checked ~ label {
+    color: var(--primary-light);
+}
+
+.property-checkbox input[type="checkbox"]:checked ~ label .property-address {
+    color: var(--primary-light);
+}
+
+.property-checkbox:has(input[type="checkbox"]:checked) {
+    border-color: var(--primary-light);
+    background: var(--surface-light);
+}
+
+.property-checkbox input[type="checkbox"]:checked ~ * {
+    opacity: 1;
+}
+
+.property-label {
+    cursor: pointer;
+    user-select: none;
+    display: block;
+}
+
+.property-address {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.property-checkbox input[type="checkbox"]:checked + label .property-address {
+    color: var(--primary-light);
+}
+
+.property-details {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.selection-count {
+    text-align: center;
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: var(--background);
+    border-radius: var(--radius-md);
+}
+
+/* Comparison Chart Section */
+.comparison-chart-section {
+    background: var(--surface);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    margin-bottom: 2rem;
+}
+
+.comparison-chart-section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+}
+
+.chart-wrapper {
+    background: var(--background);
+    padding: 2rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 2rem;
+    height: 600px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chart-wrapper canvas {
+    max-width: 100%;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Legend */
+.chart-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--background);
+    border-radius: var(--radius-md);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.legend-text {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    flex: 1;
+}
+
+/* Metrics Table */
+.metrics-table-wrapper {
+    margin-top: 2rem;
+}
+
+.metrics-table-wrapper h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.metrics-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--background);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.metrics-table thead {
+    background: var(--surface-light);
+}
+
+.metrics-table th,
+.metrics-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.metrics-table th {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.metrics-table td {
+    color: var(--text-secondary);
+}
+
+.metrics-table td.metric-label {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.metrics-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.metrics-table tbody tr:hover {
+    background: var(--surface-light);
+}
+
+/* Empty States */
+.empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--text-secondary);
+    background: var(--background);
+    border-radius: var(--radius-md);
+}
+
+/* Metrics Loading State */
+.metrics-loader {
+    text-align: center;
+    padding: 2rem;
+    background: var(--background);
+    border-radius: var(--radius-md);
+    margin-bottom: 1rem;
+}
+
+.metrics-loader .loading {
+    padding: 2rem;
+    font-size: 1rem;
+    color: var(--primary-light);
+}
+
+/* Responsive Design for Comparison Page */
+@media (max-width: 768px) {
+    .compare-container {
+        padding: 1rem;
+    }
+
+    .property-selector {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-wrapper {
+        padding: 1rem;
+        height: 450px;
+    }
+
+    .metrics-table {
+        font-size: 0.875rem;
+    }
+
+    .metrics-table th,
+    .metrics-table td {
+        padding: 0.75rem 0.5rem;
+    }
+
+    .chart-legend {
+        flex-direction: column;
+    }
+}

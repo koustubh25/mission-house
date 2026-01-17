@@ -35,6 +35,24 @@ Refer the wireframe [dataentrywithdb](img/dataentrywithdb.png)
    b. The original property address itself i.e. input at 2. Again during peak hours on a working day.
 4. Refer [dataview.png](./img/dataview.png)
 
+### Data Comparison Page
+
+1. We need a data comparison page where you can select and compare up to 4 properties.
+2. You can only compare properties which are already present in our database i.e. json file.
+3. I am thinking the way to do this would be the following:
+   1. Following our current hub and spoke design, we could build a spider chart or a radar chart. 
+   2. The different parameters we want to compare on are 
+      1. Number of bedrooms
+      2. Number of baths
+      3. Are of the house
+      4. Price of the house. If it's a range consider the midpoint of the range for comparison
+      5. Time taken to Flinders street station (via train) during peak hours
+      6. Time taken to walk to the nearest train station
+      7. Time take to drive to the nearest train station
+      8. Distance to the primary school
+      9. Distance to the secondary school
+4.  Since this is a lot of information, you can make certain assumptions like I might be ok with hiding the details and display on hovering a particular thread in the web.
+
 ## Constraints
 
 1. I don't have a server to run this application. So make this a purely frontend app i.e. just JS making web api calls.

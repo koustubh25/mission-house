@@ -37,6 +37,158 @@
           "scrapedAt": "2026-01-17T11:40:26.075Z"
         }
       }
+    },
+    {
+      "id": "mkia3f4nfobtc72zdlt",
+      "address": "2/62 Talbot Road, Mount Waverley, Vic 3149",
+      "url": "https://www.realestate.com.au/property-townhouse-vic-mount+waverley-149198460",
+      "rooms": {
+        "bedrooms": 3,
+        "bathrooms": 2,
+        "carSpaces": 2
+      },
+      "price": {
+        "min": 1050000,
+        "max": 1149000,
+        "displayText": "$1,050,000-$1,149,000"
+      },
+      "auctionDate": null,
+      "floorPlan": {
+        "landSize": 153,
+        "unit": "m²"
+      },
+      "propertyType": "Townhouse",
+      "scrapedAt": "2026-01-17T12:23:23.735Z",
+      "schools": {
+        "primary": {
+          "name": "Mount Waverley Primary School",
+          "address": "37-45 Park Lane, Mount Waverley 3149",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-01-17T12:23:52.629Z"
+        },
+        "secondary": {
+          "name": "Mount Waverley Secondary College",
+          "address": "145 Stephensons Road, Mount Waverley 3149",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-01-17T12:23:52.629Z"
+        }
+      }
+    },
+    {
+      "id": "mkia5thoqdghl5zw2ss",
+      "address": "1/1 Sampson Drive, Mount Waverley, Vic 3149",
+      "url": "https://www.realestate.com.au/property-townhouse-vic-mount+waverley-149339396",
+      "rooms": {
+        "bedrooms": 3,
+        "bathrooms": 2,
+        "carSpaces": 1
+      },
+      "price": {
+        "min": 900000,
+        "max": 990000,
+        "displayText": "Indicative price: $900,000 - $990,000"
+      },
+      "auctionDate": null,
+      "floorPlan": {
+        "landSize": null,
+        "unit": "m²"
+      },
+      "propertyType": "Townhouse",
+      "scrapedAt": "2026-01-17T12:25:15.660Z",
+      "schools": {
+        "primary": {
+          "name": "Pinewood Primary School",
+          "address": "27-35 Pinewood Drive, Mount Waverley 3149",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-01-17T12:25:43.392Z"
+        },
+        "secondary": {
+          "name": "Mount Waverley Secondary College",
+          "address": "145 Stephensons Road, Mount Waverley 3149",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-01-17T12:25:43.392Z"
+        }
+      }
+    },
+    {
+      "id": "mkia7uk3mcm098z0m4",
+      "address": "1/12 Sadie Street, Mount Waverley, Vic 3149",
+      "url": "https://www.realestate.com.au/property-townhouse-vic-mount+waverley-149710620",
+      "rooms": {
+        "bedrooms": 4,
+        "bathrooms": 3,
+        "carSpaces": 2
+      },
+      "price": {
+        "min": 1250000,
+        "max": 1350000,
+        "displayText": "AUCTION ($1,250,000 -$1,350,000)"
+      },
+      "auctionDate": "2026-02-06",
+      "floorPlan": {
+        "landSize": 356,
+        "unit": "m²"
+      },
+      "propertyType": "Townhouse",
+      "scrapedAt": "2026-01-17T12:26:50.355Z",
+      "schools": {
+        "primary": {
+          "name": "Mount Waverley Heights Primary School",
+          "address": "36 Solomon Street, Mount Waverley 3149",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-01-17T12:27:18.644Z"
+        },
+        "secondary": {
+          "name": "Mount Waverley Secondary College",
+          "address": "145 Stephensons Road, Mount Waverley 3149",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-01-17T12:27:18.644Z"
+        }
+      }
+    },
+    {
+      "id": "mkib04trft8polkjkx6",
+      "address": "5B Jacqueline Road, Mount Waverley, Vic 3149",
+      "url": "https://www.realestate.com.au/property-townhouse-vic-mount+waverley-149504252",
+      "rooms": {
+        "bedrooms": 4,
+        "bathrooms": 3,
+        "carSpaces": 2
+      },
+      "price": {
+        "min": 1200000,
+        "max": 1300000,
+        "displayText": "Indicative price: $1,200,000 - $1,300,000"
+      },
+      "auctionDate": null,
+      "floorPlan": {
+        "landSize": null,
+        "unit": "m²"
+      },
+      "propertyType": "Townhouse",
+      "scrapedAt": "2026-01-17T12:48:50.031Z",
+      "schools": {
+        "primary": {
+          "name": "Mount Waverley North Primary School",
+          "address": "Marcus Avenue, Mount Waverley 3149",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-01-17T12:49:19.097Z"
+        },
+        "secondary": {
+          "name": "Mount Waverley Secondary College",
+          "address": "145 Stephensons Road, Mount Waverley 3149",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-01-17T12:49:19.097Z"
+        }
+      }
     }
   ]
 }

@@ -21,7 +21,7 @@ puppeteer.use(StealthPlugin());
 // Use Google's public DNS as fallback
 dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
 
-const PORT = 3000;
+const PORT = 3001;
 
 /**
  * Custom DNS lookup using Google's public DNS
