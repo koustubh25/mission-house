@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission House - Melbourne Property Comparison</title>
+    <link rel="stylesheet" href="src/css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <span class="logo">🏠</span>
+                <span class="brand-text">Mission House</span>
+            </div>
+            <div class="nav-links">
+                <a href="#" class="nav-link active" data-page="view">Data View</a>
+                <a href="#" class="nav-link localhost-only" data-page="entry">Data Entry</a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <!-- Data View Page -->
+            <section id="page-view" class="page active">
+                <div class="view-container">
+                    <h1 class="page-title">Property Comparison</h1>
+                    <p class="page-subtitle">Select or enter an address to explore property details</p>
+
+                    <div class="address-selector">
+                        <div class="search-wrapper">
+                            <input type="text"
+                                   id="address-input"
+                                   class="address-input"
+                                   placeholder="Enter address or select from database..."
+                                   autocomplete="off">
+                            <div id="address-suggestions" class="suggestions-dropdown"></div>
+                        </div>
+                    </div>
+
+                    <div id="property-display" class="property-display hidden">
+                        <!-- Hub and spoke visualization will be rendered here -->
+                    </div>
+
+                    <div id="no-selection" class="no-selection">
+                        <div class="placeholder-icon">📍</div>
+                        <p>Enter an address above to see property details</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data Entry Page (localhost only) -->
+            <section id="page-entry" class="page localhost-only">
+                <div class="entry-container">
+                    <h1 class="page-title">Add Property</h1>
+                    <p class="page-subtitle">Enter a realestate.com.au link to add a property</p>
+
+                    <form id="entry-form" class="entry-form">
+                        <div class="input-group">
+                            <label for="url-input">Property URL</label>
+                            <input type="url"
+                                   id="url-input"
+                                   class="url-input"
+                                   placeholder="https://www.realestate.com.au/property-..."
+                                   required>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            <span class="btn-text">Scrape & Add</span>
+                            <span class="btn-loader hidden"></span>
+                        </button>
+                    </form>
+
+                    <div id="scrape-result" class="scrape-result hidden">
+                        <!-- Scrape results will be shown here -->
+                    </div>
+
+                    <div class="database-preview">
+                        <h2>Current Database</h2>
+                        <div id="database-list" class="database-list">
+                            <!-- Database entries will be listed here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>Mission House &copy; 2026 | Melbourne Property Comparison Tool</p>
+        </footer>
+    </div>
+
+    <!-- Google Maps API - Replace YOUR_API_KEY with actual key in config.js -->
+    <script>
+        // Load Google Maps API dynamically with the key from config
+        function loadGoogleMapsAPI() {
+            const script = document.createElement('script');
+            // Note: User must set their API key in src/js/config.js
+            const apiKey = typeof Config !== 'undefined' ? Config.GOOGLE_MAPS_API_KEY : 'YOUR_GOOGLE_MAPS_API_KEY';
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places,geometry&callback=initGoogleMaps`;
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+        }
+        function initGoogleMaps() {
+            // Google Maps loaded, MapsService will initialize in App.init()
+            console.log('Google Maps API loaded');
+        }
+    </script>
+    <script src="src/js/config.js"></script>
+    <script>loadGoogleMapsAPI();</script>
+    <script src="src/js/utils.js"></script>
+    <script src="src/js/scraper.js"></script>
+    <script src="src/js/maps.js"></script>
+    <script src="src/js/schools.js"></script>
+    <script src="src/js/app.js"></script>
+</body>
+</html>

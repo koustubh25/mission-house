@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Mission House - Melbourne Property Database",
+  "version": "1.0.0",
+  "properties": [
+    {
+      "id": "sample-mt-waverley",
+      "address": "2A Donald Street, Mount Waverley, Vic 3149",
+      "rooms": {
+        "bedrooms": 4,
+        "bathrooms": 3,
+        "carSpaces": 2
+      },
+      "price": {
+        "min": 1250000,
+        "max": 1350000,
+        "displayText": "AUCTION - Indicative price: $1,250,000 - $1,350,000"
+      },
+      "auctionDate": "2026-02-15",
+      "floorPlan": {
+        "landSize": 237,
+        "unit": "m²"
+      },
+      "propertyType": "Townhouse",
+      "sourceUrl": "https://www.realestate.com.au/property-townhouse-vic-mount+waverley-149968316",
+      "scrapedAt": "2026-01-17T10:00:00.000Z"
+    }
+  ]
+}
