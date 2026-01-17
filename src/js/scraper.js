@@ -166,38 +166,35 @@ const Scraper = {
     },
 
     /**
-     * Fetch property page via CORS proxy (for localhost only)
+     * Fetch property page via local backend API
      * @param {string} url - Realestate.com.au URL
      * @returns {Promise<string>} HTML content
      */
     async fetchPropertyPage(url) {
-        // CORS proxies - try multiple as they can be unreliable
-        const corsProxies = [
-            { prefix: 'https://api.allorigins.win/raw?url=', encode: true },
-            { prefix: 'https://corsproxy.io/?', encode: true },
-            { prefix: 'https://api.codetabs.com/v1/proxy?quest=', encode: true },
-            { prefix: 'https://thingproxy.freeboard.io/fetch/', encode: false }
-        ];
+        // Try local backend first (runs on port 3000)
+        try {
+            const response = await fetch('/api/scrape', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url })
+            });
 
-        for (const proxy of corsProxies) {
-            try {
-                const proxyUrl = proxy.prefix + (proxy.encode ? encodeURIComponent(url) : url);
-                const response = await fetch(proxyUrl, {
-                    headers: { 'Accept': 'text/html' }
-                });
-                if (response.ok) {
-                    const text = await response.text();
-                    // Verify we got HTML, not an error page
-                    if (text.includes('property-info-address') || text.includes('realestate.com.au')) {
-                        return text;
-                    }
+            if (response.ok) {
+                const data = await response.json();
+                if (data.html) {
+                    return data.html;
                 }
-            } catch (e) {
-                console.warn(`Proxy ${proxy.prefix} failed:`, e);
             }
-        }
 
-        throw new Error('CORS_PROXY_FAILED');
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || `Server returned ${response.status}`);
+        } catch (e) {
+            // If it's a network error (backend not running), give a helpful message
+            if (e.message.includes('Failed to fetch') || e.message.includes('NetworkError')) {
+                throw new Error('LOCAL_SERVER_NOT_RUNNING');
+            }
+            throw e;
+        }
     },
 
     /**

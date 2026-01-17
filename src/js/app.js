@@ -476,21 +476,33 @@ const App = {
             } catch (error) {
                 console.error('Scraping failed:', error);
 
-                // Show helpful error with suggestion to use HTML paste
                 const resultEl = document.getElementById('scrape-result');
-                const isCorsError = error.message === 'CORS_PROXY_FAILED';
+                const isServerError = error.message === 'LOCAL_SERVER_NOT_RUNNING';
 
-                resultEl.innerHTML = `
-                    <div class="error-message">
-                        <h3>Scraping Failed</h3>
-                        <p>${isCorsError ? 'CORS proxies are unavailable.' : error.message}</p>
-                        <p><strong>Recommended:</strong> Use the "Paste HTML" tab instead - it's more reliable!</p>
-                    </div>
-                `;
+                if (isServerError) {
+                    resultEl.innerHTML = `
+                        <div class="error-message">
+                            <h3>Server Not Running</h3>
+                            <p>The local backend server is required for URL scraping.</p>
+                            <p><strong>Start it with:</strong></p>
+                            <pre class="code-block">node server.js</pre>
+                            <p>Then refresh this page and try again.</p>
+                            <p><em>Or use the "Paste HTML" tab as an alternative.</em></p>
+                        </div>
+                    `;
+                } else {
+                    resultEl.innerHTML = `
+                        <div class="error-message">
+                            <h3>Scraping Failed</h3>
+                            <p>${error.message}</p>
+                            <p>Try the "Paste HTML" tab as an alternative.</p>
+                        </div>
+                    `;
+                }
                 resultEl.classList.remove('hidden', 'success');
                 resultEl.classList.add('error');
 
-                Utils.showToast('Try the "Paste HTML" tab instead', 'error');
+                Utils.showToast(isServerError ? 'Start server with: node server.js' : 'Scraping failed', 'error');
             } finally {
                 submitBtn.disabled = false;
                 btnText.textContent = 'Scrape & Add';
