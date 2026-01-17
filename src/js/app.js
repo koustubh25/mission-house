@@ -402,16 +402,60 @@ const App = {
     setupDataEntryPage() {
         if (!Config.isLocalhost()) return;
 
+        // Setup tab switching
+        this.setupEntryTabs();
+
+        // Setup URL form
+        this.setupUrlEntryForm();
+
+        // Setup HTML paste form
+        this.setupHtmlEntryForm();
+    },
+
+    /**
+     * Setup entry tab switching
+     */
+    setupEntryTabs() {
+        const tabs = document.querySelectorAll('.tab-btn');
+        const contents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.dataset.tab;
+
+                // Update tab buttons
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                // Update content visibility
+                contents.forEach(c => {
+                    c.classList.toggle('active', c.dataset.tab === targetTab);
+                });
+
+                // Clear any previous results
+                const resultEl = document.getElementById('scrape-result');
+                if (resultEl) {
+                    resultEl.classList.add('hidden');
+                    resultEl.classList.remove('success', 'error');
+                }
+            });
+        });
+    },
+
+    /**
+     * Setup URL entry form
+     */
+    setupUrlEntryForm() {
         const form = document.getElementById('entry-form');
         const urlInput = document.getElementById('url-input');
-        const submitBtn = form?.querySelector('.submit-btn');
-        const btnText = submitBtn?.querySelector('.btn-text');
-        const btnLoader = submitBtn?.querySelector('.btn-loader');
 
         if (!form) return;
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
+            const submitBtn = form.querySelector('.submit-btn');
+            const btnText = submitBtn?.querySelector('.btn-text');
+            const btnLoader = submitBtn?.querySelector('.btn-loader');
 
             const url = urlInput.value.trim();
 
@@ -432,66 +476,95 @@ const App = {
             } catch (error) {
                 console.error('Scraping failed:', error);
 
-                // Show manual entry option
+                // Show helpful error with suggestion to use HTML paste
                 const resultEl = document.getElementById('scrape-result');
+                const isCorsError = error.message === 'CORS_PROXY_FAILED';
+
                 resultEl.innerHTML = `
                     <div class="error-message">
                         <h3>Scraping Failed</h3>
-                        <p>${error.message}</p>
-                        <p>You can manually enter the property details:</p>
-                        <div id="manual-form-container"></div>
+                        <p>${isCorsError ? 'CORS proxies are unavailable.' : error.message}</p>
+                        <p><strong>Recommended:</strong> Use the "Paste HTML" tab instead - it's more reliable!</p>
                     </div>
                 `;
-                resultEl.classList.remove('hidden');
+                resultEl.classList.remove('hidden', 'success');
                 resultEl.classList.add('error');
 
-                // Add manual form
-                const manualForm = Scraper.createManualEntryForm();
-                const manualSubmit = Utils.createElement('button', {
-                    type: 'submit',
-                    className: 'submit-btn',
-                    style: { marginTop: '1rem' }
-                }, 'Add Property');
-
-                manualForm.appendChild(manualSubmit);
-                manualForm.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    const formData = new FormData(manualForm);
-                    const property = {
-                        id: Utils.generateId(),
-                        address: formData.get('address'),
-                        rooms: {
-                            bedrooms: parseInt(formData.get('bedrooms')) || 0,
-                            bathrooms: parseInt(formData.get('bathrooms')) || 0,
-                            carSpaces: parseInt(formData.get('carSpaces')) || 0
-                        },
-                        price: {
-                            min: parseInt(formData.get('priceMin')) || null,
-                            max: parseInt(formData.get('priceMax')) || null
-                        },
-                        auctionDate: formData.get('auctionDate') || null,
-                        floorPlan: {
-                            landSize: parseInt(formData.get('landSize')) || null,
-                            unit: 'm²'
-                        },
-                        propertyType: formData.get('propertyType') || '',
-                        sourceUrl: url,
-                        scrapedAt: new Date().toISOString()
-                    };
-                    this.saveToDatabase(property);
-                });
-
-                document.getElementById('manual-form-container').appendChild(manualForm);
-
-                Utils.showToast('Scraping failed. Use manual entry.', 'error');
+                Utils.showToast('Try the "Paste HTML" tab instead', 'error');
             } finally {
-                // Reset button state
                 submitBtn.disabled = false;
                 btnText.textContent = 'Scrape & Add';
                 btnLoader?.classList.add('hidden');
             }
         });
     },
+
+    /**
+     * Setup HTML paste form
+     */
+    setupHtmlEntryForm() {
+        const form = document.getElementById('html-form');
+        const htmlInput = document.getElementById('html-input');
+
+        if (!form) return;
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = form.querySelector('.submit-btn');
+            const btnText = submitBtn?.querySelector('.btn-text');
+            const btnLoader = submitBtn?.querySelector('.btn-loader');
+
+            const html = htmlInput.value.trim();
+
+            if (!html) {
+                Utils.showToast('Please paste the page HTML', 'error');
+                return;
+            }
+
+            if (!html.includes('realestate.com.au') && !html.includes('property-info')) {
+                Utils.showToast('This doesn\'t look like realestate.com.au HTML', 'error');
+                return;
+            }
+
+            // Show loading state
+            submitBtn.disabled = true;
+            btnText.textContent = 'Parsing...';
+            btnLoader?.classList.remove('hidden');
+
+            try {
+                const property = Scraper.parsePropertyHtml(html);
+                const validation = Scraper.validateProperty(property);
+
+                if (!validation.isValid) {
+                    throw new Error('Could not extract property data: ' + validation.errors.join(', '));
+                }
+
+                this.saveToDatabase(property);
+                htmlInput.value = '';
+                Utils.showToast('Property added successfully!', 'success');
+            } catch (error) {
+                console.error('Parsing failed:', error);
+
+                const resultEl = document.getElementById('scrape-result');
+                resultEl.innerHTML = `
+                    <div class="error-message">
+                        <h3>Parsing Failed</h3>
+                        <p>${error.message}</p>
+                        <p>Make sure you copied the entire page source (View Page Source, then Ctrl+A, Ctrl+C)</p>
+                    </div>
+                `;
+                resultEl.classList.remove('hidden', 'success');
+                resultEl.classList.add('error');
+
+                Utils.showToast('Failed to parse HTML', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                btnText.textContent = 'Parse & Add';
+                btnLoader?.classList.add('hidden');
+            }
+        });
+    },
+
 
     /**
      * Update the database list display

@@ -55,9 +55,16 @@
             <section id="page-entry" class="page localhost-only">
                 <div class="entry-container">
                     <h1 class="page-title">Add Property</h1>
-                    <p class="page-subtitle">Enter a realestate.com.au link to add a property</p>
+                    <p class="page-subtitle">Add properties from realestate.com.au</p>
 
-                    <form id="entry-form" class="entry-form">
+                    <!-- Tab Navigation -->
+                    <div class="entry-tabs">
+                        <button class="tab-btn active" data-tab="url">Via URL</button>
+                        <button class="tab-btn" data-tab="html">Paste HTML</button>
+                    </div>
+
+                    <!-- URL Entry Form -->
+                    <form id="entry-form" class="entry-form tab-content active" data-tab="url">
                         <div class="input-group">
                             <label for="url-input">Property URL</label>
                             <input type="url"
@@ -68,6 +75,29 @@
                         </div>
                         <button type="submit" class="submit-btn">
                             <span class="btn-text">Scrape & Add</span>
+                            <span class="btn-loader hidden"></span>
+                        </button>
+                        <p class="form-hint">Note: If this fails, use "Paste HTML" tab instead</p>
+                    </form>
+
+                    <!-- HTML Paste Form -->
+                    <form id="html-form" class="entry-form tab-content" data-tab="html">
+                        <div class="input-group">
+                            <label for="html-input">Page HTML</label>
+                            <p class="form-hint">
+                                1. Open the property on realestate.com.au<br>
+                                2. Right-click and select "View Page Source"<br>
+                                3. Select All (Ctrl+A) and Copy (Ctrl+C)<br>
+                                4. Paste below
+                            </p>
+                            <textarea id="html-input"
+                                      class="html-input"
+                                      placeholder="Paste the full HTML here..."
+                                      rows="8"
+                                      required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            <span class="btn-text">Parse & Add</span>
                             <span class="btn-loader hidden"></span>
                         </button>
                     </form>

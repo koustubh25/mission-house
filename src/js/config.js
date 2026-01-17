@@ -3,7 +3,7 @@
  */
 const Config = {
     // Google Maps API Key - Replace with your actual key
-    GOOGLE_MAPS_API_KEY: 'YOUR_GOOGLE_MAPS_API_KEY',
+    GOOGLE_MAPS_API_KEY: 'AIzaSyCdHYNvCeMW8aGuNvLynTEFr4fukVSAyjI',
 
     // Melbourne-specific settings
     MELBOURNE: {

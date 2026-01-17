@@ -171,24 +171,33 @@ const Scraper = {
      * @returns {Promise<string>} HTML content
      */
     async fetchPropertyPage(url) {
-        // CORS proxies that might work
+        // CORS proxies - try multiple as they can be unreliable
         const corsProxies = [
-            'https://api.allorigins.win/raw?url=',
-            'https://corsproxy.io/?'
+            { prefix: 'https://api.allorigins.win/raw?url=', encode: true },
+            { prefix: 'https://corsproxy.io/?', encode: true },
+            { prefix: 'https://api.codetabs.com/v1/proxy?quest=', encode: true },
+            { prefix: 'https://thingproxy.freeboard.io/fetch/', encode: false }
         ];
 
         for (const proxy of corsProxies) {
             try {
-                const response = await fetch(proxy + encodeURIComponent(url));
+                const proxyUrl = proxy.prefix + (proxy.encode ? encodeURIComponent(url) : url);
+                const response = await fetch(proxyUrl, {
+                    headers: { 'Accept': 'text/html' }
+                });
                 if (response.ok) {
-                    return await response.text();
+                    const text = await response.text();
+                    // Verify we got HTML, not an error page
+                    if (text.includes('property-info-address') || text.includes('realestate.com.au')) {
+                        return text;
+                    }
                 }
             } catch (e) {
-                console.warn(`Proxy ${proxy} failed:`, e);
+                console.warn(`Proxy ${proxy.prefix} failed:`, e);
             }
         }
 
-        throw new Error('Unable to fetch property page. CORS proxies unavailable.');
+        throw new Error('CORS_PROXY_FAILED');
     },
 
     /**
