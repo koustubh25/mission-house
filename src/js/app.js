@@ -360,15 +360,46 @@ const App = {
             if (school?.lookupSuccess && school?.name) {
                 const mapsAvailable = MapsService.isLoaded;
                 const naplan = school.naplan;
-                const hasNaplan = naplan && (naplan.reading || naplan.numeracy);
+
+                // Get the appropriate year level scores
+                // Primary: prefer year5, fallback to year3
+                // Secondary: prefer year9, fallback to year7
+                let yearScores = null;
+                let yearLabel = '';
+                if (naplan) {
+                    if (type === 'primary') {
+                        yearScores = naplan.year5 || naplan.year3;
+                        yearLabel = naplan.year5 ? 'Yr5' : (naplan.year3 ? 'Yr3' : '');
+                    } else {
+                        yearScores = naplan.year9 || naplan.year7;
+                        yearLabel = naplan.year9 ? 'Yr9' : (naplan.year7 ? 'Yr7' : '');
+                    }
+                }
+                const hasNaplan = yearScores && (yearScores.reading || yearScores.numeracy);
+                const quality = naplan?.quality;
 
                 // Format NAPLAN scores if available
                 let naplanHtml = '';
-                if (hasNaplan) {
+                if (hasNaplan || quality) {
                     const scores = [];
-                    if (naplan.reading) scores.push(`R:${naplan.reading}`);
-                    if (naplan.numeracy) scores.push(`N:${naplan.numeracy}`);
-                    naplanHtml = `<div class="naplan-scores" title="NAPLAN: Reading=${naplan.reading || 'N/A'}, Numeracy=${naplan.numeracy || 'N/A'}">📊 ${scores.join(' ')}</div>`;
+                    if (yearScores?.reading) scores.push(`R:${yearScores.reading}`);
+                    if (yearScores?.numeracy) scores.push(`N:${yearScores.numeracy}`);
+                    if (quality) scores.push(`Q:${quality}`);
+
+                    // Determine quality indicator color
+                    let qualityClass = '';
+                    if (quality) {
+                        if (quality >= 100) qualityClass = 'quality-good';
+                        else if (quality >= 95) qualityClass = 'quality-ok';
+                        else qualityClass = 'quality-low';
+                    }
+
+                    const qualityTooltip = quality
+                        ? `Quality=${quality}% (100=benchmark)`
+                        : '';
+                    const tooltip = `NAPLAN ${yearLabel}: Reading=${yearScores?.reading || 'N/A'}, Writing=${yearScores?.writing || 'N/A'}, Spelling=${yearScores?.spelling || 'N/A'}, Grammar=${yearScores?.grammar || 'N/A'}, Numeracy=${yearScores?.numeracy || 'N/A'}${qualityTooltip ? ', ' + qualityTooltip : ''}`;
+
+                    naplanHtml = `<div class="naplan-scores ${qualityClass}" title="${tooltip}">📊 ${yearLabel ? yearLabel + ' ' : ''}${scores.join(' ')}</div>`;
                 }
 
                 return `

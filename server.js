@@ -21,7 +21,7 @@ puppeteer.use(StealthPlugin());
 // Use Google's public DNS as fallback
 dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
 
-const PORT = 3001;
+const PORT = 3002;
 
 /**
  * Custom DNS lookup using Google's public DNS
@@ -429,7 +429,99 @@ async function scrapeSchoolCatchmentWithRetry(address) {
 }
 
 /**
+ * Benchmark NAPLAN scores for quality comparison
+ * Primary: Mount Waverley Primary School
+ * Secondary: Mount Waverley Secondary College
+ */
+const BENCHMARK_NAPLAN = {
+    primary: {
+        year3: { reading: 446, writing: 460, spelling: 459, grammar: 475, numeracy: 466 },
+        year5: { reading: 539, writing: 539, spelling: 536, grammar: 561, numeracy: 566 }
+    },
+    secondary: {
+        year7: { reading: 584, writing: 592, spelling: 581, grammar: 592, numeracy: 616 },
+        year9: { reading: 601, writing: 632, spelling: 602, grammar: 609, numeracy: 637 }
+    }
+};
+
+/**
+ * Calculate the sum of all scores in a year level object
+ * @param {Object} yearScores - Object with reading, writing, spelling, grammar, numeracy
+ * @returns {number} Sum of all scores
+ */
+function sumYearScores(yearScores) {
+    if (!yearScores) return 0;
+    return (yearScores.reading || 0) +
+           (yearScores.writing || 0) +
+           (yearScores.spelling || 0) +
+           (yearScores.grammar || 0) +
+           (yearScores.numeracy || 0);
+}
+
+/**
+ * Calculate NAPLAN quality score compared to benchmark
+ * Formula: (school_avg / benchmark_avg) * 100
+ * @param {Object} naplanScores - School's NAPLAN scores with year3/year5/year7/year9
+ * @param {string} schoolType - 'primary' or 'secondary'
+ * @returns {number|null} Quality score (100 = benchmark level, >100 = better, <100 = worse)
+ */
+function calculateNaplanQuality(naplanScores, schoolType) {
+    if (!naplanScores) return null;
+
+    const benchmark = BENCHMARK_NAPLAN[schoolType];
+    if (!benchmark) return null;
+
+    // Determine which year levels to use based on school type
+    const yearLevels = schoolType === 'primary'
+        ? ['year3', 'year5']
+        : ['year7', 'year9'];
+
+    // Calculate school's total and count
+    let schoolTotal = 0;
+    let schoolYearCount = 0;
+
+    for (const year of yearLevels) {
+        if (naplanScores[year]) {
+            const yearSum = sumYearScores(naplanScores[year]);
+            if (yearSum > 0) {
+                schoolTotal += yearSum;
+                schoolYearCount++;
+            }
+        }
+    }
+
+    // Calculate benchmark's total and count
+    let benchmarkTotal = 0;
+    let benchmarkYearCount = 0;
+
+    for (const year of yearLevels) {
+        if (benchmark[year]) {
+            const yearSum = sumYearScores(benchmark[year]);
+            if (yearSum > 0) {
+                benchmarkTotal += yearSum;
+                benchmarkYearCount++;
+            }
+        }
+    }
+
+    // If no data available, return null
+    if (schoolYearCount === 0 || benchmarkYearCount === 0) return null;
+
+    // Calculate averages
+    const schoolAvg = schoolTotal / schoolYearCount;
+    const benchmarkAvg = benchmarkTotal / benchmarkYearCount;
+
+    // Calculate quality score
+    const quality = (schoolAvg / benchmarkAvg) * 100;
+
+    // Round to 1 decimal place
+    return Math.round(quality * 10) / 10;
+}
+
+/**
  * Scrape NAPLAN scores from myschool.edu.au for a specific school
+ * Flow: Accept terms -> Search school -> Click "View School Profile" ->
+ *       Click NAPLAN dropdown -> Select "Results" -> Extract scores from table
  * @param {string} schoolName - Name of the school to search for
  * @returns {Promise<Object>} NAPLAN scores
  */
@@ -458,13 +550,13 @@ async function scrapeNaplanScores(schoolName) {
             timeout: 30000
         });
 
-        // Wait for and accept terms of use
+        // Step 1: Accept terms of use
         console.log('[NAPLAN] Accepting terms of use...');
         await page.waitForSelector('#checkBoxTou', { timeout: 10000 });
         await page.click('#checkBoxTou');
         await new Promise(resolve => setTimeout(resolve, 500));
 
-        // Click Accept button
+        // Click Accept button (wait for it to be enabled after checkbox is clicked)
         await page.waitForSelector('button.accept:not([disabled])', { timeout: 5000 });
         await page.click('button.accept');
 
@@ -472,116 +564,245 @@ async function scrapeNaplanScores(schoolName) {
         await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 });
         console.log('[NAPLAN] Terms accepted, on search page');
 
-        // Wait for search input
-        await page.waitForSelector('input[type="search"], input[name="search"], #search-input, .search-input', { timeout: 10000 });
+        // Step 2: Search for school
+        // The search input is in a form with placeholder text - look for it more broadly
+        await new Promise(resolve => setTimeout(resolve, 2000));
 
-        // Find and use the search input
-        const searchInput = await page.$('input[type="search"]') ||
-                           await page.$('input[name="search"]') ||
-                           await page.$('#search-input') ||
-                           await page.$('.search-input') ||
-                           await page.$('input[placeholder*="search" i]');
+        // Try multiple selectors for the search input
+        let searchInput = null;
+        const searchSelectors = [
+            'input[type="text"]',
+            'input.form-control',
+            'input[placeholder*="school"]',
+            'input[placeholder*="Search"]',
+            '#SchoolSearchTerm',
+            '.school-search input'
+        ];
+
+        for (const selector of searchSelectors) {
+            searchInput = await page.$(selector);
+            if (searchInput) {
+                console.log(`[NAPLAN] Found search input with selector: ${selector}`);
+                break;
+            }
+        }
 
         if (!searchInput) {
-            throw new Error('Could not find search input');
+            // Take screenshot to debug
+            const screenshotPath = path.join(__dirname, `naplan-no-search-${Date.now()}.png`);
+            await page.screenshot({ path: screenshotPath, fullPage: true });
+            console.log(`[NAPLAN] Screenshot saved: ${screenshotPath}`);
+            throw new Error('Could not find search input on myschool.edu.au');
         }
 
         // Type school name
         console.log(`[NAPLAN] Searching for: ${schoolName}`);
         await searchInput.click({ clickCount: 3 });
-        await searchInput.type(schoolName, { delay: 50 });
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await searchInput.type(schoolName, { delay: 30 });
+        await new Promise(resolve => setTimeout(resolve, 500));
 
-        // Press Enter or click search button
-        await page.keyboard.press('Enter');
+        // Click the search button (magnifying glass icon) or press Enter
+        const searchButton = await page.$('button[type="submit"]') ||
+                            await page.$('.search-button') ||
+                            await page.$('button.btn-search') ||
+                            await page.$('a.search-icon');
 
-        // Wait for results
+        if (searchButton) {
+            console.log('[NAPLAN] Clicking search button...');
+            await searchButton.click();
+        } else {
+            console.log('[NAPLAN] Pressing Enter to search...');
+            await page.keyboard.press('Enter');
+        }
+
+        // Wait for search results
         console.log('[NAPLAN] Waiting for search results...');
         await new Promise(resolve => setTimeout(resolve, 3000));
 
-        // Try to click on the first result that matches the school name
-        const resultLinks = await page.$$('a[href*="/school/"]');
-        let clicked = false;
+        // Step 3: Click "View School Profile" button for the matching school
+        // Look for the button in the results
+        let viewProfileClicked = false;
 
-        for (const link of resultLinks) {
-            const text = await link.evaluate(el => el.textContent);
-            if (text && text.toLowerCase().includes(schoolName.toLowerCase().split(' ')[0])) {
-                console.log(`[NAPLAN] Clicking on result: ${text.trim()}`);
-                await link.click();
-                clicked = true;
+        // Try to find "View School Profile" button
+        const viewProfileButtons = await page.$$('a.btn, button.btn, a[href*="/school/"]');
+        for (const btn of viewProfileButtons) {
+            const text = await btn.evaluate(el => el.textContent.trim());
+            if (text.toLowerCase().includes('view school profile')) {
+                console.log('[NAPLAN] Clicking "View School Profile" button...');
+                await btn.click();
+                viewProfileClicked = true;
                 break;
             }
         }
 
-        if (!clicked && resultLinks.length > 0) {
-            // Click first result if no exact match
-            await resultLinks[0].click();
-            clicked = true;
+        // If no "View School Profile" button, try clicking on the school name link
+        if (!viewProfileClicked) {
+            const schoolLinks = await page.$$('a[href*="/school/"]');
+            for (const link of schoolLinks) {
+                const text = await link.evaluate(el => el.textContent.trim());
+                // Match if the link text contains part of the school name
+                const searchTerm = schoolName.toLowerCase().split(' ')[0];
+                if (text.toLowerCase().includes(searchTerm)) {
+                    console.log(`[NAPLAN] Clicking school link: ${text}`);
+                    await link.click();
+                    viewProfileClicked = true;
+                    break;
+                }
+            }
         }
 
-        if (!clicked) {
-            console.log('[NAPLAN] No results found, returning null');
+        if (!viewProfileClicked) {
+            console.log('[NAPLAN] Could not find school in results');
             return null;
         }
 
-        // Wait for school page to load
+        // Wait for school profile page to load
         await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 });
-        console.log('[NAPLAN] School page loaded');
-
-        // Look for NAPLAN link and click it
+        console.log('[NAPLAN] School profile page loaded');
         await new Promise(resolve => setTimeout(resolve, 2000));
 
-        const naplanLink = await page.$('a[href*="naplan"], a:contains("NAPLAN")');
-        if (naplanLink) {
-            await naplanLink.click();
-            await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 });
+        // Step 4: Click on NAPLAN dropdown menu and select "Results"
+        // The NAPLAN menu is a dropdown - we need to hover or click to expand it
+        console.log('[NAPLAN] Looking for NAPLAN menu...');
+
+        // Find the NAPLAN menu item (it's a dropdown)
+        const naplanMenuItem = await page.$('a[href*="naplan"], li:has-text("NAPLAN"), .nav-item:has-text("NAPLAN")');
+
+        // Try clicking on NAPLAN tab/dropdown
+        let naplanClicked = false;
+        const navItems = await page.$$('a, li.nav-item, .nav-link');
+        for (const item of navItems) {
+            const text = await item.evaluate(el => el.textContent.trim());
+            if (text.toUpperCase() === 'NAPLAN' || text.includes('NAPLAN')) {
+                console.log('[NAPLAN] Clicking NAPLAN menu...');
+                await item.click();
+                naplanClicked = true;
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                break;
+            }
         }
 
-        // Extract NAPLAN scores
-        console.log('[NAPLAN] Extracting scores...');
+        if (!naplanClicked) {
+            console.log('[NAPLAN] Could not find NAPLAN menu');
+            // Try direct URL navigation
+            const currentUrl = page.url();
+            if (currentUrl.includes('/school/')) {
+                const naplanUrl = currentUrl.replace(/\/school\/(\d+).*/, '/school/$1/naplan/results');
+                console.log(`[NAPLAN] Trying direct navigation to: ${naplanUrl}`);
+                await page.goto(naplanUrl, { waitUntil: 'networkidle2', timeout: 15000 });
+            }
+        } else {
+            // Step 5: Click "Results" in the dropdown
+            console.log('[NAPLAN] Looking for Results option...');
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            const dropdownItems = await page.$$('a, li, .dropdown-item');
+            for (const item of dropdownItems) {
+                const text = await item.evaluate(el => el.textContent.trim());
+                if (text === 'Results' || text.toLowerCase() === 'results') {
+                    console.log('[NAPLAN] Clicking Results...');
+                    await item.click();
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    break;
+                }
+            }
+        }
+
+        // Step 6: Extract NAPLAN scores from the results table
+        console.log('[NAPLAN] Extracting scores from table...');
         await new Promise(resolve => setTimeout(resolve, 2000));
 
         const scores = await page.evaluate(() => {
             const result = {
                 year: null,
-                reading: null,
-                writing: null,
-                spelling: null,
-                grammar: null,
-                numeracy: null,
                 source: 'myschool.edu.au'
             };
 
-            // Try to find score elements - myschool uses various formats
-            const scoreElements = document.querySelectorAll('[class*="score"], [class*="naplan"], td, .result-value');
+            // Find the most recent year tab that's selected or available
+            const yearTabs = document.querySelectorAll('a[class*="year"], button[class*="year"], .year-tab');
+            for (const tab of yearTabs) {
+                const text = tab.textContent.trim();
+                const yearMatch = text.match(/20\d{2}/);
+                if (yearMatch) {
+                    result.year = yearMatch[0];
+                    break;
+                }
+            }
 
-            // Look for labeled scores
-            const pageText = document.body.innerText;
+            // Also check page content for year
+            if (!result.year) {
+                const pageText = document.body.innerText;
+                const yearMatch = pageText.match(/20(2[3-9]|[3-9]\d)/); // Match 2023 onwards
+                if (yearMatch) result.year = '20' + yearMatch[1];
+            }
 
-            // Extract year
-            const yearMatch = pageText.match(/20\d{2}/);
-            if (yearMatch) result.year = yearMatch[0];
-
-            // Try to extract scores from tables or score displays
+            // Find the NAPLAN results table
+            // Structure: rows are Year 3, Year 5, Year 7, Year 9. Columns are Reading, Writing, Spelling, Grammar, Numeracy
             const tables = document.querySelectorAll('table');
+
             for (const table of tables) {
+                // Check if this looks like a NAPLAN results table
+                const headerRow = table.querySelector('tr');
+                if (!headerRow) continue;
+
+                const headerText = headerRow.textContent.toLowerCase();
+                if (!headerText.includes('reading') && !headerText.includes('numeracy')) continue;
+
+                // Found the NAPLAN table - extract column indices
+                const headers = Array.from(headerRow.querySelectorAll('th, td'));
+                const colIndex = {};
+                headers.forEach((h, i) => {
+                    const text = h.textContent.toLowerCase().trim();
+                    if (text.includes('reading')) colIndex.reading = i;
+                    else if (text.includes('writing')) colIndex.writing = i;
+                    else if (text.includes('spelling')) colIndex.spelling = i;
+                    else if (text.includes('grammar')) colIndex.grammar = i;
+                    else if (text.includes('numeracy')) colIndex.numeracy = i;
+                });
+
+                // Extract scores from data rows
                 const rows = table.querySelectorAll('tr');
                 for (const row of rows) {
                     const cells = row.querySelectorAll('td, th');
-                    if (cells.length >= 2) {
-                        const label = cells[0].textContent.toLowerCase().trim();
-                        const value = cells[1].textContent.trim();
-                        const numValue = parseInt(value);
+                    if (cells.length < 2) continue;
 
-                        if (!isNaN(numValue) && numValue > 0 && numValue < 1000) {
-                            if (label.includes('reading')) result.reading = numValue;
-                            else if (label.includes('writing')) result.writing = numValue;
-                            else if (label.includes('spelling')) result.spelling = numValue;
-                            else if (label.includes('grammar')) result.grammar = numValue;
-                            else if (label.includes('numeracy')) result.numeracy = numValue;
+                    const rowLabel = cells[0].textContent.toLowerCase().trim();
+
+                    // Determine which year level this row is for
+                    let yearKey = null;
+                    if (rowLabel.includes('year 3') || rowLabel === '3' || rowLabel.includes('yr 3')) {
+                        yearKey = 'year3';
+                    } else if (rowLabel.includes('year 5') || rowLabel === '5' || rowLabel.includes('yr 5')) {
+                        yearKey = 'year5';
+                    } else if (rowLabel.includes('year 7') || rowLabel === '7' || rowLabel.includes('yr 7')) {
+                        yearKey = 'year7';
+                    } else if (rowLabel.includes('year 9') || rowLabel === '9' || rowLabel.includes('yr 9')) {
+                        yearKey = 'year9';
+                    }
+
+                    if (yearKey) {
+                        const yearData = {};
+
+                        // Extract each score from the appropriate column
+                        for (const [metric, idx] of Object.entries(colIndex)) {
+                            if (cells[idx]) {
+                                const scoreText = cells[idx].textContent.trim();
+                                const score = parseInt(scoreText);
+                                if (!isNaN(score) && score > 0 && score < 1000) {
+                                    yearData[metric] = score;
+                                }
+                            }
+                        }
+
+                        // Only add if we got some scores
+                        if (Object.keys(yearData).length > 0) {
+                            result[yearKey] = yearData;
                         }
                     }
                 }
+
+                // If we found data, break
+                if (result.year3 || result.year5 || result.year7 || result.year9) break;
             }
 
             return result;
@@ -628,6 +849,9 @@ async function fetchNaplanScoresForSchools(schools) {
         try {
             const primaryNaplan = await scrapeNaplanScores(schools.primary.name);
             if (primaryNaplan) {
+                // Calculate quality score compared to benchmark
+                primaryNaplan.quality = calculateNaplanQuality(primaryNaplan, 'primary');
+                console.log(`[NAPLAN] Primary school quality: ${primaryNaplan.quality}`);
                 schools.primary.naplan = primaryNaplan;
             }
         } catch (e) {
@@ -640,6 +864,9 @@ async function fetchNaplanScoresForSchools(schools) {
         try {
             const secondaryNaplan = await scrapeNaplanScores(schools.secondary.name);
             if (secondaryNaplan) {
+                // Calculate quality score compared to benchmark
+                secondaryNaplan.quality = calculateNaplanQuality(secondaryNaplan, 'secondary');
+                console.log(`[NAPLAN] Secondary school quality: ${secondaryNaplan.quality}`);
                 schools.secondary.naplan = secondaryNaplan;
             }
         } catch (e) {
