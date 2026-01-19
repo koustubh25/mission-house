@@ -567,8 +567,8 @@ async function scrapeNaplanScores(schoolName) {
         });
         await page.click('button.accept');
 
-        // Wait for navigation to search page
-        await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 });
+        // Wait for page to load after accepting terms (no explicit navigation event)
+        await new Promise(resolve => setTimeout(resolve, 2000));
         console.log('[NAPLAN] Terms accepted, on search page');
 
         // Step 2: Search for school
