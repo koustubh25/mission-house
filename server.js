@@ -429,6 +429,228 @@ async function scrapeSchoolCatchmentWithRetry(address) {
 }
 
 /**
+ * Scrape NAPLAN scores from myschool.edu.au for a specific school
+ * @param {string} schoolName - Name of the school to search for
+ * @returns {Promise<Object>} NAPLAN scores
+ */
+async function scrapeNaplanScores(schoolName) {
+    let browser = null;
+
+    try {
+        console.log(`[NAPLAN] Fetching scores for: ${schoolName}`);
+
+        browser = await puppeteer.launch({
+            headless: false,
+            defaultViewport: null,
+            args: [
+                '--start-maximized',
+                '--no-sandbox',
+                '--disable-setuid-sandbox'
+            ]
+        });
+
+        const page = await browser.newPage();
+
+        // Navigate to myschool.edu.au
+        console.log('[NAPLAN] Navigating to myschool.edu.au...');
+        await page.goto('https://www.myschool.edu.au/', {
+            waitUntil: 'networkidle2',
+            timeout: 30000
+        });
+
+        // Wait for and accept terms of use
+        console.log('[NAPLAN] Accepting terms of use...');
+        await page.waitForSelector('#checkBoxTou', { timeout: 10000 });
+        await page.click('#checkBoxTou');
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        // Click Accept button
+        await page.waitForSelector('button.accept:not([disabled])', { timeout: 5000 });
+        await page.click('button.accept');
+
+        // Wait for navigation to search page
+        await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 });
+        console.log('[NAPLAN] Terms accepted, on search page');
+
+        // Wait for search input
+        await page.waitForSelector('input[type="search"], input[name="search"], #search-input, .search-input', { timeout: 10000 });
+
+        // Find and use the search input
+        const searchInput = await page.$('input[type="search"]') ||
+                           await page.$('input[name="search"]') ||
+                           await page.$('#search-input') ||
+                           await page.$('.search-input') ||
+                           await page.$('input[placeholder*="search" i]');
+
+        if (!searchInput) {
+            throw new Error('Could not find search input');
+        }
+
+        // Type school name
+        console.log(`[NAPLAN] Searching for: ${schoolName}`);
+        await searchInput.click({ clickCount: 3 });
+        await searchInput.type(schoolName, { delay: 50 });
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        // Press Enter or click search button
+        await page.keyboard.press('Enter');
+
+        // Wait for results
+        console.log('[NAPLAN] Waiting for search results...');
+        await new Promise(resolve => setTimeout(resolve, 3000));
+
+        // Try to click on the first result that matches the school name
+        const resultLinks = await page.$$('a[href*="/school/"]');
+        let clicked = false;
+
+        for (const link of resultLinks) {
+            const text = await link.evaluate(el => el.textContent);
+            if (text && text.toLowerCase().includes(schoolName.toLowerCase().split(' ')[0])) {
+                console.log(`[NAPLAN] Clicking on result: ${text.trim()}`);
+                await link.click();
+                clicked = true;
+                break;
+            }
+        }
+
+        if (!clicked && resultLinks.length > 0) {
+            // Click first result if no exact match
+            await resultLinks[0].click();
+            clicked = true;
+        }
+
+        if (!clicked) {
+            console.log('[NAPLAN] No results found, returning null');
+            return null;
+        }
+
+        // Wait for school page to load
+        await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 });
+        console.log('[NAPLAN] School page loaded');
+
+        // Look for NAPLAN link and click it
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
+        const naplanLink = await page.$('a[href*="naplan"], a:contains("NAPLAN")');
+        if (naplanLink) {
+            await naplanLink.click();
+            await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 });
+        }
+
+        // Extract NAPLAN scores
+        console.log('[NAPLAN] Extracting scores...');
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
+        const scores = await page.evaluate(() => {
+            const result = {
+                year: null,
+                reading: null,
+                writing: null,
+                spelling: null,
+                grammar: null,
+                numeracy: null,
+                source: 'myschool.edu.au'
+            };
+
+            // Try to find score elements - myschool uses various formats
+            const scoreElements = document.querySelectorAll('[class*="score"], [class*="naplan"], td, .result-value');
+
+            // Look for labeled scores
+            const pageText = document.body.innerText;
+
+            // Extract year
+            const yearMatch = pageText.match(/20\d{2}/);
+            if (yearMatch) result.year = yearMatch[0];
+
+            // Try to extract scores from tables or score displays
+            const tables = document.querySelectorAll('table');
+            for (const table of tables) {
+                const rows = table.querySelectorAll('tr');
+                for (const row of rows) {
+                    const cells = row.querySelectorAll('td, th');
+                    if (cells.length >= 2) {
+                        const label = cells[0].textContent.toLowerCase().trim();
+                        const value = cells[1].textContent.trim();
+                        const numValue = parseInt(value);
+
+                        if (!isNaN(numValue) && numValue > 0 && numValue < 1000) {
+                            if (label.includes('reading')) result.reading = numValue;
+                            else if (label.includes('writing')) result.writing = numValue;
+                            else if (label.includes('spelling')) result.spelling = numValue;
+                            else if (label.includes('grammar')) result.grammar = numValue;
+                            else if (label.includes('numeracy')) result.numeracy = numValue;
+                        }
+                    }
+                }
+            }
+
+            return result;
+        });
+
+        console.log('[NAPLAN] Scores extracted:', scores);
+        return scores;
+
+    } catch (error) {
+        console.error('[NAPLAN] Error:', error.message);
+
+        // Take screenshot for debugging
+        if (browser) {
+            try {
+                const pages = await browser.pages();
+                if (pages.length > 0) {
+                    const screenshotPath = path.join(__dirname, `naplan-error-${Date.now()}.png`);
+                    await pages[0].screenshot({ path: screenshotPath, fullPage: true });
+                    console.log(`[NAPLAN] Screenshot saved: ${screenshotPath}`);
+                }
+            } catch (e) {
+                console.error('[NAPLAN] Could not save screenshot');
+            }
+        }
+
+        return null; // Return null instead of throwing - NAPLAN is optional
+    } finally {
+        if (browser) {
+            await browser.close();
+        }
+    }
+}
+
+/**
+ * Fetch NAPLAN scores for both schools with retry
+ * @param {Object} schools - Schools object with primary and secondary
+ * @returns {Promise<Object>} Schools object with NAPLAN scores added
+ */
+async function fetchNaplanScoresForSchools(schools) {
+    console.log('[NAPLAN] Fetching scores for schools...');
+
+    // Fetch NAPLAN for primary school
+    if (schools.primary?.name) {
+        try {
+            const primaryNaplan = await scrapeNaplanScores(schools.primary.name);
+            if (primaryNaplan) {
+                schools.primary.naplan = primaryNaplan;
+            }
+        } catch (e) {
+            console.error('[NAPLAN] Failed to get primary school scores:', e.message);
+        }
+    }
+
+    // Fetch NAPLAN for secondary school
+    if (schools.secondary?.name) {
+        try {
+            const secondaryNaplan = await scrapeNaplanScores(schools.secondary.name);
+            if (secondaryNaplan) {
+                schools.secondary.naplan = secondaryNaplan;
+            }
+        } catch (e) {
+            console.error('[NAPLAN] Failed to get secondary school scores:', e.message);
+        }
+    }
+
+    return schools;
+}
+
+/**
  * Serve static files
  */
 function serveStatic(filePath, res) {
@@ -515,6 +737,16 @@ async function handleApi(req, res, pathname) {
                     const schools = await scrapeSchoolCatchmentWithRetry(property.address);
                     property.schools = schools;
                     console.log('School lookup completed successfully');
+
+                    // Fetch NAPLAN scores for the schools (optional - won't fail if unavailable)
+                    console.log('Fetching NAPLAN scores...');
+                    try {
+                        await fetchNaplanScoresForSchools(property.schools);
+                        console.log('NAPLAN scores fetched successfully');
+                    } catch (naplanError) {
+                        console.warn('NAPLAN fetch failed (continuing without scores):', naplanError.message);
+                        // Continue without NAPLAN scores - they're optional
+                    }
                 } catch (schoolError) {
                     console.error('School lookup failed:', schoolError.message);
                     res.writeHead(500, { 'Content-Type': 'application/json' });

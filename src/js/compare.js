@@ -192,7 +192,12 @@ const CompareService = {
                     walkToStation: null,
                     driveToStation: null,
                     primarySchoolDist: null,
-                    secondarySchoolDist: null
+                    secondarySchoolDist: null,
+                    // NAPLAN scores (higher is better)
+                    primaryNaplanReading: property.schools?.primary?.naplan?.reading || null,
+                    primaryNaplanNumeracy: property.schools?.primary?.naplan?.numeracy || null,
+                    secondaryNaplanReading: property.schools?.secondary?.naplan?.reading || null,
+                    secondaryNaplanNumeracy: property.schools?.secondary?.naplan?.numeracy || null
                 };
 
                 // Ensure MapsService is initialized
@@ -311,7 +316,8 @@ const CompareService = {
         if (!this.metrics || this.metrics.length === 0) return [];
 
         const metricKeys = ['bedrooms', 'bathrooms', 'area', 'price', 'flindersCommute',
-                           'walkToStation', 'driveToStation', 'primarySchoolDist', 'secondarySchoolDist'];
+                           'walkToStation', 'driveToStation', 'primarySchoolDist', 'secondarySchoolDist',
+                           'primaryNaplanReading', 'primaryNaplanNumeracy', 'secondaryNaplanReading', 'secondaryNaplanNumeracy'];
 
         const normalized = this.selectedProperties.map(() => ({}));
 
@@ -326,7 +332,9 @@ const CompareService = {
                 const defaults = {
                     bedrooms: 3, bathrooms: 2, area: 200, price: 1100000,
                     flindersCommute: 45, walkToStation: 15, driveToStation: 5,
-                    primarySchoolDist: 1.5, secondarySchoolDist: 2.0
+                    primarySchoolDist: 1.5, secondarySchoolDist: 2.0,
+                    primaryNaplanReading: 500, primaryNaplanNumeracy: 500,
+                    secondaryNaplanReading: 550, secondaryNaplanNumeracy: 550
                 };
                 return defaults[key] || 0;
             });
@@ -335,9 +343,11 @@ const CompareService = {
             const max = Math.max(...values);
             const range = max - min;
 
-            // Metrics where HIGHER values are BETTER (bedrooms, bathrooms, area)
+            // Metrics where HIGHER values are BETTER (bedrooms, bathrooms, area, NAPLAN scores)
             // These need to be INVERTED so better (higher) values are CLOSER to center (inner)
-            const higherIsBetter = ['bedrooms', 'bathrooms', 'area'].includes(key);
+            const higherIsBetter = ['bedrooms', 'bathrooms', 'area',
+                                    'primaryNaplanReading', 'primaryNaplanNumeracy',
+                                    'secondaryNaplanReading', 'secondaryNaplanNumeracy'].includes(key);
 
             values.forEach((value, i) => {
                 // If all values are the same, set to middle of visible range
@@ -399,7 +409,7 @@ const CompareService = {
             const color = this.chartColors[i];
             const metrics = normalized[i];
 
-            // Ensure we have all 9 values in the correct order matching the labels
+            // Ensure we have all 13 values in the correct order matching the labels
             // Default to 60 (middle of 20-100 range) for any missing values
             const dataArray = [
                 typeof metrics.bedrooms === 'number' ? metrics.bedrooms : 60,
@@ -410,7 +420,11 @@ const CompareService = {
                 typeof metrics.walkToStation === 'number' ? metrics.walkToStation : 60,
                 typeof metrics.driveToStation === 'number' ? metrics.driveToStation : 60,
                 typeof metrics.primarySchoolDist === 'number' ? metrics.primarySchoolDist : 60,
-                typeof metrics.secondarySchoolDist === 'number' ? metrics.secondarySchoolDist : 60
+                typeof metrics.secondarySchoolDist === 'number' ? metrics.secondarySchoolDist : 60,
+                typeof metrics.primaryNaplanReading === 'number' ? metrics.primaryNaplanReading : 60,
+                typeof metrics.primaryNaplanNumeracy === 'number' ? metrics.primaryNaplanNumeracy : 60,
+                typeof metrics.secondaryNaplanReading === 'number' ? metrics.secondaryNaplanReading : 60,
+                typeof metrics.secondaryNaplanNumeracy === 'number' ? metrics.secondaryNaplanNumeracy : 60
             ];
 
             console.log(`Property ${i + 1} (${property.address}):`, {
@@ -419,9 +433,9 @@ const CompareService = {
                 metricsObject: metrics
             });
 
-            // Verify we have exactly 9 data points
-            if (dataArray.length !== 9) {
-                console.error(`ERROR: Property ${i + 1} has ${dataArray.length} data points instead of 9!`);
+            // Verify we have exactly 13 data points
+            if (dataArray.length !== 13) {
+                console.error(`ERROR: Property ${i + 1} has ${dataArray.length} data points instead of 13!`);
             }
 
             return {
@@ -462,8 +476,12 @@ const CompareService = {
             'Flinders St Commute',
             'Walk to Station',
             'Drive to Station',
-            'Primary School',
-            'Secondary School'
+            'Primary School Dist',
+            'Secondary School Dist',
+            'Primary NAPLAN Reading',
+            'Primary NAPLAN Numeracy',
+            'Secondary NAPLAN Reading',
+            'Secondary NAPLAN Numeracy'
         ];
 
         console.log('Chart has', chartLabels.length, 'labels and each dataset should have', chartLabels.length, 'data points');
@@ -561,7 +579,8 @@ const CompareService = {
     getActualMetricValue(propIndex, metricIndex) {
         const metrics = this.metrics[this.selectedProperties.indexOf(propIndex)];
         const metricKeys = ['bedrooms', 'bathrooms', 'area', 'price', 'flindersCommute',
-                           'walkToStation', 'driveToStation', 'primarySchoolDist', 'secondarySchoolDist'];
+                           'walkToStation', 'driveToStation', 'primarySchoolDist', 'secondarySchoolDist',
+                           'primaryNaplanReading', 'primaryNaplanNumeracy', 'secondaryNaplanReading', 'secondaryNaplanNumeracy'];
         const key = metricKeys[metricIndex];
         const value = metrics[key];
 
@@ -577,6 +596,11 @@ const CompareService = {
             case 'primarySchoolDist':
             case 'secondarySchoolDist':
                 return Utils.formatDistance(value * 1000); // Convert km to meters
+            case 'primaryNaplanReading':
+            case 'primaryNaplanNumeracy':
+            case 'secondaryNaplanReading':
+            case 'secondaryNaplanNumeracy':
+                return value !== null ? value.toString() : 'N/A';
             default:
                 return value;
         }
@@ -627,7 +651,11 @@ const CompareService = {
             { key: 'walkToStation', label: 'Walk to Station', format: (v) => Utils.formatDuration(v) },
             { key: 'driveToStation', label: 'Drive to Station', format: (v) => Utils.formatDuration(v) },
             { key: 'primarySchoolDist', label: 'Primary School Distance', format: (v) => Utils.formatDistance(v * 1000) },
-            { key: 'secondarySchoolDist', label: 'Secondary School Distance', format: (v) => Utils.formatDistance(v * 1000) }
+            { key: 'secondarySchoolDist', label: 'Secondary School Distance', format: (v) => Utils.formatDistance(v * 1000) },
+            { key: 'primaryNaplanReading', label: 'Primary NAPLAN Reading', format: (v) => v !== null ? v : 'N/A' },
+            { key: 'primaryNaplanNumeracy', label: 'Primary NAPLAN Numeracy', format: (v) => v !== null ? v : 'N/A' },
+            { key: 'secondaryNaplanReading', label: 'Secondary NAPLAN Reading', format: (v) => v !== null ? v : 'N/A' },
+            { key: 'secondaryNaplanNumeracy', label: 'Secondary NAPLAN Numeracy', format: (v) => v !== null ? v : 'N/A' }
         ];
 
         // Build table header

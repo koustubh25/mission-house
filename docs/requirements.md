@@ -60,3 +60,31 @@ Refer the wireframe [dataentrywithdb](img/dataentrywithdb.png)
 3. This app will be hosted on koustubh25.github.io
 4. Make this app with a fancy UI i.e. make it as artistic as you can.
 5. I live in Melbourne, Australia. So this is all about Melbourne suburbs.
+
+## Update
+
+1. We now also need the NAPLAN scores for each of the primary and secondary schools
+2. It's a tricky process to obtain the scores, but you will pretty much have to open a browser and scrape the required data.
+3. The process is as below:
+   i. https://myschool.edu.au/
+4. You will need to check the checkbox and click on `Accept`. See [homepage](./myschool/homepage.jpg)
+5. The HTML for it is as below:
+
+```
+<div id="mainFormAcceptance">
+   <div class="col-md-12 text-center">
+   <div class="tou-checkbox-wrapper">
+      <p class="tou-text">
+         <label class="tou-checkbox-inline">
+         <input type="checkbox" id="checkBoxTou" name="checkBoxTou">
+         <span class="myschool-checkbox__indicator"></span>
+         Please select the checkbox to 'Accept' that you have read/heard, understood and accepted the terms of use.
+         </label>
+      </p>
+   </div>
+   </div>
+   <div class="col-md-12 text-center">
+   <button type="submit" class="button-link  accept" disabled="">Accept</button>
+   </div>
+</div>
+```

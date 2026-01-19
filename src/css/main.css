@@ -561,6 +561,22 @@ body {
     text-decoration: underline;
 }
 
+/* NAPLAN Scores in School Nodes */
+.naplan-scores {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    background: rgba(245, 158, 11, 0.15);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    margin: 0.25rem 0;
+    cursor: help;
+}
+
+.naplan-scores:hover {
+    background: rgba(245, 158, 11, 0.25);
+}
+
 /* Entry Tabs */
 .entry-tabs {
     display: flex;

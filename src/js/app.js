@@ -359,10 +359,23 @@ const App = {
         const renderSchoolNode = (school, type, icon, label) => {
             if (school?.lookupSuccess && school?.name) {
                 const mapsAvailable = MapsService.isLoaded;
+                const naplan = school.naplan;
+                const hasNaplan = naplan && (naplan.reading || naplan.numeracy);
+
+                // Format NAPLAN scores if available
+                let naplanHtml = '';
+                if (hasNaplan) {
+                    const scores = [];
+                    if (naplan.reading) scores.push(`R:${naplan.reading}`);
+                    if (naplan.numeracy) scores.push(`N:${naplan.numeracy}`);
+                    naplanHtml = `<div class="naplan-scores" title="NAPLAN: Reading=${naplan.reading || 'N/A'}, Numeracy=${naplan.numeracy || 'N/A'}">📊 ${scores.join(' ')}</div>`;
+                }
+
                 return `
                     <div class="node-icon">${icon}</div>
                     <div class="node-title">${label}</div>
                     <div class="node-value">${school.name}</div>
+                    ${naplanHtml}
                     <div class="node-detail" data-school-type="${type}" data-school-address="${school.address || ''}" ${mapsAvailable ? 'data-loading="true"' : ''}>
                         ${mapsAvailable ? 'Calculating walking time...' : (school.address || 'Address not available')}
                     </div>
