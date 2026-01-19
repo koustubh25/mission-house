@@ -552,12 +552,19 @@ async function scrapeNaplanScores(schoolName) {
 
         // Step 1: Accept terms of use
         console.log('[NAPLAN] Accepting terms of use...');
-        await page.waitForSelector('#checkBoxTou', { timeout: 10000 });
-        await page.click('#checkBoxTou');
-        await new Promise(resolve => setTimeout(resolve, 500));
 
-        // Click Accept button (wait for it to be enabled after checkbox is clicked)
-        await page.waitForSelector('button.accept:not([disabled])', { timeout: 5000 });
+        // Scroll checkbox into view and click the label (more reliable than clicking checkbox directly)
+        await page.evaluate(() => {
+            document.querySelector('#checkBoxTou').scrollIntoView({ behavior: 'instant', block: 'center' });
+        });
+        await page.waitForSelector('label.tou-checkbox-inline', { visible: true });
+        await page.click('label.tou-checkbox-inline');
+
+        // Wait for Accept button to be enabled and click it
+        await page.waitForFunction(() => {
+            const btn = document.querySelector('button.accept');
+            return btn && !btn.disabled;
+        });
         await page.click('button.accept');
 
         // Wait for navigation to search page
@@ -601,11 +608,8 @@ async function scrapeNaplanScores(schoolName) {
         await searchInput.type(schoolName, { delay: 30 });
         await new Promise(resolve => setTimeout(resolve, 500));
 
-        // Click the search button (magnifying glass icon) or press Enter
-        const searchButton = await page.$('button[type="submit"]') ||
-                            await page.$('.search-button') ||
-                            await page.$('button.btn-search') ||
-                            await page.$('a.search-icon');
+        // Click the search button
+        const searchButton = await page.waitForSelector('button.myschool-search-button', { visible: true, timeout: 5000 }).catch(() => null);
 
         if (searchButton) {
             console.log('[NAPLAN] Clicking search button...');
@@ -661,54 +665,15 @@ async function scrapeNaplanScores(schoolName) {
         console.log('[NAPLAN] School profile page loaded');
         await new Promise(resolve => setTimeout(resolve, 2000));
 
-        // Step 4: Click on NAPLAN dropdown menu and select "Results"
-        // The NAPLAN menu is a dropdown - we need to hover or click to expand it
-        console.log('[NAPLAN] Looking for NAPLAN menu...');
+        // Step 4: Navigate to NAPLAN Results via URL
+        // URL pattern: https://myschool.edu.au/school/{id}/naplan/results
+        const currentUrl = page.url();
+        const naplanUrl = currentUrl.replace(/\/?$/, '') + '/naplan/results';
+        console.log(`[NAPLAN] Navigating to: ${naplanUrl}`);
+        await page.goto(naplanUrl, { waitUntil: 'networkidle2', timeout: 15000 });
+        console.log('[NAPLAN] NAPLAN Results page loaded');
 
-        // Find the NAPLAN menu item (it's a dropdown)
-        const naplanMenuItem = await page.$('a[href*="naplan"], li:has-text("NAPLAN"), .nav-item:has-text("NAPLAN")');
-
-        // Try clicking on NAPLAN tab/dropdown
-        let naplanClicked = false;
-        const navItems = await page.$$('a, li.nav-item, .nav-link');
-        for (const item of navItems) {
-            const text = await item.evaluate(el => el.textContent.trim());
-            if (text.toUpperCase() === 'NAPLAN' || text.includes('NAPLAN')) {
-                console.log('[NAPLAN] Clicking NAPLAN menu...');
-                await item.click();
-                naplanClicked = true;
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                break;
-            }
-        }
-
-        if (!naplanClicked) {
-            console.log('[NAPLAN] Could not find NAPLAN menu');
-            // Try direct URL navigation
-            const currentUrl = page.url();
-            if (currentUrl.includes('/school/')) {
-                const naplanUrl = currentUrl.replace(/\/school\/(\d+).*/, '/school/$1/naplan/results');
-                console.log(`[NAPLAN] Trying direct navigation to: ${naplanUrl}`);
-                await page.goto(naplanUrl, { waitUntil: 'networkidle2', timeout: 15000 });
-            }
-        } else {
-            // Step 5: Click "Results" in the dropdown
-            console.log('[NAPLAN] Looking for Results option...');
-            await new Promise(resolve => setTimeout(resolve, 500));
-
-            const dropdownItems = await page.$$('a, li, .dropdown-item');
-            for (const item of dropdownItems) {
-                const text = await item.evaluate(el => el.textContent.trim());
-                if (text === 'Results' || text.toLowerCase() === 'results') {
-                    console.log('[NAPLAN] Clicking Results...');
-                    await item.click();
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                    break;
-                }
-            }
-        }
-
-        // Step 6: Extract NAPLAN scores from the results table
+        // Step 5: Extract NAPLAN scores from the results table
         console.log('[NAPLAN] Extracting scores from table...');
         await new Promise(resolve => setTimeout(resolve, 2000));
 
