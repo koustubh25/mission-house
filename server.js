@@ -580,8 +580,8 @@ async function scrapeNaplanScores(schoolName) {
         const searchSelectors = [
             'input[type="text"]',
             'input.form-control',
-            'input[placeholder*="school"]',
-            'input[placeholder*="Search"]',
+            'input[placeholder*="school" i]',
+            'input[placeholder*="Search" i]',
             '#SchoolSearchTerm',
             '.school-search input'
         ];
@@ -627,8 +627,8 @@ async function scrapeNaplanScores(schoolName) {
         // Look for the button in the results
         let viewProfileClicked = false;
 
-        // Try to find "View School Profile" button
-        const viewProfileButtons = await page.$$('a.btn, button.btn, a[href*="/school/"]');
+        // Try to find "View School Profile" button (use broad selector like test script)
+        const viewProfileButtons = await page.$$('a, button');
         for (const btn of viewProfileButtons) {
             const text = await btn.evaluate(el => el.textContent.trim());
             if (text.toLowerCase().includes('view school profile')) {
