@@ -69,7 +69,7 @@ SDD frameworks like agent-os are great for complex features that need upfront de
 └── db.sqlite       # Local cache for fast queries
 ```
 
-One line per issue. No walls of prose. The AI can parse the entire project state in milliseconds:
+One line per issue. No walls of prose. The AI can quickly parse the entire project state:
 
 ```json
 {

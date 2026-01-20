@@ -20,7 +20,7 @@ I began with a lightweight [requirements.md](https://github.com/koustubh25/missi
 - data sources (e.g. NAPLAN, Google Maps)
 - output expectations (comparison metrics, charts)
 
-I then asked Claude Code (with the beads plugin) to:
+I then asked Claude Code (with beads installed) to:
 
 - Read requirements.md
 - Propose epics, features, and tasks
@@ -408,7 +408,7 @@ If you want a Kanban board or burndown chart, you'll need external tools. beads 
 When we had duplicate issues, we cleaned up with:
 
 ```bash
-bd delete mission-house-ck6 mission-house-d1s mission-house-hqs --reason="batch delete"
+bd delete mission-house-ck6 mission-house-d1s mission-house-hqs --reason="batch delete" --force
 ```
 
 This created tombstones preserving the history.
