@@ -1,0 +1,8 @@
+flowchart LR
+    A[bd ready] --> B[Query graph]
+    B --> C[Filter: status=open]
+    C --> D[Filter: no blockers]
+    D --> E[Sort: priority]
+    E --> F[Here's your next task]
+
+    style F fill:#4ade80,color:#000

@@ -1,0 +1,49 @@
+flowchart TB
+    subgraph Epic["House Comparison App (1ow)"]
+        direction TB
+
+        subgraph Features
+            A6U[Data Entry Page]
+            NG2[Data View Page]
+            E6[JSON Database Schema]
+        end
+
+        subgraph Tasks
+            MV5[Setup Frontend Structure]
+            XKJ[URL Input Form]
+            STY[Web Scraper]
+            I1G[JSON Schema Design]
+            N0A[Create DB File]
+            KD7[Save to JSON]
+            B7T[Address Dropdown]
+            QVS[Google Maps API]
+            UTK[Find Train Station]
+            P73[Flinders St Travel Time]
+            GJ4[Primary School Lookup]
+            UAX[Secondary School Lookup]
+            B44[Hub-Spoke Visualization]
+            C5E[Modern UI Styling]
+        end
+    end
+
+    MV5 --> XKJ
+    MV5 --> B7T
+    MV5 --> A6U
+    MV5 --> NG2
+    MV5 --> E6
+
+    XKJ --> STY
+    STY --> KD7
+    I1G --> KD7
+    I1G --> N0A
+
+    QVS --> UTK
+    QVS --> GJ4
+    QVS --> UAX
+    UTK --> P73
+
+    B7T --> B44
+    B44 --> C5E
+
+    style MV5 fill:#4ade80,color:#000
+    style Epic fill:#1e293b,color:#fff

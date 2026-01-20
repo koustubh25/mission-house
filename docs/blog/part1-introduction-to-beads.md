@@ -29,18 +29,7 @@ If you've used AI coding assistants for larger projects, you've likely encounter
 
 One popular implementation is [agent-os](https://buildermethods.com/agent-os/workflow), which formalizes SDD into a six-phase workflow:
 
-```mermaid
-flowchart LR
-    A[Plan Product] --> B[Shape Spec]
-    B --> C[Write Spec]
-    C --> D[Create Tasks]
-    D --> E[Implement]
-    E --> F[Orchestrate]
-
-    style A fill:#7c3aed,color:#fff
-    style B fill:#7c3aed,color:#fff
-    style C fill:#7c3aed,color:#fff
-```
+![agent-os SDD workflow](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p1-sdd-workflow.png)
 
 agent-os uses layered context (Standards → Product → Specs) stored in markdown files like `mission.md`, `roadmap.md`, and `tech-stack.md`. Tasks are _derived from specs_, not created directly.
 
@@ -51,16 +40,7 @@ agent-os uses layered context (Standards → Product → Specs) stored in markdo
 3. **Layered context** - Rich documentation, but more files to maintain
 4. **Sequential phases** - Structured workflow from planning to orchestration
 
-```mermaid
-flowchart LR
-    A[Read Specs] --> B[Interpret intent]
-    B --> C[Generate tasks]
-    C --> D[Determine order]
-    D --> E[Start working]
-
-    style B fill:#fbbf24,color:#000
-    style D fill:#fbbf24,color:#000
-```
+![SDD interpretation flow](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p1-sdd-interpretation.png)
 
 SDD frameworks like agent-os are great for complex features that need upfront design. But what if you want to skip straight to task management with automatic prioritization?
 
@@ -100,16 +80,7 @@ bd ready  # Shows only unblocked, high-priority tasks
 
 The graph database computes this automatically. No interpretation, no judgment calls - just a deterministic query.
 
-```mermaid
-flowchart LR
-    A[bd ready] --> B[Query graph]
-    B --> C[Filter: status=open]
-    C --> D[Filter: no blockers]
-    D --> E[Sort: priority]
-    E --> F[Here's your next task]
-
-    style F fill:#4ade80,color:#000
-```
+![bd ready flow](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p1-bd-ready-flow.png)
 
 ### 3. Explicit Dependencies = Enforced Execution Order
 
@@ -149,29 +120,7 @@ Before diving deeper into beads, let me briefly introduce what we built. **Missi
 - How long is the commute to the CBD?
 - How do these 4 properties compare on a radar chart?
 
-```mermaid
-flowchart TB
-    subgraph "Data Entry (localhost only)"
-        A[Paste realestate.com.au URL] --> B[Scrape Property Data]
-        B --> C[Save to houses.json]
-    end
-
-    subgraph "Data View"
-        D[Select Property] --> E[Hub & Spoke Visualization]
-        E --> F[Schools]
-        E --> G[Train Station]
-        E --> H[Commute Times]
-        E --> I[NAPLAN Scores]
-    end
-
-    subgraph "Compare View"
-        J[Select up to 4 Properties] --> K[Radar Chart]
-        K --> L[13 Comparison Metrics]
-    end
-
-    C --> D
-    C --> J
-```
+![Mission House architecture](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p1-mission-house-arch.png)
 
 The interesting part isn't the app itself - it's **how we built it using beads**.
 
@@ -230,57 +179,7 @@ And we're coding.
 
 Here's what our project looked like after the initial planning:
 
-```mermaid
-flowchart TB
-    subgraph Epic["House Comparison App (1ow)"]
-        direction TB
-
-        subgraph Features
-            A6U[Data Entry Page]
-            NG2[Data View Page]
-            E6[JSON Database Schema]
-        end
-
-        subgraph Tasks
-            MV5[Setup Frontend Structure]
-            XKJ[URL Input Form]
-            STY[Web Scraper]
-            I1G[JSON Schema Design]
-            N0A[Create DB File]
-            KD7[Save to JSON]
-            B7T[Address Dropdown]
-            QVS[Google Maps API]
-            UTK[Find Train Station]
-            P73[Flinders St Travel Time]
-            GJ4[Primary School Lookup]
-            UAX[Secondary School Lookup]
-            B44[Hub-Spoke Visualization]
-            C5E[Modern UI Styling]
-        end
-    end
-
-    MV5 --> XKJ
-    MV5 --> B7T
-    MV5 --> A6U
-    MV5 --> NG2
-    MV5 --> E6
-
-    XKJ --> STY
-    STY --> KD7
-    I1G --> KD7
-    I1G --> N0A
-
-    QVS --> UTK
-    QVS --> GJ4
-    QVS --> UAX
-    UTK --> P73
-
-    B7T --> B44
-    B44 --> C5E
-
-    style MV5 fill:#4ade80,color:#000
-    style Epic fill:#1e293b,color:#fff
-```
+![Dependency graph](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p1-dependency-graph.png)
 
 Every arrow represents a `bd dep add` command. The AI knows it can't work on "Web Scraper" until "URL Input Form" is done.
 

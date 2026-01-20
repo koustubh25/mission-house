@@ -1,0 +1,23 @@
+flowchart TB
+    subgraph AgentOS["agent-os (SDD)"]
+        S1["Plan Product"]
+        S2["Write Specs"]
+        S3["Derive Tasks"]
+        S4["Interpret Priority"]
+        S5["Implement"]
+
+        S1 --> S2 --> S3 --> S4 --> S5
+    end
+
+    subgraph Beads["beads (Task-First)"]
+        B1["Create Issues"]
+        B2["Add Dependencies"]
+        B3["bd ready"]
+        B4["Implement"]
+
+        B1 --> B2 --> B3 --> B4
+    end
+
+    style S2 fill:#7c3aed,color:#fff
+    style S4 fill:#fbbf24,color:#000
+    style B3 fill:#4ade80,color:#000

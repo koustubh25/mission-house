@@ -1,0 +1,17 @@
+flowchart LR
+    subgraph "Verbose MD Files"
+        A1[Read file 1] --> A2[Read file 2]
+        A2 --> A3[Read file 3...]
+        A3 --> A4[Parse all prose]
+        A4 --> A5[Build mental model]
+        A5 --> A6[Tokens consumed: 📈]
+    end
+
+    subgraph "Single JSONL"
+        B1[Read issues.jsonl] --> B2[Parse structured data]
+        B2 --> B3[Query with bd commands]
+        B3 --> B4[Tokens consumed: 📉]
+    end
+
+    style A6 fill:#ff6b6b,color:#fff
+    style B4 fill:#4ade80,color:#000

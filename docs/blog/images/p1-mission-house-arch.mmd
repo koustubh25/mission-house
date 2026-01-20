@@ -1,0 +1,21 @@
+flowchart TB
+    subgraph "Data Entry (localhost only)"
+        A[Paste realestate.com.au URL] --> B[Scrape Property Data]
+        B --> C[Save to houses.json]
+    end
+
+    subgraph "Data View"
+        D[Select Property] --> E[Hub & Spoke Visualization]
+        E --> F[Schools]
+        E --> G[Train Station]
+        E --> H[Commute Times]
+        E --> I[NAPLAN Scores]
+    end
+
+    subgraph "Compare View"
+        J[Select up to 4 Properties] --> K[Radar Chart]
+        K --> L[13 Comparison Metrics]
+    end
+
+    C --> D
+    C --> J

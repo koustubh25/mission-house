@@ -65,25 +65,7 @@ Compare this to a typical markdown task file that might span dozens of lines wit
 
 ### Why Compact Matters
 
-```mermaid
-flowchart LR
-    subgraph "Verbose MD Files"
-        A1[Read file 1] --> A2[Read file 2]
-        A2 --> A3[Read file 3...]
-        A3 --> A4[Parse all prose]
-        A4 --> A5[Build mental model]
-        A5 --> A6[Tokens consumed: 📈]
-    end
-
-    subgraph "Single JSONL"
-        B1[Read issues.jsonl] --> B2[Parse structured data]
-        B2 --> B3[Query with bd commands]
-        B3 --> B4[Tokens consumed: 📉]
-    end
-
-    style A6 fill:#ff6b6b,color:#fff
-    style B4 fill:#4ade80,color:#000
-```
+![Compact vs verbose comparison](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p2-compact-vs-verbose.png)
 
 The AI gets structured data it can query, not prose it must interpret:
 
@@ -139,50 +121,7 @@ Claude immediately knew:
 
 We organized Mission House using a three-level hierarchy:
 
-```mermaid
-flowchart TB
-    subgraph Epics["Epics (Strategic Goals)"]
-        E1["House Comparison App<br/>mission-house-1ow"]
-        E2["Data Comparison Page<br/>mission-house-tfz"]
-    end
-
-    subgraph Features["Features (User-Facing)"]
-        F1["Data Entry Page<br/>mission-house-a6u"]
-        F2["Data View Page<br/>mission-house-ng2"]
-        F3["JSON Database<br/>mission-house-2e6"]
-        F4["Radar Chart<br/>mission-house-xsq"]
-        F5["NAPLAN Integration<br/>mission-house-9d1"]
-    end
-
-    subgraph Tasks["Tasks (Implementation)"]
-        T1["Frontend Setup"]
-        T2["URL Form"]
-        T3["Web Scraper"]
-        T4["Google Maps API"]
-        T5["School Lookups"]
-        T6["Train Station Finder"]
-        T7["Chart Library Setup"]
-        T8["NAPLAN Scraper"]
-    end
-
-    E1 --> F1
-    E1 --> F2
-    E1 --> F3
-    E2 --> F4
-    F5 --> T8
-
-    F1 --> T1
-    F1 --> T2
-    F1 --> T3
-    F2 --> T4
-    F2 --> T5
-    F2 --> T6
-    F4 --> T7
-
-    style Epics fill:#7c3aed,color:#fff
-    style Features fill:#2563eb,color:#fff
-    style Tasks fill:#059669,color:#fff
-```
+![Epics Features Tasks hierarchy](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p2-hierarchy.png)
 
 ### Why This Structure Works
 
@@ -282,31 +221,7 @@ It uses layered context (Standards/Product/Specs) in markdown files. Tasks are _
 
 No ongoing spec phase was required. A lightweight requirements document seeded the task graph, after which dependencies were tracked as explicit graph edges rather than implied through prose.
 
-```mermaid
-flowchart TB
-    subgraph AgentOS["agent-os (SDD)"]
-        S1["Plan Product"]
-        S2["Write Specs"]
-        S3["Derive Tasks"]
-        S4["Interpret Priority"]
-        S5["Implement"]
-
-        S1 --> S2 --> S3 --> S4 --> S5
-    end
-
-    subgraph Beads["beads (Task-First)"]
-        B1["Create Issues"]
-        B2["Add Dependencies"]
-        B3["bd ready"]
-        B4["Implement"]
-
-        B1 --> B2 --> B3 --> B4
-    end
-
-    style S2 fill:#7c3aed,color:#fff
-    style S4 fill:#fbbf24,color:#000
-    style B3 fill:#4ade80,color:#000
-```
+![agent-os vs beads comparison](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p2-sdd-vs-beads.png)
 
 ### Comparison Table (agent-os vs beads)
 
@@ -355,18 +270,7 @@ Let me be honest about the challenges:
 
 ### 1. Learning Curve
 
-```mermaid
-flowchart LR
-    A[Day 1] -->|"What's bd dep add?"| B[Day 2]
-    B -->|"Why is this blocked?"| C[Day 3]
-    C -->|"Aha! Dependencies!"| D[Day 4+]
-    D -->|"Smooth sailing"| E[Productive]
-
-    style A fill:#ff6b6b,color:#fff
-    style B fill:#fbbf24,color:#000
-    style C fill:#fbbf24,color:#000
-    style D fill:#4ade80,color:#000
-```
+![Learning curve](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p2-learning-curve.png)
 
 The CLI commands take time to internalize. `bd dep add A B` means "A depends on B" (B blocks A) - I got this backwards several times.
 
@@ -451,28 +355,7 @@ This becomes searchable context for future sessions.
 
 Here's how our project actually progressed:
 
-```mermaid
-gantt
-    title Mission House Development Timeline
-    dateFormat  YYYY-MM-DD HH:mm
-    axisFormat %H:%M
-
-    section Day 1 (Jan 17)
-    Epic Creation           :2026-01-17 17:50, 5m
-    Frontend Setup          :2026-01-17 17:55, 15m
-    Data Entry Page         :2026-01-17 18:10, 20m
-    Data View Page          :2026-01-17 18:30, 45m
-    Hub-Spoke UI            :2026-01-17 19:15, 30m
-
-    section Day 1 Evening
-    Comparison Page Epic    :2026-01-17 23:05, 5m
-    Radar Chart             :2026-01-17 23:10, 10m
-    Chart Integration       :2026-01-17 23:20, 5m
-
-    section Day 2 (Jan 19)
-    NAPLAN Feature          :2026-01-19 13:43, 6m
-    NAPLAN Bug Fix          :2026-01-19 17:33, 41m
-```
+![Project timeline](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p2-timeline.png)
 
 **Total active development time:** ~3 hours across 2 days
 
