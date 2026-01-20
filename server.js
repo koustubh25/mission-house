@@ -774,6 +774,10 @@ async function scrapeNaplanScores(schoolName) {
         });
 
         console.log('[NAPLAN] Scores extracted:', scores);
+
+        // Add the NAPLAN results URL to the scores object
+        scores.url = naplanUrl;
+
         return scores;
 
     } catch (error) {

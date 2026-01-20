@@ -507,8 +507,15 @@ const App = {
             node.addEventListener('click', () => {
                 const schoolType = node.dataset.schoolType;
                 if (schoolType) {
-                    // Open findmyschool for school nodes
-                    window.open(SchoolService.generateFindMySchoolLink(property?.address || '', schoolType), '_blank');
+                    // Check if we have a NAPLAN URL for this school
+                    const school = property?.schools?.[schoolType];
+                    if (school?.naplan?.url) {
+                        // Open myschool.edu.au NAPLAN results page
+                        window.open(school.naplan.url, '_blank');
+                    } else {
+                        // Fallback to findmyschool for school lookup
+                        window.open(SchoolService.generateFindMySchoolLink(property?.address || '', schoolType), '_blank');
+                    }
                 } else {
                     this.showNodeDetails(node.classList[1], property, commuteData);
                 }
