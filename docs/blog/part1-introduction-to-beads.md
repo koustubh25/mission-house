@@ -13,37 +13,50 @@ I built a real estate comparison app using Claude Code and a tool called `beads`
 
 ---
 
-## The Problem with Markdown-Based Task Tracking
+## The Spec-Driven Development (SDD) Approach
 
-If you've used AI coding assistants for multi-session projects, you've probably tried tracking work in markdown files - checklists, task lists, or verbose specs. It works... until it doesn't.
-
-The problems with MD-based tracking:
-
-1. **No dependency graph** - You can write "Task B depends on Task A" in prose, but the AI has to *parse and interpret* that relationship every time
-2. **Manual prioritization** - "What should I work on next?" requires scanning through files and making judgment calls
-3. **Verbose = noisy** - As the project grows, task files become walls of text that are hard to scan
-4. **No automatic blocking** - If Task A isn't done, nothing prevents the AI from starting Task B anyway
+If you've used AI coding assistants for larger projects, you've likely encountered Spec-Driven Development. Tools like [agent-os](https://buildermethods.com/agent-os/workflow) formalize this into a structured workflow:
 
 ```mermaid
 flowchart LR
-    A[Read MD Files] --> B{What's next?}
-    B --> C[Parse prose]
-    C --> D[Interpret dependencies]
-    D --> E[Make judgment call]
-    E --> F[Hope it's right]
+    A[Plan Product] --> B[Shape Spec]
+    B --> C[Write Spec]
+    C --> D[Create Tasks]
+    D --> E[Implement]
+    E --> F[Orchestrate]
 
-    style C fill:#fbbf24,color:#000
-    style D fill:#fbbf24,color:#000
-    style E fill:#ff6b6b,color:#fff
+    style A fill:#7c3aed,color:#fff
+    style B fill:#7c3aed,color:#fff
+    style C fill:#7c3aed,color:#fff
 ```
 
-The fundamental issue? **Markdown is for humans, not graph traversal.** When your AI needs to determine the next highest-priority unblocked task, parsing prose is inefficient and error-prone.
+SDD uses layered context (Standards → Product → Specs) stored in markdown files like `mission.md`, `roadmap.md`, and `tech-stack.md`. Tasks are *derived from specs*, not created directly.
+
+**SDD works well, but has trade-offs:**
+
+1. **Spec-first philosophy** - You must write specs before creating tasks, even for small changes
+2. **Tasks derived from prose** - The AI interprets specs to generate tasks, which requires judgment
+3. **No explicit dependency graph** - Dependencies are implicit in the spec narrative
+4. **Manual "what's next?"** - Prioritization comes from the spec phase, not computed automatically
+
+```mermaid
+flowchart LR
+    A[Read Specs] --> B[Interpret intent]
+    B --> C[Generate tasks]
+    C --> D[Determine order]
+    D --> E[Start working]
+
+    style B fill:#fbbf24,color:#000
+    style D fill:#fbbf24,color:#000
+```
+
+SDD is great for complex features that need upfront design. But what if you want to skip straight to task management with automatic prioritization?
 
 ---
 
-## Enter `beads`: A Graph Database for AI Task Planning
+## Enter `beads`: Task-First with Graph-Based Dependencies
 
-[Beads](https://github.com/steveyegge/beads) is what its creator Steve Yegge calls "a drop-in cognitive upgrade for your coding agents." It's designed to replace markdown files for tracking work, using a graph-based approach that makes dependency resolution automatic.
+[Beads](https://github.com/steveyegge/beads) is what its creator Steve Yegge calls "a drop-in cognitive upgrade for your coding agents." Instead of the spec-first approach, beads is **task-first** - you create issues directly, with explicit dependencies stored as graph edges.
 
 ### 1. Compact JSONL, Not Verbose Markdown
 
@@ -269,9 +282,9 @@ In the next post, I'll dive deep into:
 
 ## Key Takeaways
 
-1. **Graph beats prose** - Dependencies as edges, not sentences to parse
-2. **`bd ready` is the killer feature** - Automatic prioritization via graph traversal
-3. **Compact JSONL beats verbose MD** - One line per issue, not walls of text
+1. **Task-first vs. spec-first** - beads lets you create issues directly; SDD requires specs first
+2. **Graph-based dependencies** - Explicit edges, not prose to interpret
+3. **`bd ready` is the killer feature** - Automatic prioritization via graph traversal
 4. **Enforced execution order** - Blocked tasks are invisible until unblocked
 
 ---

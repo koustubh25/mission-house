@@ -211,69 +211,83 @@ Tombstones preserve history while removing clutter. The AI knows this was delete
 
 ---
 
-## beads vs. Markdown-Based Task Tracking
+## beads vs. Spec-Driven Development (SDD)
 
-Let's be honest about the comparison. Tools like `agent-os` and other AI workflow managers also create persistent task lists in files that can be committed to git. So what's actually different?
+Let's compare beads to Spec-Driven Development, as implemented by tools like [agent-os](https://buildermethods.com/agent-os/workflow).
 
-### The Core Difference: Graph vs. Prose
+### Two Different Philosophies
+
+**SDD (agent-os)** follows a six-phase workflow:
+1. Plan Product → 2. Shape Spec → 3. Write Spec → 4. Create Tasks → 5. Implement → 6. Orchestrate
+
+It uses layered context (Standards/Product/Specs) in markdown files. Tasks are *derived from specs*.
+
+**beads** is task-first:
+1. Create issues → 2. Add dependencies → 3. Run `bd ready` → 4. Implement
+
+No spec phase required. Dependencies are explicit graph edges, not prose.
 
 ```mermaid
 flowchart TB
-    subgraph MD["Markdown Task Tracking"]
-        M1["Create task list in MD"]
-        M2["AI reads MD file"]
-        M3["AI parses prose"]
-        M4["AI interprets dependencies"]
-        M5["AI makes judgment call"]
-        M6["AI picks a task"]
+    subgraph SDD["Spec-Driven Development"]
+        S1["Plan Product"]
+        S2["Write Specs"]
+        S3["Derive Tasks"]
+        S4["Interpret Priority"]
+        S5["Implement"]
 
-        M1 --> M2 --> M3 --> M4 --> M5 --> M6
+        S1 --> S2 --> S3 --> S4 --> S5
     end
 
-    subgraph Beads["beads Graph Database"]
-        B1["Create issues with bd"]
-        B2["AI runs bd ready"]
-        B3["Graph query executes"]
-        B4["Unblocked tasks returned"]
-        B5["AI picks top priority"]
+    subgraph Beads["beads Task-First"]
+        B1["Create Issues"]
+        B2["Add Dependencies"]
+        B3["bd ready"]
+        B4["Implement"]
 
-        B1 --> B2 --> B3 --> B4 --> B5
+        B1 --> B2 --> B3 --> B4
     end
 
-    style M4 fill:#fbbf24,color:#000
-    style M5 fill:#ff6b6b,color:#fff
+    style S2 fill:#7c3aed,color:#fff
+    style S4 fill:#fbbf24,color:#000
     style B3 fill:#4ade80,color:#000
-    style B4 fill:#4ade80,color:#000
 ```
 
 ### Honest Comparison Table
 
-| Aspect | MD-Based (agent-os, etc.) | beads |
-|--------|---------------------------|-------|
-| **Persistence** | ✅ Yes (files in git) | ✅ Yes (JSONL in git) |
-| **Status tracking** | ✅ Yes | ✅ Yes |
-| **Format** | Verbose prose/checklists | Compact JSON (1 line/issue) |
-| **Dependencies** | Written in prose | Graph edges (queryable) |
-| **"What's next?"** | AI must parse & decide | `bd ready` computes it |
-| **Blocked work** | AI must interpret | `bd blocked` shows instantly |
-| **Signal-to-noise** | Gets noisy over time | Stays compact |
+| Aspect | SDD (agent-os) | beads |
+|--------|----------------|-------|
+| **Philosophy** | Spec-first | Task-first |
+| **Persistence** | ✅ MD files in git | ✅ JSONL in git |
+| **Context layers** | Standards/Product/Specs | Flat issue list |
+| **Task creation** | Derived from specs | Created directly |
+| **Dependencies** | Implicit in spec narrative | Explicit graph edges |
+| **"What's next?"** | Derived from spec phase | `bd ready` computes it |
+| **Upfront design** | Required (spec phases) | Optional |
+| **Best for** | Complex features needing design | Iterative, fast-moving work |
 
-### The Real Advantage: Automatic Prioritization
+### When to Use Which
 
-Both approaches persist state. The difference is **how the AI determines what to work on next**:
+**Use SDD when:**
+1. **Complex features** - You need to think through architecture before coding
+2. **Team alignment** - Specs help communicate intent to other humans
+3. **Stakeholder buy-in** - Non-technical people need to review plans
+4. **Regulated industries** - Formal specs may be required
 
-- **MD files:** Parse text → Interpret meaning → Make judgment → Hope it's right
-- **beads:** Run `bd ready` → Get mathematically correct answer
+**Use beads when:**
+1. **Fast iteration** - You want to jump straight to tasks
+2. **Clear requirements** - You already know what to build
+3. **Dependency-heavy work** - Many tasks blocking each other
+4. **Solo or AI-assisted** - Less need for human-readable specs
 
-When Steve Yegge says beads gives agents "long-horizon task planning capability," this is what he means - the graph handles the planning logic, not the AI's interpretation of prose.
+### Can You Use Both?
 
-### When MD-Based Still Works
+Yes. You could:
+- Use SDD's planning phases to think through architecture
+- Export tasks to beads for execution with graph-based tracking
+- Keep high-level context in a README, detailed execution in beads
 
-1. **Simple projects** - If you have 5 tasks with no dependencies, a checklist is fine
-2. **Human-first workflows** - If humans are the primary readers, prose is more natural
-3. **Explanatory context** - Sometimes you need paragraphs to explain *why*, not just *what*
-
-**My approach:** Use beads for execution tracking, keep a lightweight README for high-level context that humans need to understand.
+**My approach:** For Mission House, I skipped formal specs and went straight to beads. The requirements doc was enough context - I didn't need a full SDD workflow for a personal project.
 
 ---
 
@@ -432,16 +446,23 @@ bd stats                          # Project overview
 
 ## Final Thoughts
 
-beads isn't magic - other tools also persist task state across sessions. What makes it different:
+beads and SDD represent different philosophies:
 
-1. **Graph-based dependencies** - Not prose to interpret, but edges to query
-2. **Automatic prioritization** - `bd ready` computes what's next mathematically
-3. **Compact JSONL** - High signal-to-noise ratio as projects grow
-4. **Close reasons** - Implementation context preserved for future sessions
+- **SDD** says: "Think first, spec it out, then derive tasks"
+- **beads** says: "Create tasks directly, let the graph handle prioritization"
 
-The Mission House project went from idea to working app in about 3 hours of active development, spread across multiple sessions. The graph kept track of what was blocked, what was ready, and what was done - with zero manual tracking overhead.
+Neither is universally better. SDD shines when you need upfront design and human-readable documentation. beads shines when you want to move fast with automatic dependency resolution.
 
-Is beads the only way to do AI-assisted development? No. Is it better than verbose markdown files that become hard to scan? For complex projects with dependencies, absolutely.
+What makes beads unique:
+
+1. **Task-first workflow** - Skip straight to issue creation
+2. **Graph-based dependencies** - Explicit edges, not prose to interpret
+3. **Automatic prioritization** - `bd ready` computes what's next mathematically
+4. **Compact JSONL** - High signal-to-noise ratio as projects grow
+
+The Mission House project went from idea to working app in about 3 hours of active development, spread across multiple sessions. The graph kept track of what was blocked, what was ready, and what was done - no spec documents required.
+
+Choose the approach that fits your project. Or use both.
 
 ---
 
