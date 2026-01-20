@@ -117,7 +117,8 @@ This isn't prose that might be ignored - it's a graph edge. The AI literally can
 For macOS users:
 
 ```bash
-brew install steveyegge/beads/bd
+brew tap steveyegge/beads
+brew install bd
 
 # Initialize in your project
 cd your-project
