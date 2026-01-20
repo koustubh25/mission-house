@@ -1,12 +1,12 @@
 # Building Apps with AI: How `beads` Changed My Development Workflow
 
-*Part 1 of 2: From Spec Documents to Living Issue Trackers*
+_Part 1 of 2: From Spec Documents to Living Issue Trackers_
 
 ---
 
 ## TL;DR
 
-I built a real estate comparison app using Claude Code and a tool called `beads` - a git-native issue tracker designed for AI-assisted development. This post explores how beads transformed my workflow from writing lengthy spec documents to having a living, breathing project tracker that my AI assistant actually understands.
+I built a real estate comparison app using Claude Code and a tool called [beads](https://github.com/steveyegge/beads) - a git-native issue tracker designed for AI-assisted development. This post explores how beads transformed my workflow from writing lengthy spec documents to having a living, breathing project tracker that my AI assistant actually understands.
 
 **Live Demo:** [Mission House App](https://koustubh25.github.io/mission-house/)
 **Source Code:** [GitHub Repository](https://github.com/koustubh25/mission-house)
@@ -32,7 +32,7 @@ flowchart LR
     style C fill:#7c3aed,color:#fff
 ```
 
-agent-os uses layered context (Standards → Product → Specs) stored in markdown files like `mission.md`, `roadmap.md`, and `tech-stack.md`. Tasks are *derived from specs*, not created directly.
+agent-os uses layered context (Standards → Product → Specs) stored in markdown files like `mission.md`, `roadmap.md`, and `tech-stack.md`. Tasks are _derived from specs_, not created directly.
 
 **agent-os works well, but has trade-offs:**
 
@@ -72,7 +72,12 @@ SDD frameworks like agent-os are great for complex features that need upfront de
 One line per issue. No walls of prose. The AI can parse the entire project state in milliseconds:
 
 ```json
-{"id":"mission-house-ogp","title":"Implement scraper","status":"closed","dependencies":[{"depends_on_id":"mission-house-5mv"}]}
+{
+  "id": "mission-house-ogp",
+  "title": "Implement scraper",
+  "status": "closed",
+  "dependencies": [{ "depends_on_id": "mission-house-5mv" }]
+}
 ```
 
 ### 2. Automatic "What's Next?" via Graph Traversal
@@ -83,7 +88,7 @@ This is the killer feature. Instead of the AI parsing prose to figure out priori
 bd ready  # Shows only unblocked, high-priority tasks
 ```
 
-The graph database computes this automatically. No interpretation, no judgment calls - just math.
+The graph database computes this automatically. No interpretation, no judgment calls - just a deterministic query.
 
 ```mermaid
 flowchart LR
@@ -291,7 +296,7 @@ In the next post, I'll dive deep into:
 
 ---
 
-*Continue to [Part 2: Deep Dive into beads Workflow →](./part2-beads-deep-dive.md)*
+_Continue to [Part 2: Deep Dive into beads Workflow →](./part2-beads-deep-dive.md)_
 
 ---
 

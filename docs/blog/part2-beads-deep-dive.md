@@ -1,12 +1,67 @@
 # Building Apps with AI: Deep Dive into beads Workflow
 
-*Part 2 of 2: JSONL Memory, Real Examples, and Honest Drawbacks*
+_Part 2 of 2: JSONL Memory, Real Examples, and Honest Drawbacks_
 
 ---
 
 ## Recap
 
-In [Part 1](./part1-introduction-to-beads.md), I introduced `beads` - a git-native issue tracker designed for AI-assisted development. We looked at the Mission House app and the basic workflow. Now let's go deeper.
+In [Part 1](./part1-introduction-to-beads.md), I introduced `beads` — a git-native issue tracker designed for AI-assisted development. We looked at the Mission House app and the basic workflow. Now let’s go deeper.
+
+---
+
+## Where the Tasks Came From
+
+Although beads is task-first, I didn’t start from a blank slate.
+
+I began with a lightweight [requirements.md](https://github.com/koustubh25/mission-house/blob/main/docs/requirements.md) that described:
+
+- core user flows
+- data sources (e.g. NAPLAN, Google Maps)
+- output expectations (comparison metrics, charts)
+
+I then asked Claude Code (with the beads plugin) to:
+
+- Read requirements.md
+- Propose epics, features, and tasks
+- Encode them directly into beads issues with explicit dependencies
+
+In other words, requirements existed, but they were treated as input, not as a continuously consulted execution artifact.
+
+Once the task graph existed, beads became the primary source of truth.
+
+## Scope and Assumptions
+
+This post reflects a **solo, AI-assisted development workflow** on a small but non-trivial codebase (dozens of tasks, explicit dependencies, multiple external APIs).
+
+Assumptions:
+
+- The AI agent has read access to the full issue graph
+- Execution efficiency matters more than prolonged design deliberation
+
+For ambiguous product discovery, multi-team coordination, or regulated environments, spec-driven approaches may be a better _first_ step.
+
+---
+
+## Where the Tasks Came From
+
+Although beads is task-first, I didn’t start from a blank slate.
+
+I began with a lightweight `requirements.md` describing:
+
+- core user flows
+- data sources (NAPLAN, Google Maps, property data)
+- output expectations (comparison metrics, charts)
+
+I then asked **Claude Code (with the beads plugin)** to:
+
+1. Read `requirements.md`
+2. Propose epics, features, and tasks
+3. Encode them directly into beads issues with explicit dependencies
+
+In other words, **requirements existed**, but they were treated as _input_, not as a continuously consulted execution artifact.
+
+Once the task graph existed, beads became the primary source of truth.
 
 ---
 
@@ -14,9 +69,10 @@ In [Part 1](./part1-introduction-to-beads.md), I introduced `beads` - a git-nati
 
 Every beads issue is stored as a single line of JSON in `.beads/issues.jsonl`:
 
-```json
+````json
 {"id":"mission-house-ogp","title":"Implement myschool.edu.au scraper","description":"Create Puppeteer-based scraper...","status":"closed","priority":1,"close_reason":"NAPLAN scraper implemented in server.js","dependencies":[{"depends_on_id":"mission-house-5mv"}]}
 ```
+
 
 Compare this to a typical markdown task file that might span dozens of lines with headers, descriptions, and nested checklists for the same information.
 
@@ -40,9 +96,10 @@ flowchart LR
 
     style A6 fill:#ff6b6b,color:#fff
     style B4 fill:#4ade80,color:#000
-```
+````
 
 The AI gets structured data it can query, not prose it must interpret:
+
 - **`bd ready`** - What's unblocked and highest priority?
 - **`bd blocked`** - What's waiting on other work?
 - **`bd show <id>`** - Full details on one issue
@@ -56,18 +113,23 @@ When you close an issue, you document what was actually built:
 bd close mission-house-ogp --reason="NAPLAN scraper implemented in server.js, handles terms acceptance and score extraction"
 ```
 
-This becomes searchable context. In future sessions, the AI can see not just "this is done" but *how* it was done.
+This is not just status — it’s ground truth.
+
+Specs capture intent.
+Close reasons capture reality.
 
 ### Real Example: Session Continuity
 
 Here's what happened when I resumed work on NAPLAN scoring after a break:
 
 **Session 1 (ended with):**
+
 ```bash
 bd close mission-house-ogp --reason="NAPLAN scores integration complete: scraper implemented in server.js"
 ```
 
 **Session 2 (started with):**
+
 ```bash
 > bd ready
 
@@ -77,11 +139,12 @@ mission-house-6t1 [P2] [task] open - Display NAPLAN scores in UI
 ```
 
 Claude immediately knew:
+
 1. The scraper was done (from ogp's close reason)
 2. The schema was updated (from 0ch's close reason)
 3. The next logical step was UI display
 
-**No context re-establishment needed.**
+**No manual context re-establishment was needed**, because dependencies and implementation details were already encoded.
 
 ---
 
@@ -136,11 +199,11 @@ flowchart TB
 
 ### Why This Structure Works
 
-| Level | Purpose | Typical Count | Lifetime |
-|-------|---------|---------------|----------|
-| **Epic** | Strategic goal, multiple sessions | 2-5 per project | Weeks |
-| **Feature** | User-facing capability | 5-15 per epic | Days |
-| **Task** | Single implementation unit | 3-10 per feature | Hours |
+| Level       | Purpose                           | Typical Count    | Lifetime |
+| ----------- | --------------------------------- | ---------------- | -------- |
+| **Epic**    | Strategic goal, multiple sessions | 2-5 per project  | Weeks    |
+| **Feature** | User-facing capability            | 5-15 per epic    | Days     |
+| **Task**    | Single implementation unit        | 3-10 per feature | Hours    |
 
 The AI works at the **task level** but understands the **feature and epic context**.
 
@@ -171,6 +234,7 @@ Let me show you actual issues from our project to illustrate different patterns:
 ```
 
 **What the AI learned from this:**
+
 - Can't calculate commute until "Find nearest train station" (utk) is done
 - Implementation went into `MapsService.getTravelToFlinders()`
 - Peak hour scheduling was added
@@ -215,19 +279,21 @@ Tombstones preserve history while removing clutter. The AI knows this was delete
 
 Spec-Driven Development (SDD) is a methodology - different tools implement it differently. Let's compare beads to [agent-os](https://buildermethods.com/agent-os/workflow), one popular SDD framework.
 
-*Note: This comparison is specific to agent-os. Other SDD implementations may work differently.*
+_Note: This comparison is specific to agent-os. Other SDD implementations may work differently._
 
 ### Two Different Philosophies
 
 **agent-os** follows a six-phase workflow:
+
 1. Plan Product → 2. Shape Spec → 3. Write Spec → 4. Create Tasks → 5. Implement → 6. Orchestrate
 
-It uses layered context (Standards/Product/Specs) in markdown files. Tasks are *derived from specs*.
+It uses layered context (Standards/Product/Specs) in markdown files. Tasks are _derived from specs_.
 
 **beads** is task-first:
+
 1. Create issues → 2. Add dependencies → 3. Run `bd ready` → 4. Implement
 
-No spec phase required. Dependencies are explicit graph edges, not prose.
+No ongoing spec phase was required. A lightweight requirements document seeded the task graph, after which dependencies were tracked as explicit graph edges rather than implied through prose.
 
 ```mermaid
 flowchart TB
@@ -257,26 +323,28 @@ flowchart TB
 
 ### Comparison Table (agent-os vs beads)
 
-| Aspect | agent-os | beads |
-|--------|----------|-------|
-| **Philosophy** | Spec-first | Task-first |
-| **Persistence** | ✅ MD files in git | ✅ JSONL in git |
-| **Context layers** | Standards/Product/Specs | Flat issue list |
-| **Task creation** | Derived from specs | Created directly |
-| **Dependencies** | Implicit in spec narrative | Explicit graph edges |
-| **"What's next?"** | Derived from spec phase | `bd ready` computes it |
-| **Upfront design** | Required (spec phases) | Optional |
-| **Best for** | Complex features needing design | Iterative, fast-moving work |
+| Aspect             | agent-os                        | beads                       |
+| ------------------ | ------------------------------- | --------------------------- |
+| **Philosophy**     | Spec-first                      | Task-first                  |
+| **Persistence**    | ✅ MD files in git              | ✅ JSONL in git             |
+| **Context layers** | Standards/Product/Specs         | Flat issue list             |
+| **Task creation**  | Derived from specs              | Created directly            |
+| **Dependencies**   | Implicit in spec narrative      | Explicit graph edges        |
+| **"What's next?"** | Derived from spec phase         | `bd ready` computes it      |
+| **Upfront design** | Required (spec phases)          | Optional                    |
+| **Best for**       | Complex features needing design | Iterative, fast-moving work |
 
 ### When to Use Which
 
 **Use agent-os (or similar SDD frameworks) when:**
+
 1. **Complex features** - You need to think through architecture before coding
 2. **Team alignment** - Specs help communicate intent to other humans
 3. **Stakeholder buy-in** - Non-technical people need to review plans
 4. **Regulated industries** - Formal specs may be required
 
 **Use beads when:**
+
 1. **Fast iteration** - You want to jump straight to tasks
 2. **Clear requirements** - You already know what to build
 3. **Dependency-heavy work** - Many tasks blocking each other
@@ -285,6 +353,7 @@ flowchart TB
 ### Can You Use Both?
 
 Yes. You could:
+
 - Use SDD's planning phases to think through architecture
 - Export tasks to beads for execution with graph-based tracking
 - Keep high-level context in a README, detailed execution in beads
@@ -371,13 +440,13 @@ This created tombstones preserving the history.
 
 beads uses P0-P4 priorities:
 
-| Priority | Meaning | Our Usage |
-|----------|---------|-----------|
-| P0 | Critical | Blocking bugs |
-| P1 | High | Core features |
-| P2 | Medium | Most tasks |
-| P3 | Low | Nice-to-haves |
-| P4 | Backlog | Future ideas |
+| Priority | Meaning  | Our Usage     |
+| -------- | -------- | ------------- |
+| P0       | Critical | Blocking bugs |
+| P1       | High     | Core features |
+| P2       | Medium   | Most tasks    |
+| P3       | Low      | Nice-to-haves |
+| P4       | Backlog  | Future ideas  |
 
 ### Close Reasons
 
@@ -459,7 +528,7 @@ What makes beads unique:
 
 1. **Task-first workflow** - Skip straight to issue creation
 2. **Graph-based dependencies** - Explicit edges, not prose to interpret
-3. **Automatic prioritization** - `bd ready` computes what's next mathematically
+3. **Automatic prioritization** - `bd ready` computes what's next via graph traversal
 4. **Compact JSONL** - High signal-to-noise ratio as projects grow
 
 The Mission House project went from idea to working app in about 3 hours of active development, spread across multiple sessions. The graph kept track of what was blocked, what was ready, and what was done - no spec documents required.
@@ -477,8 +546,12 @@ Choose the approach that fits your project. Or use both.
 
 ---
 
-*Thanks for reading! If you try beads on your next AI-assisted project, I'd love to hear how it goes.*
+_Thanks for reading! If you try beads on your next AI-assisted project, I'd love to hear how it goes._
 
 ---
 
 **Tags:** #ai #claude #devtools #productivity #projectmanagement #webdev
+
+```
+
+```
