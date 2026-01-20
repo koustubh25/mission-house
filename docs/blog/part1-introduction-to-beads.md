@@ -13,77 +13,82 @@ I built a real estate comparison app using Claude Code and a tool called `beads`
 
 ---
 
-## The Problem with Spec-Driven AI Development
+## The Problem with Markdown-Based Task Tracking
 
-If you've worked with AI coding assistants, you've probably experienced this:
+If you've used AI coding assistants for multi-session projects, you've probably tried tracking work in markdown files - checklists, task lists, or verbose specs. It works... until it doesn't.
 
-1. You write a detailed spec document
-2. You paste it into the AI chat
-3. The AI implements half of it, forgets the rest
-4. You remind it about the forgotten parts
-5. It apologizes and starts over
-6. Rinse and repeat
+The problems with MD-based tracking:
 
-The fundamental issue? **AI assistants have limited context windows**, and even the best ones struggle to maintain coherent project state across sessions.
+1. **No dependency graph** - You can write "Task B depends on Task A" in prose, but the AI has to *parse and interpret* that relationship every time
+2. **Manual prioritization** - "What should I work on next?" requires scanning through files and making judgment calls
+3. **Verbose = noisy** - As the project grows, task files become walls of text that are hard to scan
+4. **No automatic blocking** - If Task A isn't done, nothing prevents the AI from starting Task B anyway
 
 ```mermaid
 flowchart LR
-    A[Write Spec] --> B[Paste to AI]
-    B --> C[AI Implements]
-    C --> D{Complete?}
-    D -->|No| E[Remind AI]
-    E --> B
-    D -->|Yes| F[Done]
+    A[Read MD Files] --> B{What's next?}
+    B --> C[Parse prose]
+    C --> D[Interpret dependencies]
+    D --> E[Make judgment call]
+    E --> F[Hope it's right]
 
+    style C fill:#fbbf24,color:#000
+    style D fill:#fbbf24,color:#000
     style E fill:#ff6b6b,color:#fff
 ```
 
-Every time you start a new session, you're essentially starting from scratch - re-explaining context, re-establishing what's done vs. pending, and hoping the AI doesn't hallucinate completed features.
+The fundamental issue? **Markdown is for humans, not graph traversal.** When your AI needs to determine the next highest-priority unblocked task, parsing prose is inefficient and error-prone.
 
 ---
 
-## Enter `beads`: Git-Native Issue Tracking for AI
+## Enter `beads`: A Graph Database for AI Task Planning
 
-[Beads](https://github.com/steveyegge/beads) is a CLI-based issue tracker that stores everything in `.jsonl` files committed directly to your git repository. Here's what makes it different:
+[Beads](https://github.com/steveyegge/beads) is what its creator Steve Yegge calls "a drop-in cognitive upgrade for your coding agents." It's designed to replace markdown files for tracking work, using a graph-based approach that makes dependency resolution automatic.
 
-### 1. Issues Live in Your Repo
+### 1. Compact JSONL, Not Verbose Markdown
 
 ```bash
 .beads/
-├── issues.jsonl    # All your issues in one file
+├── issues.jsonl    # All issues in ONE compact file
 ├── config.yaml     # Project configuration
 └── db.sqlite       # Local cache for fast queries
 ```
 
-The `issues.jsonl` file is plain text and committed to git. This means:
-- **Full history** of every issue change
-- **Branching and merging** works naturally
-- **AI assistants can read it** to understand project context
+One line per issue. No walls of prose. The AI can parse the entire project state in milliseconds:
 
-### 2. Purpose-Built for AI Workflows
-
-When Claude Code (or any AI assistant with beads integration) starts a session, it can run:
-
-```bash
-bd prime  # Loads project context
-bd ready  # Shows issues ready to work on
-bd list   # Shows all open issues
+```json
+{"id":"mission-house-ogp","title":"Implement scraper","status":"closed","dependencies":[{"depends_on_id":"mission-house-5mv"}]}
 ```
 
-The AI immediately knows:
-- What's been completed
-- What's currently in progress
-- What's blocked and why
-- The full dependency graph
+### 2. Automatic "What's Next?" via Graph Traversal
 
-### 3. Dependencies That Actually Work
+This is the killer feature. Instead of the AI parsing prose to figure out priorities:
+
+```bash
+bd ready  # Shows only unblocked, high-priority tasks
+```
+
+The graph database computes this automatically. No interpretation, no judgment calls - just math.
+
+```mermaid
+flowchart LR
+    A[bd ready] --> B[Query graph]
+    B --> C[Filter: status=open]
+    C --> D[Filter: no blockers]
+    D --> E[Sort: priority]
+    E --> F[Here's your next task]
+
+    style F fill:#4ade80,color:#000
+```
+
+### 3. Explicit Dependencies = Enforced Execution Order
 
 ```bash
 bd dep add mission-house-abc mission-house-xyz
 # "abc depends on xyz" (xyz blocks abc)
 ```
 
-This creates a clear execution order that both humans and AI can follow.
+This isn't prose that might be ignored - it's a graph edge. The AI literally cannot see `abc` in `bd ready` until `xyz` is closed.
 
 ---
 
@@ -264,10 +269,10 @@ In the next post, I'll dive deep into:
 
 ## Key Takeaways
 
-1. **Spec documents are static; beads issues are dynamic** - They evolve with your project
-2. **Dependencies prevent AI amnesia** - The assistant always knows what to work on next
-3. **Git integration means full history** - Every issue change is tracked
-4. **AI-native by design** - Built specifically for Claude Code and similar tools
+1. **Graph beats prose** - Dependencies as edges, not sentences to parse
+2. **`bd ready` is the killer feature** - Automatic prioritization via graph traversal
+3. **Compact JSONL beats verbose MD** - One line per issue, not walls of text
+4. **Enforced execution order** - Blocked tasks are invisible until unblocked
 
 ---
 

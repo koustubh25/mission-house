@@ -10,49 +10,53 @@ In [Part 1](./part1-introduction-to-beads.md), I introduced `beads` - a git-nati
 
 ---
 
-## The JSONL Advantage: Why Plain Text Matters
+## The JSONL Advantage: Compact and Queryable
 
 Every beads issue is stored as a single line of JSON in `.beads/issues.jsonl`:
 
 ```json
-{"id":"mission-house-ogp","title":"Implement myschool.edu.au scraper","description":"Create Puppeteer-based scraper for myschool.edu.au to fetch NAPLAN scores. Must handle: 1) Accept terms of use (check checkbox #checkBoxTou, click Accept button), 2) Search for school by name, 3) Extract NAPLAN scores from results page.","status":"closed","priority":1,"issue_type":"task","created_at":"2026-01-19T13:43:24.489562+11:00","closed_at":"2026-01-19T13:49:09.53437+11:00","close_reason":"NAPLAN scores integration complete: scraper implemented in server.js, schema updated with naplan property in schools, UI displays scores in data view and compare pages"}
+{"id":"mission-house-ogp","title":"Implement myschool.edu.au scraper","description":"Create Puppeteer-based scraper...","status":"closed","priority":1,"close_reason":"NAPLAN scraper implemented in server.js","dependencies":[{"depends_on_id":"mission-house-5mv"}]}
 ```
 
-### Why This Matters for AI
+Compare this to a typical markdown task file that might span dozens of lines with headers, descriptions, and nested checklists for the same information.
+
+### Why Compact Matters
 
 ```mermaid
 flowchart LR
-    subgraph "Traditional Approach"
-        A1[Start Session] --> A2[Read Spec Doc]
-        A2 --> A3[Work on Tasks]
-        A3 --> A4[End Session]
-        A4 --> A5[Start New Session]
-        A5 --> A6[Re-read Spec Doc]
-        A6 --> A7[Remember What's Done?]
-        A7 -->|Maybe| A3
+    subgraph "Verbose MD Files"
+        A1[Read file 1] --> A2[Read file 2]
+        A2 --> A3[Read file 3...]
+        A3 --> A4[Parse all prose]
+        A4 --> A5[Build mental model]
+        A5 --> A6[Tokens consumed: 📈]
     end
 
-    subgraph "beads Approach"
-        B1[Start Session] --> B2[bd prime]
-        B2 --> B3[AI Reads JSONL]
-        B3 --> B4[Knows Full History]
-        B4 --> B5[bd ready]
-        B5 --> B6[Work on Next Task]
-        B6 --> B7[bd close with reason]
-        B7 --> B8[End Session]
-        B8 --> B9[Start New Session]
-        B9 --> B2
+    subgraph "Single JSONL"
+        B1[Read issues.jsonl] --> B2[Parse structured data]
+        B2 --> B3[Query with bd commands]
+        B3 --> B4[Tokens consumed: 📉]
     end
 
-    style A7 fill:#ff6b6b,color:#fff
+    style A6 fill:#ff6b6b,color:#fff
     style B4 fill:#4ade80,color:#000
 ```
 
-The AI doesn't just see "what's open" - it sees:
-- **Full descriptions** of every completed task
-- **Close reasons** explaining what was implemented
-- **Dependencies** showing the logical flow
-- **Timestamps** for understanding project velocity
+The AI gets structured data it can query, not prose it must interpret:
+- **`bd ready`** - What's unblocked and highest priority?
+- **`bd blocked`** - What's waiting on other work?
+- **`bd show <id>`** - Full details on one issue
+- **`bd stats`** - Project health at a glance
+
+### Close Reasons: Implementation Memory
+
+When you close an issue, you document what was actually built:
+
+```bash
+bd close mission-house-ogp --reason="NAPLAN scraper implemented in server.js, handles terms acceptance and score extraction"
+```
+
+This becomes searchable context. In future sessions, the AI can see not just "this is done" but *how* it was done.
 
 ### Real Example: Session Continuity
 
@@ -207,57 +211,69 @@ Tombstones preserve history while removing clutter. The AI knows this was delete
 
 ---
 
-## beads vs. Spec-Driven Development
+## beads vs. Markdown-Based Task Tracking
 
-Here's an honest comparison:
+Let's be honest about the comparison. Tools like `agent-os` and other AI workflow managers also create persistent task lists in files that can be committed to git. So what's actually different?
+
+### The Core Difference: Graph vs. Prose
 
 ```mermaid
 flowchart TB
-    subgraph Spec["Spec-Driven Development"]
-        S1["Write detailed spec<br/>(2-4 hours)"]
-        S2["AI reads spec"]
-        S3["AI implements"]
-        S4["Spec becomes outdated"]
-        S5["Update spec manually"]
+    subgraph MD["Markdown Task Tracking"]
+        M1["Create task list in MD"]
+        M2["AI reads MD file"]
+        M3["AI parses prose"]
+        M4["AI interprets dependencies"]
+        M5["AI makes judgment call"]
+        M6["AI picks a task"]
 
-        S1 --> S2 --> S3 --> S4 --> S5 --> S2
+        M1 --> M2 --> M3 --> M4 --> M5 --> M6
     end
 
-    subgraph Beads["beads-Driven Development"]
-        B1["Create epic + features<br/>(10 minutes)"]
-        B2["AI reads JSONL"]
-        B3["AI creates tasks"]
-        B4["AI implements task"]
-        B5["AI closes with reason"]
-        B6["JSONL auto-updated"]
+    subgraph Beads["beads Graph Database"]
+        B1["Create issues with bd"]
+        B2["AI runs bd ready"]
+        B3["Graph query executes"]
+        B4["Unblocked tasks returned"]
+        B5["AI picks top priority"]
 
-        B1 --> B2 --> B3 --> B4 --> B5 --> B6 --> B2
+        B1 --> B2 --> B3 --> B4 --> B5
     end
 
-    style S4 fill:#ff6b6b,color:#fff
-    style S5 fill:#ff6b6b,color:#fff
-    style B6 fill:#4ade80,color:#000
+    style M4 fill:#fbbf24,color:#000
+    style M5 fill:#ff6b6b,color:#fff
+    style B3 fill:#4ade80,color:#000
+    style B4 fill:#4ade80,color:#000
 ```
 
-### Comparison Table
+### Honest Comparison Table
 
-| Aspect | Spec-Driven | beads-Driven |
-|--------|-------------|--------------|
-| **Initial Setup** | Slower (detailed writing) | Faster (bullet points) |
-| **Context Loss** | Every session | Never (JSONL persists) |
-| **Progress Tracking** | Manual | Automatic |
-| **Dependency Handling** | Implicit/forgotten | Explicit/enforced |
-| **Multi-session Work** | Painful | Seamless |
-| **History** | None/separate doc | Full git history |
-| **AI Understanding** | Requires re-reading | Instant via `bd prime` |
+| Aspect | MD-Based (agent-os, etc.) | beads |
+|--------|---------------------------|-------|
+| **Persistence** | ✅ Yes (files in git) | ✅ Yes (JSONL in git) |
+| **Status tracking** | ✅ Yes | ✅ Yes |
+| **Format** | Verbose prose/checklists | Compact JSON (1 line/issue) |
+| **Dependencies** | Written in prose | Graph edges (queryable) |
+| **"What's next?"** | AI must parse & decide | `bd ready` computes it |
+| **Blocked work** | AI must interpret | `bd blocked` shows instantly |
+| **Signal-to-noise** | Gets noisy over time | Stays compact |
 
-### When Spec-Driven Still Wins
+### The Real Advantage: Automatic Prioritization
 
-1. **Complex domain logic** - Sometimes you need prose to explain *why*
-2. **External stakeholders** - Non-technical people prefer docs
-3. **Regulatory requirements** - Some industries need formal specs
+Both approaches persist state. The difference is **how the AI determines what to work on next**:
 
-**My approach:** Use beads for execution, keep a lightweight README for high-level context.
+- **MD files:** Parse text → Interpret meaning → Make judgment → Hope it's right
+- **beads:** Run `bd ready` → Get mathematically correct answer
+
+When Steve Yegge says beads gives agents "long-horizon task planning capability," this is what he means - the graph handles the planning logic, not the AI's interpretation of prose.
+
+### When MD-Based Still Works
+
+1. **Simple projects** - If you have 5 tasks with no dependencies, a checklist is fine
+2. **Human-first workflows** - If humans are the primary readers, prose is more natural
+3. **Explanatory context** - Sometimes you need paragraphs to explain *why*, not just *what*
+
+**My approach:** Use beads for execution tracking, keep a lightweight README for high-level context that humans need to understand.
 
 ---
 
@@ -416,16 +432,16 @@ bd stats                          # Project overview
 
 ## Final Thoughts
 
-beads isn't a replacement for thinking through your architecture. It's a tool that:
+beads isn't magic - other tools also persist task state across sessions. What makes it different:
 
-1. **Preserves context** between AI sessions
-2. **Enforces execution order** through dependencies
-3. **Creates accountability** through close reasons
-4. **Integrates with git** for full history
+1. **Graph-based dependencies** - Not prose to interpret, but edges to query
+2. **Automatic prioritization** - `bd ready` computes what's next mathematically
+3. **Compact JSONL** - High signal-to-noise ratio as projects grow
+4. **Close reasons** - Implementation context preserved for future sessions
 
-The Mission House project went from idea to working app in about 3 hours of active development, spread across multiple sessions with zero context loss.
+The Mission House project went from idea to working app in about 3 hours of active development, spread across multiple sessions. The graph kept track of what was blocked, what was ready, and what was done - with zero manual tracking overhead.
 
-Is beads perfect? No. Is it better than copying specs into chat windows? Absolutely.
+Is beads the only way to do AI-assisted development? No. Is it better than verbose markdown files that become hard to scan? For complex projects with dependencies, absolutely.
 
 ---
 
