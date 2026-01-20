@@ -431,7 +431,7 @@ Is beads perfect? No. Is it better than copying specs into chat windows? Absolut
 
 ## Resources
 
-- [beads Documentation](https://beads.dev)
+- [beads GitHub Repository](https://github.com/steveyegge/beads)
 - [Mission House Demo](https://koustubh25.github.io/mission-house/)
 - [Mission House Source](https://github.com/koustubh25/mission-house)
 - [Claude Code](https://claude.ai/claude-code)

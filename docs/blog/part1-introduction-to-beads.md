@@ -44,7 +44,7 @@ Every time you start a new session, you're essentially starting from scratch - r
 
 ## Enter `beads`: Git-Native Issue Tracking for AI
 
-[Beads](https://beads.dev) is a CLI-based issue tracker that stores everything in `.jsonl` files committed directly to your git repository. Here's what makes it different:
+[Beads](https://github.com/steveyegge/beads) is a CLI-based issue tracker that stores everything in `.jsonl` files committed directly to your git repository. Here's what makes it different:
 
 ### 1. Issues Live in Your Repo
 
