@@ -1,3 +1,11 @@
+---
+title: "Building Apps with AI: Deep Dive into beads Workflow"
+published: true
+description: "Part 2 of 2: JSONL Memory, Real Examples, and Honest Drawbacks - a detailed look at beads for AI-assisted development"
+tags: ai, productivity, projectmanagement, webdev
+series: building-apps-with-ai-beads
+---
+
 # Building Apps with AI: Deep Dive into beads Workflow
 
 _Part 2 of 2: JSONL Memory, Real Examples, and Honest Drawbacks_
@@ -525,6 +533,4 @@ Choose the approach that fits your project. Or use both.
 
 _Thanks for reading! If you try beads on your next AI-assisted project, I'd love to hear how it goes._
 
----
 
-**Tags:** #ai #claude #devtools #productivity #projectmanagement #webdev

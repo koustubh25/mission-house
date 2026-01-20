@@ -1,3 +1,11 @@
+---
+title: "Building Apps with AI: How beads Changed My Development Workflow"
+published: true
+description: "Part 1 of 2: From Spec Documents to Living Issue Trackers - exploring beads, a git-native issue tracker for AI-assisted development"
+tags: ai, productivity, devtools, webdev
+series: building-apps-with-ai-beads
+---
+
 # Building Apps with AI: How `beads` Changed My Development Workflow
 
 _Part 1 of 2: From Spec Documents to Living Issue Trackers_
@@ -300,6 +308,4 @@ In the next post, I'll dive deep into:
 
 _Continue to [Part 2: Deep Dive into beads Workflow →](./part2-beads-deep-dive.md)_
 
----
 
-**Tags:** #ai #claude #devtools #productivity #webdev
