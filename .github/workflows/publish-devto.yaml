@@ -22,6 +22,6 @@ jobs:
         with:
           devto_key: ${{ secrets.DEVTO_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          files: "agent-os/specs/2025-11-03-technical-blog-sdd/posts/*.md"
+          files: "docs/blog/*.md"
           branch: main
           conventional_commits: true
