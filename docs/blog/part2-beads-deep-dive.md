@@ -211,13 +211,15 @@ Tombstones preserve history while removing clutter. The AI knows this was delete
 
 ---
 
-## beads vs. Spec-Driven Development (SDD)
+## beads vs. agent-os (an SDD Framework)
 
-Let's compare beads to Spec-Driven Development, as implemented by tools like [agent-os](https://buildermethods.com/agent-os/workflow).
+Spec-Driven Development (SDD) is a methodology - different tools implement it differently. Let's compare beads to [agent-os](https://buildermethods.com/agent-os/workflow), one popular SDD framework.
+
+*Note: This comparison is specific to agent-os. Other SDD implementations may work differently.*
 
 ### Two Different Philosophies
 
-**SDD (agent-os)** follows a six-phase workflow:
+**agent-os** follows a six-phase workflow:
 1. Plan Product → 2. Shape Spec → 3. Write Spec → 4. Create Tasks → 5. Implement → 6. Orchestrate
 
 It uses layered context (Standards/Product/Specs) in markdown files. Tasks are *derived from specs*.
@@ -229,7 +231,7 @@ No spec phase required. Dependencies are explicit graph edges, not prose.
 
 ```mermaid
 flowchart TB
-    subgraph SDD["Spec-Driven Development"]
+    subgraph AgentOS["agent-os (SDD)"]
         S1["Plan Product"]
         S2["Write Specs"]
         S3["Derive Tasks"]
@@ -239,7 +241,7 @@ flowchart TB
         S1 --> S2 --> S3 --> S4 --> S5
     end
 
-    subgraph Beads["beads Task-First"]
+    subgraph Beads["beads (Task-First)"]
         B1["Create Issues"]
         B2["Add Dependencies"]
         B3["bd ready"]
@@ -253,10 +255,10 @@ flowchart TB
     style B3 fill:#4ade80,color:#000
 ```
 
-### Honest Comparison Table
+### Comparison Table (agent-os vs beads)
 
-| Aspect | SDD (agent-os) | beads |
-|--------|----------------|-------|
+| Aspect | agent-os | beads |
+|--------|----------|-------|
 | **Philosophy** | Spec-first | Task-first |
 | **Persistence** | ✅ MD files in git | ✅ JSONL in git |
 | **Context layers** | Standards/Product/Specs | Flat issue list |
@@ -268,7 +270,7 @@ flowchart TB
 
 ### When to Use Which
 
-**Use SDD when:**
+**Use agent-os (or similar SDD frameworks) when:**
 1. **Complex features** - You need to think through architecture before coding
 2. **Team alignment** - Specs help communicate intent to other humans
 3. **Stakeholder buy-in** - Non-technical people need to review plans
@@ -446,12 +448,12 @@ bd stats                          # Project overview
 
 ## Final Thoughts
 
-beads and SDD represent different philosophies:
+beads and SDD frameworks like agent-os represent different philosophies:
 
-- **SDD** says: "Think first, spec it out, then derive tasks"
+- **SDD frameworks** say: "Think first, spec it out, then derive tasks"
 - **beads** says: "Create tasks directly, let the graph handle prioritization"
 
-Neither is universally better. SDD shines when you need upfront design and human-readable documentation. beads shines when you want to move fast with automatic dependency resolution.
+Neither is universally better. SDD frameworks shine when you need upfront design and human-readable documentation. beads shines when you want to move fast with automatic dependency resolution.
 
 What makes beads unique:
 

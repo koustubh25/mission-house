@@ -13,9 +13,11 @@ I built a real estate comparison app using Claude Code and a tool called `beads`
 
 ---
 
-## The Spec-Driven Development (SDD) Approach
+## Spec-Driven Development (SDD) and agent-os
 
-If you've used AI coding assistants for larger projects, you've likely encountered Spec-Driven Development. Tools like [agent-os](https://buildermethods.com/agent-os/workflow) formalize this into a structured workflow:
+If you've used AI coding assistants for larger projects, you've likely encountered Spec-Driven Development (SDD) - a methodology where detailed specifications drive the implementation process. Different frameworks implement SDD differently.
+
+One popular implementation is [agent-os](https://buildermethods.com/agent-os/workflow), which formalizes SDD into a six-phase workflow:
 
 ```mermaid
 flowchart LR
@@ -30,14 +32,14 @@ flowchart LR
     style C fill:#7c3aed,color:#fff
 ```
 
-SDD uses layered context (Standards → Product → Specs) stored in markdown files like `mission.md`, `roadmap.md`, and `tech-stack.md`. Tasks are *derived from specs*, not created directly.
+agent-os uses layered context (Standards → Product → Specs) stored in markdown files like `mission.md`, `roadmap.md`, and `tech-stack.md`. Tasks are *derived from specs*, not created directly.
 
-**SDD works well, but has trade-offs:**
+**agent-os works well, but has trade-offs:**
 
-1. **Spec-first philosophy** - You must write specs before creating tasks, even for small changes
-2. **Tasks derived from prose** - The AI interprets specs to generate tasks, which requires judgment
-3. **No explicit dependency graph** - Dependencies are implicit in the spec narrative
-4. **Manual "what's next?"** - Prioritization comes from the spec phase, not computed automatically
+1. **Spec-first philosophy** - You write specs before creating tasks
+2. **Tasks derived from prose** - The AI interprets specs to generate tasks
+3. **Layered context** - Rich documentation, but more files to maintain
+4. **Sequential phases** - Structured workflow from planning to orchestration
 
 ```mermaid
 flowchart LR
@@ -50,7 +52,7 @@ flowchart LR
     style D fill:#fbbf24,color:#000
 ```
 
-SDD is great for complex features that need upfront design. But what if you want to skip straight to task management with automatic prioritization?
+SDD frameworks like agent-os are great for complex features that need upfront design. But what if you want to skip straight to task management with automatic prioritization?
 
 ---
 
