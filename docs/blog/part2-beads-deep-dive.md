@@ -43,36 +43,13 @@ For ambiguous product discovery, multi-team coordination, or regulated environme
 
 ---
 
-## Where the Tasks Came From
-
-Although beads is task-first, I didn’t start from a blank slate.
-
-I began with a lightweight `requirements.md` describing:
-
-- core user flows
-- data sources (NAPLAN, Google Maps, property data)
-- output expectations (comparison metrics, charts)
-
-I then asked **Claude Code (with the beads plugin)** to:
-
-1. Read `requirements.md`
-2. Propose epics, features, and tasks
-3. Encode them directly into beads issues with explicit dependencies
-
-In other words, **requirements existed**, but they were treated as _input_, not as a continuously consulted execution artifact.
-
-Once the task graph existed, beads became the primary source of truth.
-
----
-
 ## The JSONL Advantage: Compact and Queryable
 
 Every beads issue is stored as a single line of JSON in `.beads/issues.jsonl`:
 
-````json
+```json
 {"id":"mission-house-ogp","title":"Implement myschool.edu.au scraper","description":"Create Puppeteer-based scraper...","status":"closed","priority":1,"close_reason":"NAPLAN scraper implemented in server.js","dependencies":[{"depends_on_id":"mission-house-5mv"}]}
 ```
-
 
 Compare this to a typical markdown task file that might span dozens of lines with headers, descriptions, and nested checklists for the same information.
 
@@ -96,7 +73,7 @@ flowchart LR
 
     style A6 fill:#ff6b6b,color:#fff
     style B4 fill:#4ade80,color:#000
-````
+```
 
 The AI gets structured data it can query, not prose it must interpret:
 
@@ -255,7 +232,7 @@ Let me show you actual issues from our project to illustrate different patterns:
 }
 ```
 
-**Priority 0 (P0)** meant this bug blocked everything else. The AI knew to prioritize this.
+**Priority 0 (P0)** is the highest priority level. The AI knew to work on this first.
 
 ### Pattern 3: Tombstone (Deleted Issue)
 
@@ -551,7 +528,3 @@ _Thanks for reading! If you try beads on your next AI-assisted project, I'd love
 ---
 
 **Tags:** #ai #claude #devtools #productivity #projectmanagement #webdev
-
-```
-
-```

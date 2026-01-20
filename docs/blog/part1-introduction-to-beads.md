@@ -117,13 +117,14 @@ This isn't prose that might be ignored - it's a graph edge. The AI literally can
 For macOS users:
 
 ```bash
-brew tap anthropics/beads
-brew install beads
+brew install steveyegge/beads/bd
 
 # Initialize in your project
 cd your-project
 bd init
 ```
+
+Other options: `npm install -g @beads/bd` or `go install github.com/steveyegge/beads/cmd/bd@latest`
 
 That's it. You now have a `.beads` directory in your repo.
 
