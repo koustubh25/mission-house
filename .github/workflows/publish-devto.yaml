@@ -1,0 +1,27 @@
+name: Publish to Dev.to
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "docs/blog/*.md"
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Publish articles to Dev.to
+        uses: sinedied/publish-devto@v2
+        with:
+          devto_key: ${{ secrets.DEVTO_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          files: "agent-os/specs/2025-11-03-technical-blog-sdd/posts/*.md"
+          branch: main
+          conventional_commits: true
