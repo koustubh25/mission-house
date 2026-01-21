@@ -73,7 +73,7 @@ Compare this to a typical markdown task file that might span dozens of lines wit
 
 ### Why Compact Matters
 
-![Compact vs verbose comparison](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p2-compact-vs-verbose.svg)
+![Compact vs verbose comparison](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p2-compact-vs-verbose.png)
 
 The AI gets structured data it can query, not prose it must interpret:
 
@@ -129,7 +129,7 @@ Claude immediately knew:
 
 We organized Mission House using a three-level hierarchy:
 
-![Epics Features Tasks hierarchy](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p2-hierarchy.svg)
+![Epics Features Tasks hierarchy](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p2-hierarchy.png)
 
 ### Why This Structure Works
 
@@ -229,7 +229,7 @@ It uses layered context (Standards/Product/Specs) in markdown files. Tasks are _
 
 No ongoing spec phase was required. A lightweight requirements document seeded the task graph, after which dependencies were tracked as explicit graph edges rather than implied through prose.
 
-![agent-os vs beads comparison](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p2-sdd-vs-beads.svg)
+![agent-os vs beads comparison](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p2-sdd-vs-beads.png)
 
 ### Comparison Table (agent-os vs beads)
 
@@ -278,7 +278,7 @@ Let me be honest about the challenges:
 
 ### 1. Learning Curve
 
-![Learning curve](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p2-learning-curve.svg)
+![Learning curve](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p2-learning-curve.png)
 
 The CLI commands take time to internalize. `bd dep add A B` means "A depends on B" (B blocks A) - I got this backwards several times.
 
@@ -363,7 +363,7 @@ This becomes searchable context for future sessions.
 
 Here's how our project actually progressed:
 
-![Project timeline](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p2-timeline.svg)
+![Project timeline](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p2-timeline.png)
 
 **Total active development time:** ~3 hours across 2 days
 
