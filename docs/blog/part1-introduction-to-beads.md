@@ -25,7 +25,7 @@ I built a real estate comparison app using Claude Code and a tool called [beads]
 
 ## Spec-Driven Development (SDD) and agent-os
 
-If you've used AI coding assistants for larger projects, you've likely encountered Spec-Driven Development (SDD) - a methodology where detailed specifications drive the implementation process. Different frameworks implement SDD differently.
+If you've used AI coding assistants for larger projects, you've likely encountered Spec-Driven Development (SDD) - a methodology where detailed specifications drive the implementation process. I've written about [SDD in detail previously](https://dev.to/koustubh/part-1-spec-driven-development-building-predictable-ai-assisted-software-19ne) - it's a powerful approach that works well for many projects. Different frameworks implement SDD differently.
 
 One popular implementation is [agent-os](https://buildermethods.com/agent-os/workflow), which formalizes SDD into a six-phase workflow:
 
