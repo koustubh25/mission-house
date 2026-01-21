@@ -1,11 +1,11 @@
 ---
-title: "Building Apps with AI: Deep Dive into beads Workflow"
+title: 'Building Apps with AI: Deep Dive into beads Workflow'
 published: true
-description: "Part 2: JSONL Memory, Real Examples, and Honest Drawbacks - a detailed look at beads for AI-assisted development"
-tags: "ai, productivity, projectmanagement, webdev"
+description: 'Part 2: JSONL Memory, Real Examples, and Honest Drawbacks - a detailed look at beads for AI-assisted development'
+tags: 'ai, productivity, projectmanagement, webdev'
 series: building-apps-with-ai-beads
 id: 3186238
-date: "2026-01-20T22:25:56Z"
+date: '2026-01-20T22:25:56Z'
 ---
 
 # Building Apps with AI: Deep Dive into beads Workflow
