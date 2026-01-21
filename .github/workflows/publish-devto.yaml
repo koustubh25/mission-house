@@ -19,14 +19,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Debug - list files
-        run: |
-          echo "Listing docs/blog/*.md:"
-          ls -la docs/blog/*.md || echo "No files found"
-          echo "---"
-          echo "Front matter of first file:"
-          head -15 docs/blog/part1-introduction-to-beads.md || echo "File not found"
-
       - name: Publish articles to Dev.to
         uses: sinedied/publish-devto@v2
         with:
