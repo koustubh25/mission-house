@@ -18,8 +18,8 @@ _Part 1 of 2: From Spec Documents to Living Issue Trackers_
 
 I built a real estate comparison app using Claude Code and a tool called [beads](https://github.com/steveyegge/beads) - a git-native issue tracker designed for AI-assisted development. This post explores how beads transformed my workflow from writing lengthy spec documents to having a living, breathing project tracker that my AI assistant actually understands.
 
-**Live Demo:** [Mission House App](https://koustubh25.github.io/mission-house/)
 **Source Code:** [GitHub Repository](https://github.com/koustubh25/mission-house)
+**Live Demo:** [Mission House App](https://koustubh25.github.io/mission-house/) - This is a SPA with no backend, so it requires a Google Maps Platform API key to be provided on the UI to render fully. Have a look at the snapshots in the source code repository above to get an idea of the app.
 
 ---
 
