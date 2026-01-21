@@ -357,6 +357,18 @@ bd close mission-house-qvs --reason="Added Google Maps API with Places and Geome
 
 This becomes searchable context for future sessions.
 
+### Jira Integration
+
+If your team uses Jira, beads can sync with it (v0.28.0+). Configure with:
+
+```bash
+bd config set jira.url https://your-company.atlassian.net
+bd config set jira.project YOUR_PROJECT
+bd config set jira.api_token your_api_token
+```
+
+This lets you maintain the graph-based workflow locally while keeping stakeholders updated in Jira. See the [integration discussion](https://github.com/steveyegge/beads/discussions/430) for details.
+
 ---
 
 ## Project Timeline Visualization
