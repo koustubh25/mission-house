@@ -29,7 +29,7 @@ If you've used AI coding assistants for larger projects, you've likely encounter
 
 One popular implementation is [agent-os](https://buildermethods.com/agent-os/workflow), which formalizes SDD into a six-phase workflow:
 
-![agent-os SDD workflow](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p1-sdd-workflow.png)
+![agent-os SDD workflow](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p1-sdd-workflow.svg)
 
 agent-os uses layered context (Standards → Product → Specs) stored in markdown files like `mission.md`, `roadmap.md`, and `tech-stack.md`. Tasks are _derived from specs_, not created directly.
 
@@ -40,7 +40,7 @@ agent-os uses layered context (Standards → Product → Specs) stored in markdo
 3. **Layered context** - Rich documentation, but more files to maintain
 4. **Sequential phases** - Structured workflow from planning to orchestration
 
-![SDD interpretation flow](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p1-sdd-interpretation.png)
+![SDD interpretation flow](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p1-sdd-interpretation.svg)
 
 SDD frameworks like agent-os are great for complex features that need upfront design. But what if you want to skip straight to task management with automatic prioritization?
 
@@ -80,7 +80,7 @@ bd ready  # Shows only unblocked, high-priority tasks
 
 The graph database computes this automatically. No interpretation, no judgment calls - just a deterministic query.
 
-![bd ready flow](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p1-bd-ready-flow.png)
+![bd ready flow](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p1-bd-ready-flow.svg)
 
 ### 3. Explicit Dependencies = Enforced Execution Order
 
@@ -120,7 +120,7 @@ Before diving deeper into beads, let me briefly introduce what we built. **Missi
 - How long is the commute to the CBD?
 - How do these 4 properties compare on a radar chart?
 
-![Mission House architecture](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p1-mission-house-arch.png)
+![Mission House architecture](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p1-mission-house-arch.svg)
 
 The interesting part isn't the app itself - it's **how we built it using beads**.
 
@@ -179,7 +179,7 @@ And we're coding.
 
 Here's what our project looked like after the initial planning:
 
-![Dependency graph](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p1-dependency-graph.png)
+![Dependency graph](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p1-dependency-graph.svg)
 
 Every arrow represents a `bd dep add` command. The AI knows it can't work on "Web Scraper" until "URL Input Form" is done.
 
