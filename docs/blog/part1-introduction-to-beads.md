@@ -136,33 +136,23 @@ The interesting part isn't the app itself - it's **how we built it using beads**
 
 ## How I Used beads: A Real Example
 
-### Step 1: Create the Epic
+Although beads is task-first, I didn’t start from a blank slate.
 
-```bash
-bd create --title="House Comparison App" --type=epic --priority=1
-# Created: mission-house-1ow
-```
+I began with a lightweight [requirements.md](https://github.com/koustubh25/mission-house/blob/main/docs/requirements.md) that described:
 
-### Step 2: Break Down into Features
+- core user flows
+- data sources (e.g. NAPLAN, Google Maps)
+- output expectations (comparison metrics, charts)
 
-```bash
-bd create --title="Data Entry Page" --type=feature --priority=2
-bd create --title="Data View Page" --type=feature --priority=1
-bd create --title="JSON Database Schema" --type=feature --priority=2
-```
+I then asked Claude Code (with beads installed) to:
 
-### Step 3: Create Tasks with Dependencies
+- Read requirements.md
+- Propose epics, features, and tasks
+- Encode them directly into beads issues with explicit dependencies
 
-```bash
-bd create --title="Set up frontend project structure" --type=task
-# Created: mission-house-5mv
+In other words, requirements existed, but they were treated as input, not as a continuously consulted execution artifact.
 
-bd create --title="Create URL input form" --type=task
-bd dep add mission-house-xkj mission-house-5mv
-# URL form depends on project structure
-```
-
-### Step 4: Let AI Take Over
+Once the task graph existed, beads became the primary source of truth.
 
 Here's where the magic happens. When I started my next Claude Code session:
 

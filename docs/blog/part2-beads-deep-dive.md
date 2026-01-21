@@ -1,11 +1,11 @@
 ---
-title: 'Building Apps with AI: Deep Dive into beads Workflow'
+title: "Building Apps with AI: Deep Dive into beads Workflow"
 published: true
-description: 'Part 2: JSONL Memory, Real Examples, and Honest Drawbacks - a detailed look at beads for AI-assisted development'
-tags: 'ai, productivity, projectmanagement, webdev'
+description: "Part 2: JSONL Memory, Real Examples, and Honest Drawbacks - a detailed look at beads for AI-assisted development"
+tags: "ai, productivity, projectmanagement, webdev"
 series: building-apps-with-ai-beads
 id: 3186238
-date: '2026-01-20T22:25:56Z'
+date: "2026-01-20T22:25:56Z"
 ---
 
 # Building Apps with AI: Deep Dive into beads Workflow
@@ -19,26 +19,6 @@ _Part 2 of 2: JSONL Memory, Real Examples, and Honest Drawbacks_
 In [Part 1](./part1-introduction-to-beads.md), I introduced `beads` — a git-native issue tracker designed for AI-assisted development. We looked at the Mission House app and the basic workflow. Now let’s go a bit deeper.
 
 ---
-
-## Where the Tasks Came From
-
-Although beads is task-first, I didn’t start from a blank slate.
-
-I began with a lightweight [requirements.md](https://github.com/koustubh25/mission-house/blob/main/docs/requirements.md) that described:
-
-- core user flows
-- data sources (e.g. NAPLAN, Google Maps)
-- output expectations (comparison metrics, charts)
-
-I then asked Claude Code (with beads installed) to:
-
-- Read requirements.md
-- Propose epics, features, and tasks
-- Encode them directly into beads issues with explicit dependencies
-
-In other words, requirements existed, but they were treated as input, not as a continuously consulted execution artifact.
-
-Once the task graph existed, beads became the primary source of truth.
 
 ## Scope and Assumptions
 
