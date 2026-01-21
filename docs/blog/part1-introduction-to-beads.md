@@ -1,11 +1,11 @@
 ---
-title: 'Building Apps with AI: How beads Changed My Development Workflow'
+title: "Building Apps with AI: How beads Changed My Development Workflow"
 published: true
-description: 'Part 1: From Spec Documents to Living Issue Trackers - exploring beads, a git-native issue tracker for AI-assisted development'
-tags: 'ai, productivity, devtools, webdev'
+description: "Part 1: From Spec Documents to Living Issue Trackers - exploring beads, a git-native issue tracker for AI-assisted development"
+tags: "ai, productivity, devtools, webdev"
 series: building-apps-with-ai-beads
 id: 3186237
-date: '2026-01-20T22:25:54Z'
+date: "2026-01-20T22:25:54Z"
 ---
 
 # Building Apps with AI: How `beads` Changed My Development Workflow
@@ -44,6 +44,13 @@ agent-os uses layered context (Standards → Product → Specs) stored in markdo
 
 SDD frameworks like agent-os are great for complex features that need upfront design. But what if you want to skip straight to task management with automatic prioritization?
 
+The key difference is where _control flow_ lives:
+
+- In SDD, control flow is implicit in prose.
+- In beads, control flow is explicit in a DAG.
+
+To be clear: SDD shines when architectural intent must be stabilized early — beads optimizes for execution once intent is roughly understood.
+
 ---
 
 ## Enter `beads`: Task-First with Graph-Based Dependencies
@@ -78,7 +85,7 @@ This is the killer feature. Instead of the AI parsing prose to figure out priori
 bd ready  # Shows only unblocked, high-priority tasks
 ```
 
-The graph database computes this automatically. No interpretation, no judgment calls - just a deterministic query.
+The graph database computes eligibility automatically based on explicit status, dependencies, and user-defined priority.
 
 ![bd ready flow](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p1-bd-ready-flow.png)
 
@@ -208,5 +215,3 @@ In the next post, I'll dive deep into:
 ---
 
 _Continue to [Part 2: Deep Dive into beads Workflow →](./part2-beads-deep-dive.md)_
-
-
