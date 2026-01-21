@@ -1,11 +1,11 @@
 ---
-title: 'Building Apps with AI: How beads Changed My Development Workflow'
+title: "Building Apps with AI: How beads Changed My Development Workflow"
 published: true
-description: 'Part 1: From Spec Documents to Living Issue Trackers - exploring beads, a git-native issue tracker for AI-assisted development'
-tags: 'ai, productivity, devtools, webdev'
+description: "Part 1: From Spec Documents to Living Issue Trackers - exploring beads, a git-native issue tracker for AI-assisted development"
+tags: "ai, productivity, devtools, webdev"
 series: building-apps-with-ai-beads
 id: 3186237
-date: '2026-01-20T22:25:54Z'
+date: "2026-01-20T22:25:54Z"
 ---
 
 # Building Apps with AI: How `beads` Changed My Development Workflow
@@ -23,7 +23,7 @@ I built a real estate comparison app using Claude Code and a tool called [beads]
 
 ---
 
-## Spec-Driven Development (SDD) and agent-os
+## Spec-Driven Development (SDD)
 
 If you've used AI coding assistants for larger projects, you've likely encountered Spec-Driven Development (SDD) - a methodology where detailed specifications drive the implementation process. I've written about [SDD in detail previously](https://dev.to/koustubh/part-1-spec-driven-development-building-predictable-ai-assisted-software-19ne) - it's a powerful approach that works well for many projects. Different frameworks implement SDD differently.
 
@@ -42,7 +42,7 @@ agent-os uses layered context (Standards → Product → Specs) stored in markdo
 
 ![SDD interpretation flow](https://raw.githubusercontent.com/koustubh25/mission-house/main/docs/blog/images/p1-sdd-interpretation.png)
 
-SDD frameworks like agent-os are great for complex features that need upfront design. But what if you want to skip straight to task management with automatic prioritization?
+SDD frameworks like agent-os are great for complex features that need upfront design. But what if you want to skip straight to task management?
 
 The key difference is where _control flow_ lives:
 
@@ -79,7 +79,7 @@ One line per issue. No walls of prose. The AI can quickly parse the entire proje
 
 ### 2. Automatic "What's Next?" via Graph Traversal
 
-This is the killer feature. Instead of the AI parsing prose to figure out priorities:
+This is the killer feature. Instead of the AI parsing prose to figure out order of execution:
 
 ```bash
 bd ready  # Shows only unblocked, high-priority tasks
