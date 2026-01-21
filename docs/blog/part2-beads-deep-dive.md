@@ -1,11 +1,11 @@
 ---
-title: 'Building Apps with AI: Deep Dive into beads Workflow'
+title: "Building Apps with AI: Deep Dive into beads Workflow"
 published: true
-description: 'Part 2: JSONL Memory, Real Examples, and Honest Drawbacks - a detailed look at beads for AI-assisted development'
-tags: 'ai, productivity, projectmanagement, webdev'
+description: "Part 2: JSONL Memory, Real Examples, and Honest Drawbacks - a detailed look at beads for AI-assisted development"
+tags: "ai, productivity, projectmanagement, webdev"
 series: building-apps-with-ai-beads
 id: 3186238
-date: '2026-01-20T22:25:56Z'
+date: "2026-01-20T22:25:56Z"
 ---
 
 # Building Apps with AI: Deep Dive into beads Workflow
@@ -396,7 +396,7 @@ Choose the approach that fits your project. Or use both.
 - [beads GitHub Repository](https://github.com/steveyegge/beads)
 - [Mission House Demo](https://koustubh25.github.io/mission-house/)
 - [Mission House Source](https://github.com/koustubh25/mission-house)
-- [Claude Code](https://claude.ai/claude-code)
+- [Claude Code](https://claude.ai)
 
 ---
 

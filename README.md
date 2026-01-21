@@ -1,108 +1,51 @@
 # Mission House
 
-Melbourne property comparison tool for evaluating houses based on school catchments, train stations, and commute times.
+A Melbourne property comparison tool that helps house hunters evaluate properties based on what matters most: school catchments, train stations, NAPLAN scores, and commute times.
 
-## Quick Start
-
-1. **Get a Google Maps API Key** (optional, for commute features)
-   - Go to [Google Cloud Console](https://console.cloud.google.com/)
-   - Enable: Maps JavaScript API, Places API, Directions API, Geocoding API
-   - Create an API key
-   - **Important**: Configure your API key in the app via Settings page (⚙️), not in code!
-   - Your API key is stored securely in your browser's localStorage
-
-2. **Install Dependencies** (required for local server)
-   ```bash
-   npm install
-   ```
-
-3. **Run Locally** (required for Data Entry and NAPLAN scraping)
-   ```bash
-   node server.js
-   ```
-   Then open http://localhost:3000
-
-   **Or** just open `index.html` directly in your browser (Data Entry will only work when running locally)
-
-## Adding Properties
-
-1. Go to the **Data Entry** tab (only visible when running on localhost)
-2. Open the property on realestate.com.au in your browser
-3. Right-click and select "View Page Source"
-4. Select All (Ctrl+A / Cmd+A) and Copy (Ctrl+C / Cmd+C)
-5. Paste the HTML into the text area
-6. Click **Parse & Add**
-7. Copy the generated JSON and save it to `src/data/houses.json`
-
-The HTML paste method bypasses anti-bot protection and works reliably every time.
+**Live Demo:** [koustubh25.github.io/mission-house](https://koustubh25.github.io/mission-house/)
 
 ## Features
 
-- **Data Entry** (localhost only): Add properties from realestate.com.au
-- **Data View**: Hub-and-spoke visualization showing:
-  - Property details (beds, baths, price, area)
-  - Primary & secondary school catchments with NAPLAN scores
-  - Nearest train station with walking time
-  - Flinders Street Station commute times
-- **Compare**: Radar chart comparison of up to 4 properties across 13 metrics including NAPLAN scores
-- **Settings**: Configure your Google Maps API key
+### Data View
+A hub-and-spoke visualization centered on your selected property, showing:
+- Property details (beds, baths, price, land area)
+- Primary & secondary school catchments with NAPLAN scores
+- Nearest train station with walking distance
+- Commute time to Flinders Street Station
 
-## NAPLAN Scores
+<!-- TODO: Add screenshot -->
 
-NAPLAN scores are automatically fetched when you add a property:
+### Compare View
+A radar chart comparing up to 4 properties across 13 metrics, including:
+- Price, bedrooms, bathrooms, land area
+- School distances and NAPLAN scores
+- Train station proximity and CBD commute times
 
-1. When you save a property via Data Entry, the server looks up the school catchment
-2. For each school found, it scrapes NAPLAN scores from [myschool.edu.au](https://myschool.edu.au)
-3. Reading and Numeracy scores are stored and displayed in:
-   - **Data View**: Shows scores next to each school (📊 R:XXX N:XXX)
-   - **Compare Page**: Includes 4 NAPLAN dimensions in the radar chart
+<!-- TODO: Add screenshot -->
 
-**Requirements for NAPLAN scraping:**
-- Must run the local server (`node server.js`)
-- Puppeteer is used to automate the myschool.edu.au website
-- Scores are cached in `houses.json` so scraping only happens once per property
+## Adding Properties
 
-**Manual NAPLAN refresh:**
-If you need to refresh NAPLAN scores for existing properties, you can re-save the property or manually edit `houses.json` to add the `naplan` object to each school:
+Adding a property requires a few manual steps (the site has anti-bot protection):
 
-```json
-"schools": {
-  "primary": {
-    "name": "School Name",
-    "naplan": {
-      "year": "2024",
-      "reading": 450,
-      "numeracy": 460,
-      "source": "myschool.edu.au"
-    }
-  }
-}
-```
+1. Run the local server:
+   ```bash
+   npm install
+   node server.js
+   ```
 
-## Project Structure
+2. Open http://localhost:3000 and go to the **Data Entry** tab
 
-```
-server.js           - Local server (handles scraping, NAPLAN, school lookups)
-index.html          - Main app
-src/
-  css/main.css      - Styles
-  js/
-    config.js       - API keys & settings
-    app.js          - Main application
-    compare.js      - Property comparison with radar chart
-    maps.js         - Google Maps integration
-    schools.js      - School catchment lookups
-    scraper.js      - HTML parser for property data
-    utils.js        - Utility functions
-  data/
-    houses.json     - Property database
-```
+3. On [realestate.com.au](https://realestate.com.au), find your property and view page source (right-click → View Page Source)
 
-## Deployment
+4. Copy all the HTML (Ctrl+A, Ctrl+C) and paste it into the text area
 
-For production (GitHub Pages), only the Data View page is shown. The Data Entry functionality requires running locally and is automatically hidden on non-localhost domains.
+5. Click **Parse & Add** - the server will automatically fetch school catchments and NAPLAN scores
 
-Properties can be added to the database by:
-1. Running the app locally
-2. Using the Data Entry page to parse property HTML
-3. Committing the updated `houses.json` file to the repository
+6. Commit the updated `src/data/houses.json` to save your property
+
+## Tech Stack
+
+- Vanilla JavaScript frontend
+- Node.js server for scraping (Puppeteer for NAPLAN scores)
+- Google Maps API for commute calculations
+- Hosted on GitHub Pages
