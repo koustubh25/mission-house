@@ -1,11 +1,11 @@
 ---
-title: 'Building Apps with AI: Deep Dive into beads Workflow'
+title: "Building Apps with AI: Deep Dive into beads Workflow"
 published: true
-description: 'Part 2: JSONL Memory, Real Examples, and Honest Drawbacks - a detailed look at beads for AI-assisted development'
-tags: 'ai, productivity, projectmanagement, webdev'
+description: "Part 2: JSONL Memory, Real Examples, and Honest Drawbacks - a detailed look at beads for AI-assisted development"
+tags: "ai, productivity, projectmanagement, webdev"
 series: building-apps-with-ai-beads
 id: 3186238
-date: '2026-01-20T22:25:56Z'
+date: "2026-01-20T22:25:56Z"
 ---
 
 # Building Apps with AI: Deep Dive into beads Workflow
@@ -16,7 +16,7 @@ _Part 2 of 2: JSONL Memory, Real Examples, and Honest Drawbacks_
 
 ## Recap
 
-In [Part 1](./part1-introduction-to-beads.md), I introduced `beads` — a git-native issue tracker designed for AI-assisted development. We looked at the Mission House app and the basic workflow. Now let’s go deeper.
+In [Part 1](./part1-introduction-to-beads.md), I introduced `beads` — a git-native issue tracker designed for AI-assisted development. We looked at the Mission House app and the basic workflow. Now let’s go a bit deeper.
 
 ---
 
@@ -58,7 +58,15 @@ For ambiguous product discovery, multi-team coordination, or regulated environme
 Every beads issue is stored as a single line of JSON in `.beads/issues.jsonl`:
 
 ```json
-{"id":"mission-house-ogp","title":"Implement myschool.edu.au scraper","description":"Create Puppeteer-based scraper...","status":"closed","priority":1,"close_reason":"NAPLAN scraper implemented in server.js","dependencies":[{"depends_on_id":"mission-house-5mv"}]}
+{
+  "id": "mission-house-ogp",
+  "title": "Implement myschool.edu.au scraper",
+  "description": "Create Puppeteer-based scraper...",
+  "status": "closed",
+  "priority": 1,
+  "close_reason": "NAPLAN scraper implemented in server.js",
+  "dependencies": [{ "depends_on_id": "mission-house-5mv" }]
+}
 ```
 
 Compare this to a typical markdown task file that might span dozens of lines with headers, descriptions, and nested checklists for the same information.
@@ -225,16 +233,16 @@ No ongoing spec phase was required. A lightweight requirements document seeded t
 
 ### Comparison Table (agent-os vs beads)
 
-| Aspect             | agent-os                        | beads                       |
-| ------------------ | ------------------------------- | --------------------------- |
-| **Philosophy**     | Spec-first                      | Task-first                  |
-| **Persistence**    | ✅ MD files in git              | ✅ JSONL in git             |
-| **Context layers** | Standards/Product/Specs         | Flat issue list             |
-| **Task creation**  | Derived from specs              | Created directly            |
-| **Dependencies**   | Implicit in spec narrative      | Explicit graph edges        |
-| **"What's next?"** | Derived from spec phase         | `bd ready` computes it      |
-| **Upfront design** | Required (spec phases)          | Optional                    |
-| **Best for**       | Complex features needing design | Iterative, fast-moving work |
+| Aspect             | agent-os                        | beads                                      |
+| ------------------ | ------------------------------- | ------------------------------------------ |
+| **Philosophy**     | Spec-first                      | Task-first                                 |
+| **Persistence**    | ✅ MD files in git              | ✅ JSONL in git                            |
+| **Context layers** | Standards/Product/Specs         | Flat issue list                            |
+| **Task creation**  | Derived from specs              | Created directly (or through a file input) |
+| **Dependencies**   | Implicit in spec narrative      | Explicit graph edges                       |
+| **"What's next?"** | Derived from spec phase         | `bd ready` computes it                     |
+| **Upfront design** | Required (spec phases)          | Optional                                   |
+| **Best for**       | Complex features needing design | Iterative, fast-moving work                |
 
 ### When to Use Which
 
@@ -311,7 +319,7 @@ Not a blocker, but noticeable.
 
 ### 5. No Visual Dashboard
 
-If you want a Kanban board or burndown chart, you'll need external tools. beads is CLI-first by design.
+This is not entirely true. You have a lot of community built dashboards available [here](https://github.com/steveyegge/beads/blob/main/docs/COMMUNITY_TOOLS.md) which will make your life much easier.
 
 ---
 
@@ -361,30 +369,6 @@ Here's how our project actually progressed:
 
 ---
 
-## Key Commands Cheat Sheet
-
-```bash
-# Planning
-bd create --title="..." --type=epic|feature|task --priority=0-4
-bd dep add <issue> <depends-on>
-
-# Working
-bd ready                          # What can I work on?
-bd update <id> --status=in_progress
-bd show <id>                      # Full issue details
-
-# Completing
-bd close <id> --reason="..."
-bd close <id1> <id2> <id3>        # Bulk close
-
-# Maintenance
-bd sync --from-main               # Resolve conflicts
-bd doctor                         # Health check
-bd stats                          # Project overview
-```
-
----
-
 ## Final Thoughts
 
 beads and SDD frameworks like agent-os represent different philosophies:
@@ -417,5 +401,3 @@ Choose the approach that fits your project. Or use both.
 ---
 
 _Thanks for reading! If you try beads on your next AI-assisted project, I'd love to hear how it goes._
-
-
