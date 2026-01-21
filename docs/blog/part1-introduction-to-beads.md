@@ -117,6 +117,8 @@ Other options: `npm install -g @beads/bd` or `go install github.com/steveyegge/b
 
 That's it. You now have a `.beads` directory in your repo.
 
+Also install the beads claude code plugin following [this](https://github.com/steveyegge/beads/blob/main/docs/PLUGIN.md#install-plugin).
+
 ---
 
 ## The App: Mission House
