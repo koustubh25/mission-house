@@ -311,6 +311,240 @@
           }
         }
       }
+    },
+    {
+      "id": "mlh8u3gur8a2fvatc0h",
+      "address": "2/5 Selby Street, Mount Waverley, Vic 3149",
+      "url": "https://www.realestate.com.au/property-townhouse-vic-mount+waverley-150095968",
+      "rooms": {
+        "bedrooms": 4,
+        "bathrooms": 3,
+        "carSpaces": 2
+      },
+      "price": {
+        "min": 1220000,
+        "max": 1270000,
+        "displayText": "Indicative price: $1,220,000 - $1,270,000"
+      },
+      "auctionDate": "2026-02-27",
+      "floorPlan": {
+        "landSize": null,
+        "unit": "m²"
+      },
+      "propertyType": "Townhouse",
+      "scrapedAt": "2026-02-10T23:40:05.262Z",
+      "schools": {
+        "primary": {
+          "name": "Mount Waverley Heights Primary School",
+          "address": "36 Solomon Street, Mount Waverley 3149",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-02-10T23:40:34.623Z",
+          "naplan": {
+            "year": "2023",
+            "source": "myschool.edu.au",
+            "year3": {
+              "reading": 465,
+              "writing": 444,
+              "spelling": 442,
+              "grammar": 480,
+              "numeracy": 459
+            },
+            "year5": {
+              "reading": 540,
+              "writing": 543,
+              "spelling": 538,
+              "grammar": 549,
+              "numeracy": 556
+            },
+            "url": "https://myschool.edu.au/school/44863/naplan/results",
+            "quality": 99.4
+          }
+        },
+        "secondary": {
+          "name": "Mount Waverley Secondary College",
+          "address": "145 Stephensons Road, Mount Waverley 3149",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-02-10T23:40:34.623Z",
+          "naplan": {
+            "year": "2023",
+            "source": "myschool.edu.au",
+            "year7": {
+              "reading": 584,
+              "writing": 592,
+              "spelling": 581,
+              "grammar": 592,
+              "numeracy": 616
+            },
+            "year9": {
+              "reading": 601,
+              "writing": 632,
+              "spelling": 602,
+              "grammar": 609,
+              "numeracy": 637
+            },
+            "url": "https://myschool.edu.au/school/45434/naplan/results",
+            "quality": 100
+          }
+        }
+      }
+    },
+    {
+      "id": "mlh8wquun3rm263xium",
+      "address": "2/91 Stanley Avenue, Mount Waverley, Vic 3149",
+      "url": "https://www.realestate.com.au/property-townhouse-vic-mount+waverley-150182048",
+      "rooms": {
+        "bedrooms": 4,
+        "bathrooms": 3,
+        "carSpaces": 2
+      },
+      "price": {
+        "min": 1250000,
+        "max": 1350000,
+        "displayText": "AUCTION  $1,250,000 - $1,350,000"
+      },
+      "auctionDate": "2026-03-06",
+      "floorPlan": {
+        "landSize": 209,
+        "unit": "m²"
+      },
+      "propertyType": "Townhouse",
+      "scrapedAt": "2026-02-10T23:42:08.886Z",
+      "schools": {
+        "primary": {
+          "name": "Amsleigh Park Primary School",
+          "address": "17 State Street, Oakleigh East 3166",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-02-10T23:42:36.714Z",
+          "naplan": {
+            "year": "2023",
+            "source": "myschool.edu.au",
+            "year3": {
+              "reading": 429,
+              "writing": 450,
+              "spelling": 431,
+              "grammar": 444,
+              "numeracy": 432
+            },
+            "year5": {
+              "reading": 533,
+              "writing": 514,
+              "spelling": 508,
+              "grammar": 526,
+              "numeracy": 504
+            },
+            "url": "https://myschool.edu.au/school/45218/naplan/results",
+            "quality": 94.5
+          }
+        },
+        "secondary": {
+          "name": "Mount Waverley Secondary College",
+          "address": "145 Stephensons Road, Mount Waverley 3149",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-02-10T23:42:36.714Z",
+          "naplan": {
+            "year": "2023",
+            "source": "myschool.edu.au",
+            "year7": {
+              "reading": 584,
+              "writing": 592,
+              "spelling": 581,
+              "grammar": 592,
+              "numeracy": 616
+            },
+            "year9": {
+              "reading": 601,
+              "writing": 632,
+              "spelling": 602,
+              "grammar": 609,
+              "numeracy": 637
+            },
+            "url": "https://myschool.edu.au/school/45434/naplan/results",
+            "quality": 100
+          }
+        }
+      }
+    },
+    {
+      "id": "mlh8zq2nmln9vu5vkcl",
+      "address": "2/101 Ferntree Gully Road, Mount Waverley, Vic 3149",
+      "url": "https://www.realestate.com.au/property-townhouse-vic-mount+waverley-149996028",
+      "rooms": {
+        "bedrooms": 4,
+        "bathrooms": 3,
+        "carSpaces": 2
+      },
+      "price": {
+        "min": 1000000,
+        "max": 1100000,
+        "displayText": "Private Sale: $1,000,000 - $1,100,000"
+      },
+      "auctionDate": null,
+      "floorPlan": {
+        "landSize": 216,
+        "unit": "m²"
+      },
+      "propertyType": "Townhouse",
+      "scrapedAt": "2026-02-10T23:44:27.839Z",
+      "schools": {
+        "primary": {
+          "name": "Amsleigh Park Primary School",
+          "address": "17 State Street, Oakleigh East 3166",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-02-10T23:44:57.335Z",
+          "naplan": {
+            "year": "2023",
+            "source": "myschool.edu.au",
+            "year3": {
+              "reading": 429,
+              "writing": 450,
+              "spelling": 431,
+              "grammar": 444,
+              "numeracy": 432
+            },
+            "year5": {
+              "reading": 533,
+              "writing": 514,
+              "spelling": 508,
+              "grammar": 526,
+              "numeracy": 504
+            },
+            "url": "https://myschool.edu.au/school/45218/naplan/results",
+            "quality": 94.5
+          }
+        },
+        "secondary": {
+          "name": "South Oakleigh College",
+          "address": "Bakers Road, Oakleigh South 3167",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-02-10T23:44:57.335Z",
+          "naplan": {
+            "year": "2023",
+            "source": "myschool.edu.au",
+            "year7": {
+              "reading": 547,
+              "writing": 555,
+              "spelling": 554,
+              "grammar": 551,
+              "numeracy": 569
+            },
+            "year9": {
+              "reading": 579,
+              "writing": 612,
+              "spelling": 583,
+              "grammar": 577,
+              "numeracy": 583
+            },
+            "url": "https://myschool.edu.au/school/45539/naplan/results",
+            "quality": 94.4
+          }
+        }
+      }
     }
   ]
 }
