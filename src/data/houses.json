@@ -545,6 +545,84 @@
           }
         }
       }
+    },
+    {
+      "id": "mlh9m6xy5q1u6dc517q",
+      "address": "2/250 Waverley Road, Mount Waverley, Vic 3149",
+      "url": "https://www.realestate.com.au/property-townhouse-vic-mount+waverley-150217644",
+      "rooms": {
+        "bedrooms": 4,
+        "bathrooms": 3,
+        "carSpaces": 2
+      },
+      "price": {
+        "min": 1100000,
+        "max": 1200000,
+        "displayText": "Indicative price: $1,100,000 - $1,200,000"
+      },
+      "auctionDate": "2026-03-06",
+      "floorPlan": {
+        "landSize": null,
+        "unit": "m²"
+      },
+      "propertyType": "Townhouse",
+      "scrapedAt": "2026-02-11T00:01:56.134Z",
+      "schools": {
+        "primary": {
+          "name": "Mount Waverley Heights Primary School",
+          "address": "36 Solomon Street, Mount Waverley 3149",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-02-11T00:02:25.136Z",
+          "naplan": {
+            "year": "2023",
+            "source": "myschool.edu.au",
+            "year3": {
+              "reading": 465,
+              "writing": 444,
+              "spelling": 442,
+              "grammar": 480,
+              "numeracy": 459
+            },
+            "year5": {
+              "reading": 540,
+              "writing": 543,
+              "spelling": 538,
+              "grammar": 549,
+              "numeracy": 556
+            },
+            "url": "https://myschool.edu.au/school/44863/naplan/results",
+            "quality": 99.4
+          }
+        },
+        "secondary": {
+          "name": "Mount Waverley Secondary College",
+          "address": "145 Stephensons Road, Mount Waverley 3149",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-02-11T00:02:25.136Z",
+          "naplan": {
+            "year": "2023",
+            "source": "myschool.edu.au",
+            "year7": {
+              "reading": 584,
+              "writing": 592,
+              "spelling": 581,
+              "grammar": 592,
+              "numeracy": 616
+            },
+            "year9": {
+              "reading": 601,
+              "writing": 632,
+              "spelling": 602,
+              "grammar": 609,
+              "numeracy": 637
+            },
+            "url": "https://myschool.edu.au/school/45434/naplan/results",
+            "quality": 100
+          }
+        }
+      }
     }
   ]
 }
