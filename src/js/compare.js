@@ -202,8 +202,26 @@ const CompareService = {
                     secondaryNaplanNumeracy: (property.schools?.secondary?.naplan?.year9?.numeracy || property.schools?.secondary?.naplan?.year7?.numeracy) || null,
                     // NAPLAN quality scores (higher is better, 100 = benchmark)
                     primaryNaplanQuality: property.schools?.primary?.naplan?.quality || null,
-                    secondaryNaplanQuality: property.schools?.secondary?.naplan?.quality || null
+                    secondaryNaplanQuality: property.schools?.secondary?.naplan?.quality || null,
+                    // Sale history metrics (calculated from most recent sale)
+                    lastSalePrice: null,
+                    lastSaleDate: null,
+                    priceIncrease: null,
+                    cagr: null
                 };
+
+                // Calculate sale history metrics from most recent sale
+                if (property.saleHistory && property.saleHistory.length > 0) {
+                    const lastSale = property.saleHistory[0]; // Most recent sale first
+                    metrics.lastSalePrice = lastSale.price;
+                    metrics.lastSaleDate = lastSale.date;
+                    const currentPrice = metrics.price;
+                    const yearsBetween = (new Date() - new Date(lastSale.date)) / (365.25 * 24 * 60 * 60 * 1000);
+                    if (yearsBetween > 0) {
+                        metrics.priceIncrease = ((currentPrice - lastSale.price) / lastSale.price) * 100;
+                        metrics.cagr = (Math.pow(currentPrice / lastSale.price, 1 / yearsBetween) - 1) * 100;
+                    }
+                }
 
                 // Ensure MapsService is initialized
                 if (!MapsService.isLoaded) {
@@ -673,7 +691,11 @@ const CompareService = {
             { key: 'secondaryNaplanReading', label: 'Secondary NAPLAN Reading', format: (v) => v !== null ? v : 'N/A' },
             { key: 'secondaryNaplanNumeracy', label: 'Secondary NAPLAN Numeracy', format: (v) => v !== null ? v : 'N/A' },
             { key: 'primaryNaplanQuality', label: 'Primary School Quality', format: (v) => v !== null ? `${v}%` : 'N/A' },
-            { key: 'secondaryNaplanQuality', label: 'Secondary School Quality', format: (v) => v !== null ? `${v}%` : 'N/A' }
+            { key: 'secondaryNaplanQuality', label: 'Secondary School Quality', format: (v) => v !== null ? `${v}%` : 'N/A' },
+            { key: 'lastSalePrice', label: 'Last Sale Price', format: (v) => v !== null ? new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD', minimumFractionDigits: 0 }).format(v) : 'N/A' },
+            { key: 'lastSaleDate', label: 'Last Sale Date', format: (v) => v !== null ? new Date(v).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }) : 'N/A' },
+            { key: 'priceIncrease', label: 'Total Price Increase', format: (v) => v !== null ? `${v.toFixed(1)}%` : 'N/A' },
+            { key: 'cagr', label: 'Annual Growth (CAGR)', format: (v) => v !== null ? `${v.toFixed(1)}% p.a.` : 'N/A' }
         ];
 
         // Build table header
