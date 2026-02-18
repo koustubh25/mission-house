@@ -22,7 +22,10 @@
       "propertyType": "Townhouse",
       "scrapedAt": "2026-01-20T05:24:47.485Z",
       "saleHistory": [
-        { "date": "2018-08-20", "price": 1198000 }
+        {
+          "date": "2018-08-20",
+          "price": 1198000
+        }
       ],
       "schools": {
         "primary": {
@@ -103,7 +106,10 @@
       "propertyType": "Townhouse",
       "scrapedAt": "2026-02-10T23:40:05.262Z",
       "saleHistory": [
-        { "date": "2021-05-27", "price": 1118000 }
+        {
+          "date": "2021-05-27",
+          "price": 1118000
+        }
       ],
       "schools": {
         "primary": {
@@ -263,8 +269,14 @@
       "propertyType": "Townhouse",
       "scrapedAt": "2026-02-13T22:24:30.127Z",
       "saleHistory": [
-        { "date": "2016-02-09", "price": 920000 },
-        { "date": "2009-07-17", "price": 667500 }
+        {
+          "date": "2016-02-09",
+          "price": 920000
+        },
+        {
+          "date": "2009-07-17",
+          "price": 667500
+        }
       ],
       "schools": {
         "primary": {
@@ -300,6 +312,84 @@
           "distance": null,
           "lookupSuccess": true,
           "scrapedAt": "2026-02-13T22:24:57.867Z",
+          "naplan": {
+            "year": "2023",
+            "source": "myschool.edu.au",
+            "year7": {
+              "reading": 584,
+              "writing": 592,
+              "spelling": 581,
+              "grammar": 592,
+              "numeracy": 616
+            },
+            "year9": {
+              "reading": 601,
+              "writing": 632,
+              "spelling": 602,
+              "grammar": 609,
+              "numeracy": 637
+            },
+            "url": "https://myschool.edu.au/school/45434/naplan/results",
+            "quality": 100
+          }
+        }
+      }
+    },
+    {
+      "id": "mlrtgp4kxjsixberk7",
+      "address": "3/4 Catherine Avenue, Mount Waverley, Vic 3149",
+      "url": "https://www.realestate.com.au/property/unit-3-4-catherine-ave-mount-waverley-vic-3149/",
+      "rooms": {
+        "bedrooms": 4,
+        "bathrooms": 2,
+        "carSpaces": 2
+      },
+      "price": {
+        "min": 1150000,
+        "max": 1250000,
+        "displayText": "$1,150,000-$1,250,000"
+      },
+      "auctionDate": "2026-02-27",
+      "floorPlan": {
+        "landSize": null,
+        "unit": "m²"
+      },
+      "propertyType": "Townhouse",
+      "scrapedAt": "2026-02-18T09:15:13.844Z",
+      "schools": {
+        "primary": {
+          "name": "Mount Waverley Heights Primary School",
+          "address": "36 Solomon Street, Mount Waverley 3149",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-02-18T09:15:41.224Z",
+          "naplan": {
+            "year": "2023",
+            "source": "myschool.edu.au",
+            "year3": {
+              "reading": 465,
+              "writing": 444,
+              "spelling": 442,
+              "grammar": 480,
+              "numeracy": 459
+            },
+            "year5": {
+              "reading": 540,
+              "writing": 543,
+              "spelling": 538,
+              "grammar": 549,
+              "numeracy": 556
+            },
+            "url": "https://myschool.edu.au/school/44863/naplan/results",
+            "quality": 99.4
+          }
+        },
+        "secondary": {
+          "name": "Mount Waverley Secondary College",
+          "address": "145 Stephensons Road, Mount Waverley 3149",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-02-18T09:15:41.224Z",
           "naplan": {
             "year": "2023",
             "source": "myschool.edu.au",
