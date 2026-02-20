@@ -412,6 +412,84 @@
           }
         }
       }
+    },
+    {
+      "id": "mlujae6rfqzfilh9mnh",
+      "address": "117 Great Ryrie Street, Heathmont, Vic 3135",
+      "url": "https://www.realestate.com.au/property-house-vic-heathmont-150248800",
+      "rooms": {
+        "bedrooms": 2,
+        "bathrooms": 1,
+        "carSpaces": 1
+      },
+      "price": {
+        "min": 800000,
+        "max": 880000,
+        "displayText": "$800,000 - $880,000"
+      },
+      "auctionDate": null,
+      "floorPlan": {
+        "landSize": 699,
+        "unit": "m²"
+      },
+      "propertyType": "House",
+      "scrapedAt": "2026-02-20T06:53:42.099Z",
+      "schools": {
+        "primary": {
+          "name": "Marlborough Primary School",
+          "address": "Hardy Crescent, Heathmont 3135",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-02-20T06:54:09.191Z",
+          "naplan": {
+            "year": "2023",
+            "source": "myschool.edu.au",
+            "year3": {
+              "reading": 374,
+              "writing": 388,
+              "spelling": 372,
+              "grammar": 401,
+              "numeracy": 345
+            },
+            "year5": {
+              "reading": 496,
+              "writing": 452,
+              "spelling": 468,
+              "grammar": 497,
+              "numeracy": 484
+            },
+            "url": "https://myschool.edu.au/school/44989/naplan/results",
+            "quality": 84.7
+          }
+        },
+        "secondary": {
+          "name": "Heathmont College",
+          "address": "Waters Grove, Heathmont 3135",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-02-20T06:54:09.191Z",
+          "naplan": {
+            "year": "2023",
+            "source": "myschool.edu.au",
+            "year7": {
+              "reading": 519,
+              "writing": 543,
+              "spelling": 517,
+              "grammar": 521,
+              "numeracy": 530
+            },
+            "year9": {
+              "reading": 552,
+              "writing": 568,
+              "spelling": 548,
+              "grammar": 527,
+              "numeracy": 552
+            },
+            "url": "https://myschool.edu.au/school/45555/naplan/results",
+            "quality": 88.9
+          }
+        }
+      }
     }
   ]
 }
