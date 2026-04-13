@@ -1,9 +1,87 @@
 {
   "properties": [
     {
-      "id": "mkm5gnb1sxidy5jn2d",
-      "address": "5B Jacqueline Road, Mount Waverley, Vic 3149",
-      "url": "https://www.realestate.com.au/property-townhouse-vic-mount+waverley-149504252",
+      "id": "mnx0z745q4ww65ts45",
+      "address": "27A Solomon Street, Mount Waverley, Vic 3149",
+      "url": "https://www.realestate.com.au/property-house-vic-mount+waverley-150234384",
+      "rooms": {
+        "bedrooms": 4,
+        "bathrooms": 3,
+        "carSpaces": 1
+      },
+      "price": {
+        "min": 1200000,
+        "max": 1300000,
+        "displayText": "Indicative price: $1,200,000 - $1,300,000"
+      },
+      "auctionDate": "2026-04-17",
+      "floorPlan": {
+        "landSize": 335,
+        "unit": "m²"
+      },
+      "propertyType": "House",
+      "scrapedAt": "2026-04-13T10:03:49.829Z",
+      "schools": {
+        "primary": {
+          "name": "Mount Waverley Heights Primary School",
+          "address": "36 Solomon Street, Mount Waverley 3149",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-04-13T10:04:19.355Z",
+          "naplan": {
+            "year": "2023",
+            "source": "myschool.edu.au",
+            "year3": {
+              "reading": 465,
+              "writing": 444,
+              "spelling": 442,
+              "grammar": 480,
+              "numeracy": 459
+            },
+            "year5": {
+              "reading": 540,
+              "writing": 543,
+              "spelling": 538,
+              "grammar": 549,
+              "numeracy": 556
+            },
+            "url": "https://myschool.edu.au/school/44863/naplan/results",
+            "quality": 99.4
+          }
+        },
+        "secondary": {
+          "name": "Ashwood High School",
+          "address": "50 Vannam Drive, Ashwood 3147",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-04-13T10:04:19.355Z",
+          "naplan": {
+            "year": "2023",
+            "source": "myschool.edu.au",
+            "year7": {
+              "reading": 576,
+              "writing": 578,
+              "spelling": 570,
+              "grammar": 572,
+              "numeracy": 593
+            },
+            "year9": {
+              "reading": 607,
+              "writing": 610,
+              "spelling": 593,
+              "grammar": 593,
+              "numeracy": 618
+            },
+            "url": "https://myschool.edu.au/school/45518/naplan/results",
+            "quality": 97.8
+          }
+        }
+      }
+    },
+    {
+      "id": "mnx11w5ltpmay4vomwr",
+      "address": "1/16 Teck Street, Ashwood, Vic 3147",
+      "url": "https://www.realestate.com.au/property-townhouse-vic-ashwood-150709080",
       "rooms": {
         "bedrooms": 4,
         "bathrooms": 3,
@@ -14,557 +92,144 @@
         "max": 1300000,
         "displayText": "Indicative price: $1,200,000 - $1,300,000"
       },
-      "auctionDate": null,
+      "auctionDate": "2026-04-17",
       "floorPlan": {
         "landSize": null,
         "unit": "m²"
       },
       "propertyType": "Townhouse",
-      "scrapedAt": "2026-01-20T05:24:47.485Z",
-      "saleHistory": [
-        {
-          "date": "2018-08-20",
-          "price": 1198000
-        }
-      ],
+      "scrapedAt": "2026-04-13T10:05:55.593Z",
       "schools": {
         "primary": {
-          "name": "Mount Waverley North Primary School",
-          "address": "Marcus Avenue, Mount Waverley 3149",
+          "name": "Parkhill Primary School",
+          "address": "4a Parkhill Drive, Ashwood 3147",
           "distance": null,
           "lookupSuccess": true,
-          "scrapedAt": "2026-01-20T05:25:14.187Z",
+          "scrapedAt": "2026-04-13T10:06:19.906Z",
           "naplan": {
             "year": "2023",
             "source": "myschool.edu.au",
             "year3": {
-              "reading": 473,
-              "writing": 472,
-              "spelling": 469,
-              "grammar": 491,
-              "numeracy": 492
+              "reading": 409,
+              "writing": 424,
+              "spelling": 405,
+              "grammar": 412,
+              "numeracy": 425
             },
             "year5": {
-              "reading": 546,
-              "writing": 532,
-              "spelling": 519,
-              "grammar": 560,
-              "numeracy": 565
+              "reading": 476,
+              "writing": 488,
+              "spelling": 477,
+              "grammar": 486,
+              "numeracy": 490
             },
-            "url": "https://myschool.edu.au/school/45220/naplan/results",
-            "quality": 101.4
+            "url": "https://myschool.edu.au/school/45208/naplan/results",
+            "quality": 89
           }
         },
         "secondary": {
-          "name": "Mount Waverley Secondary College",
-          "address": "145 Stephensons Road, Mount Waverley 3149",
+          "name": "Ashwood High School",
+          "address": "50 Vannam Drive, Ashwood 3147",
           "distance": null,
           "lookupSuccess": true,
-          "scrapedAt": "2026-01-20T05:25:14.187Z",
+          "scrapedAt": "2026-04-13T10:06:19.906Z",
           "naplan": {
             "year": "2023",
             "source": "myschool.edu.au",
             "year7": {
-              "reading": 584,
-              "writing": 592,
-              "spelling": 581,
-              "grammar": 592,
-              "numeracy": 616
+              "reading": 576,
+              "writing": 578,
+              "spelling": 570,
+              "grammar": 572,
+              "numeracy": 593
             },
             "year9": {
-              "reading": 601,
-              "writing": 632,
-              "spelling": 602,
-              "grammar": 609,
-              "numeracy": 637
+              "reading": 607,
+              "writing": 610,
+              "spelling": 593,
+              "grammar": 593,
+              "numeracy": 618
             },
-            "url": "https://myschool.edu.au/school/45434/naplan/results",
-            "quality": 100
+            "url": "https://myschool.edu.au/school/45518/naplan/results",
+            "quality": 97.8
           }
         }
       }
     },
     {
-      "id": "mlh8u3gur8a2fvatc0h",
-      "address": "2/5 Selby Street, Mount Waverley, Vic 3149",
-      "url": "https://www.realestate.com.au/property-townhouse-vic-mount+waverley-150095968",
+      "id": "mnx148mep0rm721hich",
+      "address": "3/63 Cypress Avenue, Glen Waverley, Vic 3150",
+      "url": "https://www.realestate.com.au/property-townhouse-vic-glen+waverley-150384676",
       "rooms": {
         "bedrooms": 4,
         "bathrooms": 3,
         "carSpaces": 2
       },
       "price": {
-        "min": 1220000,
-        "max": 1270000,
-        "displayText": "Indicative price: $1,220,000 - $1,270,000"
+        "min": 1200000,
+        "max": 1300000,
+        "displayText": "Indicative price: $1,200,000 - $1,300,000"
       },
-      "auctionDate": "2026-02-27",
+      "auctionDate": "2026-04-17",
       "floorPlan": {
         "landSize": null,
         "unit": "m²"
       },
       "propertyType": "Townhouse",
-      "scrapedAt": "2026-02-10T23:40:05.262Z",
-      "saleHistory": [
-        {
-          "date": "2021-05-27",
-          "price": 1118000
-        }
-      ],
+      "scrapedAt": "2026-04-13T10:07:45.062Z",
       "schools": {
         "primary": {
-          "name": "Mount Waverley Heights Primary School",
-          "address": "36 Solomon Street, Mount Waverley 3149",
+          "name": "Glendal Primary School",
+          "address": "55 Nottingham Street, Glen Waverley 3150",
           "distance": null,
           "lookupSuccess": true,
-          "scrapedAt": "2026-02-10T23:40:34.623Z",
+          "scrapedAt": "2026-04-13T10:08:11.662Z",
           "naplan": {
             "year": "2023",
             "source": "myschool.edu.au",
             "year3": {
-              "reading": 465,
-              "writing": 444,
-              "spelling": 442,
-              "grammar": 480,
-              "numeracy": 459
+              "reading": 457,
+              "writing": 468,
+              "spelling": 471,
+              "grammar": 489,
+              "numeracy": 474
             },
             "year5": {
-              "reading": 540,
-              "writing": 543,
-              "spelling": 538,
-              "grammar": 549,
-              "numeracy": 556
+              "reading": 548,
+              "writing": 548,
+              "spelling": 553,
+              "grammar": 585,
+              "numeracy": 586
             },
-            "url": "https://myschool.edu.au/school/44863/naplan/results",
-            "quality": 99.4
+            "url": "https://myschool.edu.au/school/44968/naplan/results",
+            "quality": 102.6
           }
         },
         "secondary": {
-          "name": "Mount Waverley Secondary College",
-          "address": "145 Stephensons Road, Mount Waverley 3149",
+          "name": "Highvale Secondary College",
+          "address": "Capital Avenue, Glen Waverley 3150",
           "distance": null,
           "lookupSuccess": true,
-          "scrapedAt": "2026-02-10T23:40:34.623Z",
+          "scrapedAt": "2026-04-13T10:08:11.662Z",
           "naplan": {
             "year": "2023",
             "source": "myschool.edu.au",
             "year7": {
-              "reading": 584,
-              "writing": 592,
-              "spelling": 581,
-              "grammar": 592,
-              "numeracy": 616
+              "reading": 586,
+              "writing": 597,
+              "spelling": 585,
+              "grammar": 598,
+              "numeracy": 615
             },
             "year9": {
-              "reading": 601,
-              "writing": 632,
-              "spelling": 602,
-              "grammar": 609,
-              "numeracy": 637
+              "reading": 608,
+              "writing": 627,
+              "spelling": 599,
+              "grammar": 614,
+              "numeracy": 645
             },
-            "url": "https://myschool.edu.au/school/45434/naplan/results",
-            "quality": 100
-          }
-        }
-      }
-    },
-    {
-      "id": "mlh8wquun3rm263xium",
-      "address": "2/91 Stanley Avenue, Mount Waverley, Vic 3149",
-      "url": "https://www.realestate.com.au/property-townhouse-vic-mount+waverley-150182048",
-      "rooms": {
-        "bedrooms": 4,
-        "bathrooms": 3,
-        "carSpaces": 2
-      },
-      "price": {
-        "min": 1250000,
-        "max": 1350000,
-        "displayText": "AUCTION  $1,250,000 - $1,350,000"
-      },
-      "auctionDate": "2026-03-06",
-      "floorPlan": {
-        "landSize": 209,
-        "unit": "m²"
-      },
-      "propertyType": "Townhouse",
-      "scrapedAt": "2026-02-10T23:42:08.886Z",
-      "saleHistory": null,
-      "schools": {
-        "primary": {
-          "name": "Amsleigh Park Primary School",
-          "address": "17 State Street, Oakleigh East 3166",
-          "distance": null,
-          "lookupSuccess": true,
-          "scrapedAt": "2026-02-10T23:42:36.714Z",
-          "naplan": {
-            "year": "2023",
-            "source": "myschool.edu.au",
-            "year3": {
-              "reading": 429,
-              "writing": 450,
-              "spelling": 431,
-              "grammar": 444,
-              "numeracy": 432
-            },
-            "year5": {
-              "reading": 533,
-              "writing": 514,
-              "spelling": 508,
-              "grammar": 526,
-              "numeracy": 504
-            },
-            "url": "https://myschool.edu.au/school/45218/naplan/results",
-            "quality": 94.5
-          }
-        },
-        "secondary": {
-          "name": "Mount Waverley Secondary College",
-          "address": "145 Stephensons Road, Mount Waverley 3149",
-          "distance": null,
-          "lookupSuccess": true,
-          "scrapedAt": "2026-02-10T23:42:36.714Z",
-          "naplan": {
-            "year": "2023",
-            "source": "myschool.edu.au",
-            "year7": {
-              "reading": 584,
-              "writing": 592,
-              "spelling": 581,
-              "grammar": 592,
-              "numeracy": 616
-            },
-            "year9": {
-              "reading": 601,
-              "writing": 632,
-              "spelling": 602,
-              "grammar": 609,
-              "numeracy": 637
-            },
-            "url": "https://myschool.edu.au/school/45434/naplan/results",
-            "quality": 100
-          }
-        }
-      }
-    },
-    {
-      "id": "mllggg4vudsh91qb7t",
-      "address": "1/7 Fletcher Court, Mount Waverley, Vic 3149",
-      "url": "https://www.realestate.com.au/property-townhouse-vic-mount+waverley-150149176",
-      "rooms": {
-        "bedrooms": 3,
-        "bathrooms": 2,
-        "carSpaces": 2
-      },
-      "price": {
-        "min": 1100000,
-        "max": 1210000,
-        "displayText": "$1,100,000 - $1,210,000"
-      },
-      "auctionDate": "2026-02-27",
-      "floorPlan": {
-        "landSize": 272,
-        "unit": "m²"
-      },
-      "propertyType": "Townhouse",
-      "scrapedAt": "2026-02-13T22:24:30.127Z",
-      "saleHistory": [
-        {
-          "date": "2016-02-09",
-          "price": 920000
-        },
-        {
-          "date": "2009-07-17",
-          "price": 667500
-        }
-      ],
-      "schools": {
-        "primary": {
-          "name": "Mount Waverley Primary School",
-          "address": "37-45 Park Lane, Mount Waverley 3149",
-          "distance": null,
-          "lookupSuccess": true,
-          "scrapedAt": "2026-02-13T22:24:57.867Z",
-          "naplan": {
-            "year": "2023",
-            "source": "myschool.edu.au",
-            "year3": {
-              "reading": 446,
-              "writing": 460,
-              "spelling": 459,
-              "grammar": 475,
-              "numeracy": 466
-            },
-            "year5": {
-              "reading": 539,
-              "writing": 539,
-              "spelling": 536,
-              "grammar": 561,
-              "numeracy": 566
-            },
-            "url": "https://myschool.edu.au/school/44601/naplan/results",
-            "quality": 100
-          }
-        },
-        "secondary": {
-          "name": "Mount Waverley Secondary College",
-          "address": "145 Stephensons Road, Mount Waverley 3149",
-          "distance": null,
-          "lookupSuccess": true,
-          "scrapedAt": "2026-02-13T22:24:57.867Z",
-          "naplan": {
-            "year": "2023",
-            "source": "myschool.edu.au",
-            "year7": {
-              "reading": 584,
-              "writing": 592,
-              "spelling": 581,
-              "grammar": 592,
-              "numeracy": 616
-            },
-            "year9": {
-              "reading": 601,
-              "writing": 632,
-              "spelling": 602,
-              "grammar": 609,
-              "numeracy": 637
-            },
-            "url": "https://myschool.edu.au/school/45434/naplan/results",
-            "quality": 100
-          }
-        }
-      }
-    },
-    {
-      "id": "mlrtgp4kxjsixberk7",
-      "address": "3/4 Catherine Avenue, Mount Waverley, Vic 3149",
-      "url": "https://www.realestate.com.au/property/unit-3-4-catherine-ave-mount-waverley-vic-3149/",
-      "rooms": {
-        "bedrooms": 4,
-        "bathrooms": 2,
-        "carSpaces": 2
-      },
-      "price": {
-        "min": 1150000,
-        "max": 1250000,
-        "displayText": "$1,150,000-$1,250,000"
-      },
-      "auctionDate": "2026-02-27",
-      "floorPlan": {
-        "landSize": null,
-        "unit": "m²"
-      },
-      "propertyType": "Townhouse",
-      "scrapedAt": "2026-02-18T09:15:13.844Z",
-      "schools": {
-        "primary": {
-          "name": "Mount Waverley Heights Primary School",
-          "address": "36 Solomon Street, Mount Waverley 3149",
-          "distance": null,
-          "lookupSuccess": true,
-          "scrapedAt": "2026-02-18T09:15:41.224Z",
-          "naplan": {
-            "year": "2023",
-            "source": "myschool.edu.au",
-            "year3": {
-              "reading": 465,
-              "writing": 444,
-              "spelling": 442,
-              "grammar": 480,
-              "numeracy": 459
-            },
-            "year5": {
-              "reading": 540,
-              "writing": 543,
-              "spelling": 538,
-              "grammar": 549,
-              "numeracy": 556
-            },
-            "url": "https://myschool.edu.au/school/44863/naplan/results",
-            "quality": 99.4
-          }
-        },
-        "secondary": {
-          "name": "Mount Waverley Secondary College",
-          "address": "145 Stephensons Road, Mount Waverley 3149",
-          "distance": null,
-          "lookupSuccess": true,
-          "scrapedAt": "2026-02-18T09:15:41.224Z",
-          "naplan": {
-            "year": "2023",
-            "source": "myschool.edu.au",
-            "year7": {
-              "reading": 584,
-              "writing": 592,
-              "spelling": 581,
-              "grammar": 592,
-              "numeracy": 616
-            },
-            "year9": {
-              "reading": 601,
-              "writing": 632,
-              "spelling": 602,
-              "grammar": 609,
-              "numeracy": 637
-            },
-            "url": "https://myschool.edu.au/school/45434/naplan/results",
-            "quality": 100
-          }
-        }
-      }
-    },
-    {
-      "id": "mlujae6rfqzfilh9mnh",
-      "address": "117 Great Ryrie Street, Heathmont, Vic 3135",
-      "url": "https://www.realestate.com.au/property-house-vic-heathmont-150248800",
-      "rooms": {
-        "bedrooms": 2,
-        "bathrooms": 1,
-        "carSpaces": 1
-      },
-      "price": {
-        "min": 800000,
-        "max": 880000,
-        "displayText": "$800,000 - $880,000"
-      },
-      "auctionDate": null,
-      "floorPlan": {
-        "landSize": 699,
-        "unit": "m²"
-      },
-      "propertyType": "House",
-      "scrapedAt": "2026-02-20T06:53:42.099Z",
-      "schools": {
-        "primary": {
-          "name": "Marlborough Primary School",
-          "address": "Hardy Crescent, Heathmont 3135",
-          "distance": null,
-          "lookupSuccess": true,
-          "scrapedAt": "2026-02-20T06:54:09.191Z",
-          "naplan": {
-            "year": "2023",
-            "source": "myschool.edu.au",
-            "year3": {
-              "reading": 374,
-              "writing": 388,
-              "spelling": 372,
-              "grammar": 401,
-              "numeracy": 345
-            },
-            "year5": {
-              "reading": 496,
-              "writing": 452,
-              "spelling": 468,
-              "grammar": 497,
-              "numeracy": 484
-            },
-            "url": "https://myschool.edu.au/school/44989/naplan/results",
-            "quality": 84.7
-          }
-        },
-        "secondary": {
-          "name": "Heathmont College",
-          "address": "Waters Grove, Heathmont 3135",
-          "distance": null,
-          "lookupSuccess": true,
-          "scrapedAt": "2026-02-20T06:54:09.191Z",
-          "naplan": {
-            "year": "2023",
-            "source": "myschool.edu.au",
-            "year7": {
-              "reading": 519,
-              "writing": 543,
-              "spelling": 517,
-              "grammar": 521,
-              "numeracy": 530
-            },
-            "year9": {
-              "reading": 552,
-              "writing": 568,
-              "spelling": 548,
-              "grammar": 527,
-              "numeracy": 552
-            },
-            "url": "https://myschool.edu.au/school/45555/naplan/results",
-            "quality": 88.9
-          }
-        }
-      }
-    },
-    {
-      "id": "mlxaqn7692fpcw2v3wu",
-      "address": "3/2 Kingsley Grove, Mount Waverley, Vic 3149",
-      "url": "https://www.realestate.com.au/property-townhouse-vic-mount+waverley-143641728?campaignType=external&campaignChannel=other&campaignSource=share_link&campaignName=share_link",
-      "rooms": {
-        "bedrooms": 4,
-        "bathrooms": 3,
-        "carSpaces": 2
-      },
-      "price": {
-        "min": 1180000,
-        "max": 1280000,
-        "displayText": "Indicative price: $1,180,000 - $1,280,000"
-      },
-      "auctionDate": null,
-      "floorPlan": {
-        "landSize": null,
-        "unit": "m²"
-      },
-      "propertyType": "Townhouse",
-      "scrapedAt": "2026-02-22T05:17:42.258Z",
-      "schools": {
-        "primary": {
-          "name": "Mount Waverley Heights Primary School",
-          "address": "36 Solomon Street, Mount Waverley 3149",
-          "distance": null,
-          "lookupSuccess": true,
-          "scrapedAt": "2026-02-22T05:18:10.447Z",
-          "naplan": {
-            "year": "2023",
-            "source": "myschool.edu.au",
-            "year3": {
-              "reading": 465,
-              "writing": 444,
-              "spelling": 442,
-              "grammar": 480,
-              "numeracy": 459
-            },
-            "year5": {
-              "reading": 540,
-              "writing": 543,
-              "spelling": 538,
-              "grammar": 549,
-              "numeracy": 556
-            },
-            "url": "https://myschool.edu.au/school/44863/naplan/results",
-            "quality": 99.4
-          }
-        },
-        "secondary": {
-          "name": "Mount Waverley Secondary College",
-          "address": "145 Stephensons Road, Mount Waverley 3149",
-          "distance": null,
-          "lookupSuccess": true,
-          "scrapedAt": "2026-02-22T05:18:10.447Z",
-          "naplan": {
-            "year": "2023",
-            "source": "myschool.edu.au",
-            "year7": {
-              "reading": 584,
-              "writing": 592,
-              "spelling": 581,
-              "grammar": 592,
-              "numeracy": 616
-            },
-            "year9": {
-              "reading": 601,
-              "writing": 632,
-              "spelling": 602,
-              "grammar": 609,
-              "numeracy": 637
-            },
-            "url": "https://myschool.edu.au/school/45434/naplan/results",
-            "quality": 100
+            "url": "https://myschool.edu.au/school/45399/naplan/results",
+            "quality": 100.5
           }
         }
       }
