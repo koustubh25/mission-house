@@ -233,6 +233,84 @@
           }
         }
       }
+    },
+    {
+      "id": "mnx2b7ofbshcbllr35",
+      "address": "1/11 Bronte Avenue, Burwood, Vic 3125",
+      "url": "https://www.realestate.com.au/property-townhouse-vic-burwood-150600792",
+      "rooms": {
+        "bedrooms": 4,
+        "bathrooms": 4,
+        "carSpaces": 2
+      },
+      "price": {
+        "min": 1100000,
+        "max": 1200000,
+        "displayText": "Auction this SAT: $1,100,000- $1,200,000"
+      },
+      "auctionDate": "2026-04-17",
+      "floorPlan": {
+        "landSize": 221,
+        "unit": "m²"
+      },
+      "propertyType": "Townhouse",
+      "scrapedAt": "2026-04-13T10:41:10.047Z",
+      "schools": {
+        "primary": {
+          "name": "Roberts McCubbin Primary School",
+          "address": "57 Birdwood Street, Box Hill South 3128",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-04-13T10:41:35.972Z",
+          "naplan": {
+            "year": "2023",
+            "source": "myschool.edu.au",
+            "year3": {
+              "reading": 445,
+              "writing": 450,
+              "spelling": 453,
+              "grammar": 466,
+              "numeracy": 438
+            },
+            "year5": {
+              "reading": 508,
+              "writing": 487,
+              "spelling": 503,
+              "grammar": 504,
+              "numeracy": 523
+            },
+            "url": "https://myschool.edu.au/school/45210/naplan/results",
+            "quality": 94.7
+          }
+        },
+        "secondary": {
+          "name": "Ashwood High School",
+          "address": "50 Vannam Drive, Ashwood 3147",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-04-13T10:41:35.972Z",
+          "naplan": {
+            "year": "2023",
+            "source": "myschool.edu.au",
+            "year7": {
+              "reading": 576,
+              "writing": 578,
+              "spelling": 570,
+              "grammar": 572,
+              "numeracy": 593
+            },
+            "year9": {
+              "reading": 607,
+              "writing": 610,
+              "spelling": 593,
+              "grammar": 593,
+              "numeracy": 618
+            },
+            "url": "https://myschool.edu.au/school/45518/naplan/results",
+            "quality": 97.8
+          }
+        }
+      }
     }
   ]
 }
