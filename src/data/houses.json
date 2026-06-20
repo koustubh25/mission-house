@@ -1,33 +1,189 @@
 {
   "properties": [
     {
-      "id": "mnx0z745q4ww65ts45",
-      "address": "27A Solomon Street, Mount Waverley, Vic 3149",
-      "url": "https://www.realestate.com.au/property-house-vic-mount+waverley-150234384",
+      "id": "mqlna9nbcoqgsanhmd",
+      "address": "1/18 Cabena Crescent, Chadstone, Vic 3148",
+      "url": "https://www.realestate.com.au/property-townhouse-vic-chadstone-151319396?campaignType=external&campaignChannel=other&campaignSource=share_link&campaignName=share_link",
       "rooms": {
-        "bedrooms": 4,
+        "bedrooms": 3,
+        "bathrooms": 2,
+        "carSpaces": 2
+      },
+      "price": {
+        "min": 790000,
+        "max": 850000,
+        "displayText": "Indicative price: $790,000 - $850,000"
+      },
+      "auctionDate": null,
+      "floorPlan": {
+        "landSize": null,
+        "unit": "m²"
+      },
+      "propertyType": "Townhouse",
+      "scrapedAt": "2026-06-20T00:54:10.775Z",
+      "schools": {
+        "primary": {
+          "name": "Oakleigh Primary School",
+          "address": "20 Warrigal Road, Oakleigh 3166",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-06-20T00:54:39.343Z",
+          "naplan": {
+            "year": "2023",
+            "source": "myschool.edu.au",
+            "year3": {
+              "reading": 442,
+              "writing": 445,
+              "spelling": 453,
+              "grammar": 466,
+              "numeracy": 463
+            },
+            "year5": {
+              "reading": 519,
+              "writing": 505,
+              "spelling": 510,
+              "grammar": 531,
+              "numeracy": 534
+            },
+            "url": "https://myschool.edu.au/school/44324/naplan/results",
+            "quality": 96.5
+          }
+        },
+        "secondary": {
+          "name": "Ashwood High School",
+          "address": "50 Vannam Drive, Ashwood 3147",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-06-20T00:54:39.343Z",
+          "naplan": {
+            "year": "2023",
+            "source": "myschool.edu.au",
+            "year7": {
+              "reading": 576,
+              "writing": 578,
+              "spelling": 570,
+              "grammar": 572,
+              "numeracy": 593
+            },
+            "year9": {
+              "reading": 607,
+              "writing": 610,
+              "spelling": 593,
+              "grammar": 593,
+              "numeracy": 618
+            },
+            "url": "https://myschool.edu.au/school/45518/naplan/results",
+            "quality": 97.8
+          }
+        }
+      }
+    },
+    {
+      "id": "mqlndjw3nois99l8eli",
+      "address": "3/72 Talbot Road, Mount Waverley, Vic 3149",
+      "url": "https://www.realestate.com.au/property-townhouse-vic-mount+waverley-150701824?campaignType=external&campaignChannel=other&campaignSource=share_link&campaignName=share_link",
+      "rooms": {
+        "bedrooms": 3,
         "bathrooms": 3,
+        "carSpaces": 2
+      },
+      "price": {
+        "min": 879000,
+        "max": 949000,
+        "displayText": "$879,000-$949,000-PRIVATE SALE"
+      },
+      "auctionDate": null,
+      "floorPlan": {
+        "landSize": 245,
+        "unit": "m²"
+      },
+      "propertyType": "Townhouse",
+      "scrapedAt": "2026-06-20T00:56:44.019Z",
+      "schools": {
+        "primary": {
+          "name": "Mount Waverley Primary School",
+          "address": "37-45 Park Lane, Mount Waverley 3149",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-06-20T00:57:10.178Z",
+          "naplan": {
+            "year": "2023",
+            "source": "myschool.edu.au",
+            "year3": {
+              "reading": 446,
+              "writing": 460,
+              "spelling": 459,
+              "grammar": 475,
+              "numeracy": 466
+            },
+            "year5": {
+              "reading": 539,
+              "writing": 539,
+              "spelling": 536,
+              "grammar": 561,
+              "numeracy": 566
+            },
+            "url": "https://myschool.edu.au/school/44601/naplan/results",
+            "quality": 100
+          }
+        },
+        "secondary": {
+          "name": "Mount Waverley Secondary College",
+          "address": "145 Stephensons Road, Mount Waverley 3149",
+          "distance": null,
+          "lookupSuccess": true,
+          "scrapedAt": "2026-06-20T00:57:10.178Z",
+          "naplan": {
+            "year": "2023",
+            "source": "myschool.edu.au",
+            "year7": {
+              "reading": 584,
+              "writing": 592,
+              "spelling": 581,
+              "grammar": 592,
+              "numeracy": 616
+            },
+            "year9": {
+              "reading": 601,
+              "writing": 632,
+              "spelling": 602,
+              "grammar": 609,
+              "numeracy": 637
+            },
+            "url": "https://myschool.edu.au/school/45434/naplan/results",
+            "quality": 100
+          }
+        }
+      }
+    },
+    {
+      "id": "mqlnfwcz6rt60q75v97",
+      "address": "1/4 Walcha Court, Chadstone, Vic 3148",
+      "url": "https://www.realestate.com.au/property-unit-vic-chadstone-151340824?campaignType=external&campaignChannel=other&campaignSource=share_link&campaignName=share_link",
+      "rooms": {
+        "bedrooms": 3,
+        "bathrooms": 2,
         "carSpaces": 1
       },
       "price": {
-        "min": 1200000,
-        "max": 1300000,
-        "displayText": "Indicative price: $1,200,000 - $1,300,000"
+        "min": 800000,
+        "max": 880000,
+        "displayText": "$800,000 to $880,000"
       },
-      "auctionDate": "2026-04-17",
+      "auctionDate": "2026-06-26",
       "floorPlan": {
-        "landSize": 335,
+        "landSize": 302,
         "unit": "m²"
       },
-      "propertyType": "House",
-      "scrapedAt": "2026-04-13T10:03:49.829Z",
+      "propertyType": "Unit",
+      "scrapedAt": "2026-06-20T00:58:33.491Z",
       "schools": {
         "primary": {
           "name": "Mount Waverley Heights Primary School",
           "address": "36 Solomon Street, Mount Waverley 3149",
           "distance": null,
           "lookupSuccess": true,
-          "scrapedAt": "2026-04-13T10:04:19.355Z",
+          "scrapedAt": "2026-06-20T00:58:58.286Z",
           "naplan": {
             "year": "2023",
             "source": "myschool.edu.au",
@@ -54,7 +210,7 @@
           "address": "50 Vannam Drive, Ashwood 3147",
           "distance": null,
           "lookupSuccess": true,
-          "scrapedAt": "2026-04-13T10:04:19.355Z",
+          "scrapedAt": "2026-06-20T00:58:58.286Z",
           "naplan": {
             "year": "2023",
             "source": "myschool.edu.au",
@@ -79,235 +235,235 @@
       }
     },
     {
-      "id": "mnx11w5ltpmay4vomwr",
-      "address": "1/16 Teck Street, Ashwood, Vic 3147",
-      "url": "https://www.realestate.com.au/property-townhouse-vic-ashwood-150709080",
+      "id": "mqlnizolmbbvj6aoism",
+      "address": "24 Hendra Grove, Ringwood, Vic 3134",
+      "url": "https://www.realestate.com.au/property-house-vic-ringwood-151519964",
       "rooms": {
-        "bedrooms": 4,
-        "bathrooms": 3,
-        "carSpaces": 2
+        "bedrooms": 3,
+        "bathrooms": 2,
+        "carSpaces": 5
       },
       "price": {
-        "min": 1200000,
-        "max": 1300000,
-        "displayText": "Indicative price: $1,200,000 - $1,300,000"
+        "min": 895000,
+        "max": 984000,
+        "displayText": "ESR - $895,000 - $984,000"
       },
-      "auctionDate": "2026-04-17",
+      "auctionDate": null,
       "floorPlan": {
-        "landSize": null,
+        "landSize": 670,
         "unit": "m²"
       },
-      "propertyType": "Townhouse",
-      "scrapedAt": "2026-04-13T10:05:55.593Z",
+      "propertyType": "House",
+      "scrapedAt": "2026-06-20T01:00:57.765Z",
       "schools": {
         "primary": {
-          "name": "Parkhill Primary School",
-          "address": "4a Parkhill Drive, Ashwood 3147",
+          "name": "Mullum Primary School",
+          "address": "18 Panfield Avenue, Ringwood 3134",
           "distance": null,
           "lookupSuccess": true,
-          "scrapedAt": "2026-04-13T10:06:19.906Z",
+          "scrapedAt": "2026-06-20T01:01:22.495Z",
           "naplan": {
             "year": "2023",
             "source": "myschool.edu.au",
             "year3": {
-              "reading": 409,
-              "writing": 424,
-              "spelling": 405,
-              "grammar": 412,
-              "numeracy": 425
+              "reading": 442,
+              "writing": 419,
+              "spelling": 439,
+              "grammar": 415,
+              "numeracy": 414
             },
             "year5": {
-              "reading": 476,
-              "writing": 488,
-              "spelling": 477,
-              "grammar": 486,
-              "numeracy": 490
+              "reading": 507,
+              "writing": 504,
+              "spelling": 517,
+              "grammar": 547,
+              "numeracy": 504
             },
-            "url": "https://myschool.edu.au/school/45208/naplan/results",
-            "quality": 89
+            "url": "https://myschool.edu.au/school/44890/naplan/results",
+            "quality": 93.3
           }
         },
         "secondary": {
-          "name": "Ashwood High School",
-          "address": "50 Vannam Drive, Ashwood 3147",
+          "name": "Norwood Secondary College",
+          "address": "9 Byron Street, Ringwood 3134",
           "distance": null,
           "lookupSuccess": true,
-          "scrapedAt": "2026-04-13T10:06:19.906Z",
+          "scrapedAt": "2026-06-20T01:01:22.495Z",
           "naplan": {
             "year": "2023",
             "source": "myschool.edu.au",
             "year7": {
-              "reading": 576,
-              "writing": 578,
-              "spelling": 570,
-              "grammar": 572,
-              "numeracy": 593
+              "reading": 545,
+              "writing": 551,
+              "spelling": 537,
+              "grammar": 535,
+              "numeracy": 549
             },
             "year9": {
-              "reading": 607,
-              "writing": 610,
-              "spelling": 593,
-              "grammar": 593,
-              "numeracy": 618
+              "reading": 571,
+              "writing": 592,
+              "spelling": 566,
+              "grammar": 553,
+              "numeracy": 577
             },
-            "url": "https://myschool.edu.au/school/45518/naplan/results",
-            "quality": 97.8
+            "url": "https://myschool.edu.au/school/45443/naplan/results",
+            "quality": 92.2
           }
         }
       }
     },
     {
-      "id": "mnx148mep0rm721hich",
-      "address": "3/63 Cypress Avenue, Glen Waverley, Vic 3150",
-      "url": "https://www.realestate.com.au/property-townhouse-vic-glen+waverley-150384676",
+      "id": "mqlnlo8mw5ws9fkh0h",
+      "address": "9 Marie Wallace Way, Bayswater, Vic 3153",
+      "url": "https://www.realestate.com.au/property-house-vic-bayswater-151503452",
       "rooms": {
         "bedrooms": 4,
-        "bathrooms": 3,
-        "carSpaces": 2
+        "bathrooms": 2,
+        "carSpaces": 1
       },
       "price": {
-        "min": 1200000,
-        "max": 1300000,
-        "displayText": "Indicative price: $1,200,000 - $1,300,000"
+        "min": 850000,
+        "max": 935000,
+        "displayText": "Auction ($850,000 - $935,000)"
       },
-      "auctionDate": "2026-04-17",
+      "auctionDate": "2026-07-10",
       "floorPlan": {
-        "landSize": null,
+        "landSize": 533,
         "unit": "m²"
       },
-      "propertyType": "Townhouse",
-      "scrapedAt": "2026-04-13T10:07:45.062Z",
+      "propertyType": "House",
+      "scrapedAt": "2026-06-20T01:03:02.902Z",
       "schools": {
         "primary": {
-          "name": "Glendal Primary School",
-          "address": "55 Nottingham Street, Glen Waverley 3150",
+          "name": "Templeton Primary School",
+          "address": "Crestdale Road, Wantirna 3152",
           "distance": null,
           "lookupSuccess": true,
-          "scrapedAt": "2026-04-13T10:08:11.662Z",
+          "scrapedAt": "2026-06-20T01:03:28.847Z",
           "naplan": {
             "year": "2023",
             "source": "myschool.edu.au",
             "year3": {
-              "reading": 457,
-              "writing": 468,
-              "spelling": 471,
-              "grammar": 489,
-              "numeracy": 474
+              "reading": 465,
+              "writing": 473,
+              "spelling": 459,
+              "grammar": 491,
+              "numeracy": 478
             },
             "year5": {
-              "reading": 548,
-              "writing": 548,
-              "spelling": 553,
-              "grammar": 585,
-              "numeracy": 586
+              "reading": 556,
+              "writing": 560,
+              "spelling": 559,
+              "grammar": 577,
+              "numeracy": 572
             },
-            "url": "https://myschool.edu.au/school/44968/naplan/results",
-            "quality": 102.6
+            "url": "https://myschool.edu.au/school/45078/naplan/results",
+            "quality": 102.8
           }
         },
         "secondary": {
-          "name": "Highvale Secondary College",
-          "address": "Capital Avenue, Glen Waverley 3150",
+          "name": "Bayswater Secondary College",
+          "address": "14 Orchard Road, Bayswater 3153",
           "distance": null,
           "lookupSuccess": true,
-          "scrapedAt": "2026-04-13T10:08:11.662Z",
+          "scrapedAt": "2026-06-20T01:03:28.847Z",
           "naplan": {
             "year": "2023",
             "source": "myschool.edu.au",
             "year7": {
-              "reading": 586,
-              "writing": 597,
-              "spelling": 585,
-              "grammar": 598,
-              "numeracy": 615
+              "reading": 498,
+              "writing": 497,
+              "spelling": 485,
+              "grammar": 490,
+              "numeracy": 495
             },
             "year9": {
-              "reading": 608,
-              "writing": 627,
-              "spelling": 599,
-              "grammar": 614,
-              "numeracy": 645
+              "reading": 563,
+              "writing": 580,
+              "spelling": 558,
+              "grammar": 542,
+              "numeracy": 545
             },
-            "url": "https://myschool.edu.au/school/45399/naplan/results",
-            "quality": 100.5
+            "url": "https://myschool.edu.au/school/45352/naplan/results",
+            "quality": 86.9
           }
         }
       }
     },
     {
-      "id": "mnx2b7ofbshcbllr35",
-      "address": "1/11 Bronte Avenue, Burwood, Vic 3125",
-      "url": "https://www.realestate.com.au/property-townhouse-vic-burwood-150600792",
+      "id": "mqlno0wc2gx0yioh993",
+      "address": "38 Sonia Street, Ringwood, Vic 3134",
+      "url": "https://www.realestate.com.au/property-house-vic-ringwood-151409836",
       "rooms": {
         "bedrooms": 4,
-        "bathrooms": 4,
+        "bathrooms": 2,
         "carSpaces": 2
       },
       "price": {
-        "min": 1100000,
-        "max": 1200000,
-        "displayText": "Auction this SAT: $1,100,000- $1,200,000"
+        "min": 960000,
+        "max": 1050000,
+        "displayText": "$960,000 - $1,050,000"
       },
-      "auctionDate": "2026-04-17",
+      "auctionDate": "2026-06-26",
       "floorPlan": {
-        "landSize": 221,
+        "landSize": 657,
         "unit": "m²"
       },
-      "propertyType": "Townhouse",
-      "scrapedAt": "2026-04-13T10:41:10.047Z",
+      "propertyType": "House",
+      "scrapedAt": "2026-06-20T01:04:52.620Z",
       "schools": {
         "primary": {
-          "name": "Roberts McCubbin Primary School",
-          "address": "57 Birdwood Street, Box Hill South 3128",
+          "name": "Mullum Primary School",
+          "address": "18 Panfield Avenue, Ringwood 3134",
           "distance": null,
           "lookupSuccess": true,
-          "scrapedAt": "2026-04-13T10:41:35.972Z",
+          "scrapedAt": "2026-06-20T01:05:17.231Z",
           "naplan": {
             "year": "2023",
             "source": "myschool.edu.au",
             "year3": {
-              "reading": 445,
-              "writing": 450,
-              "spelling": 453,
-              "grammar": 466,
-              "numeracy": 438
+              "reading": 442,
+              "writing": 419,
+              "spelling": 439,
+              "grammar": 415,
+              "numeracy": 414
             },
             "year5": {
-              "reading": 508,
-              "writing": 487,
-              "spelling": 503,
-              "grammar": 504,
-              "numeracy": 523
+              "reading": 507,
+              "writing": 504,
+              "spelling": 517,
+              "grammar": 547,
+              "numeracy": 504
             },
-            "url": "https://myschool.edu.au/school/45210/naplan/results",
-            "quality": 94.7
+            "url": "https://myschool.edu.au/school/44890/naplan/results",
+            "quality": 93.3
           }
         },
         "secondary": {
-          "name": "Ashwood High School",
-          "address": "50 Vannam Drive, Ashwood 3147",
+          "name": "Norwood Secondary College",
+          "address": "9 Byron Street, Ringwood 3134",
           "distance": null,
           "lookupSuccess": true,
-          "scrapedAt": "2026-04-13T10:41:35.972Z",
+          "scrapedAt": "2026-06-20T01:05:17.231Z",
           "naplan": {
             "year": "2023",
             "source": "myschool.edu.au",
             "year7": {
-              "reading": 576,
-              "writing": 578,
-              "spelling": 570,
-              "grammar": 572,
-              "numeracy": 593
+              "reading": 545,
+              "writing": 551,
+              "spelling": 537,
+              "grammar": 535,
+              "numeracy": 549
             },
             "year9": {
-              "reading": 607,
-              "writing": 610,
-              "spelling": 593,
-              "grammar": 593,
-              "numeracy": 618
+              "reading": 571,
+              "writing": 592,
+              "spelling": 566,
+              "grammar": 553,
+              "numeracy": 577
             },
-            "url": "https://myschool.edu.au/school/45518/naplan/results",
-            "quality": 97.8
+            "url": "https://myschool.edu.au/school/45443/naplan/results",
+            "quality": 92.2
           }
         }
       }
